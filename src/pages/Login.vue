@@ -65,7 +65,7 @@
               </q-input>
             </div>
             <div v-if="!isShowAuthentic">
-              <q-btn :loading="loading" color="purple" type="submit">
+              <q-btn :loading="loading" color="orange-8" type="submit">
                 Đăng nhập
                 <template v-slot:loading>
                   <q-spinner-facebook color="light-blue" />

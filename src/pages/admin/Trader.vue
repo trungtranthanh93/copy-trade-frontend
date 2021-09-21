@@ -45,7 +45,7 @@
               </template>
             </q-input>
             <div>
-              <q-btn :loading="loading" color="purple" type="submit">
+              <q-btn :loading="loading" color="orange-8" type="submit">
                 Đánh lệnh
                 <template v-slot:loading>
                   <q-spinner-facebook color="light-blue" />

@@ -90,17 +90,21 @@ module.exports = configure(function(ctx) {
         // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
         framework: {
             config: {
+                loading: {
+                    /* look at QuasarConfOptions from the API card */
+                },
                 brand: {
-                    primary: '#18144a',
+                    primary: '#011022',
                     secondary: '#26A69A',
-                    accent: '#9C27B0',
+                    // accent: '#9C27B0',
 
                     dark: '#1d1d1d',
 
                     positive: '#21BA45',
                     negative: '#C10015',
                     info: '#31CCEC',
-                    white: '#ffffff'
+                    white: '#ffffff',
+                    orangeButton: '#E66E06'
                 }
             },
 
@@ -115,7 +119,7 @@ module.exports = configure(function(ctx) {
             // directives: [],
 
             // Quasar plugins
-            plugins: ['Notify']
+            plugins: ['Notify', 'Loading']
         },
 
         // animations: 'all', // --- includes all animations
