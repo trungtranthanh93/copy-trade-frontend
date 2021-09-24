@@ -1664,6 +1664,11 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
+"@websanova/vue-auth@^4.1.4":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@websanova/vue-auth/-/vue-auth-4.1.4.tgz#44157c066722cfc5dc31eb915a67b6133ad2b5f0"
+  integrity sha512-1lRVQRbmg22VQASSwV/G8cagZaGScfcVHq5obTp8CK3OVLLMYVjE1C5WTNukgN3cZOf8ESsX9632D6rtlHExcg==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"

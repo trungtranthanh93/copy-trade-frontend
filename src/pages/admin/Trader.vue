@@ -1,30 +1,30 @@
 <template>
-  <q-layout>
-    <q-page-container class="bg-primary text-white">
-      <q-page
-        class="window-height window-width row justify-center items-center"
+  <div class="column">
+    <div class="row justify-center items-center">
+      <q-card
+        square
+        dark
+        class="q-pa-md q-ma-none no-shadow bg-grey-10"
+        style="width: 320px"
+        align="center"
       >
-        <div class="q-pa-md q-gutter-sm">
-          <div class="row">
-            <label class="text-h5">Màn hình đánh lệnh của admin</label>
-          </div>
-          <q-form @submit="onSubmit">
-            <div>
-              <q-radio
-                keep-color
-                v-model="putOptions"
-                val="UP"
-                label="Tăng"
-                color="green-14"
-              />
-              <q-radio
-                keep-color
-                v-model="putOptions"
-                val="DOWN"
-                label="Giảm"
-                color="red-10"
-              />
+        <q-card-section class="q-mb-md"> </q-card-section>
+        <q-card-section class="q-mt-xl q-mb-md">
+          <p class="text-weight-bolder text-grey-2 text-center text-h6 ">
+            Màn hình đánh lệnh
+          </p>
+        </q-card-section>
+        <q-card-section>
+          <q-form class="q-gutter-md justify-center items-center">
+             <div>
+              
             </div>
+            <q-btn
+              size="22px"
+              class="q-px-xl q-py-xs"
+              color="purple"
+              label="Tăng"
+            />
             <q-input
               outlined
               input-class="text-right"
@@ -33,6 +33,7 @@
               v-model="money"
               label="Nhập số tiền đánh"
               lazy-rules
+              style="width: 160px"
               suffix="$"
               :rules="[
                 (val) =>
@@ -40,24 +41,21 @@
                 (val) => val > 0 || 'Hãy điền số lớn hơn 0',
               ]"
             >
-              <template v-slot:before>
-                <q-icon name="paid" color="grey-1" />
-              </template>
             </q-input>
-            <div>
-              <q-btn :loading="loading" color="orange-8" type="submit">
-                Đánh lệnh
-                <template v-slot:loading>
-                  <q-spinner-facebook color="light-blue" />
-                </template>
-              </q-btn>
-            </div>
+            <q-btn
+              size="22px"
+              class="q-px-xl q-py-xs"
+              color="purple"
+              label="Giảm"
+            />
           </q-form>
-        </div>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+        </q-card-section>
+        <q-card-section> </q-card-section>
+      </q-card>
+    </div>
+  </div>
 </template>
+
 
 <script>
 import { useQuasar } from 'quasar';

@@ -1,114 +1,115 @@
 <template>
   <q-layout>
-    <q-page-container class="bg-primary text-white">
-      <q-page class="row justify-center items-center">
-        <div class="q-pa-md q-gutter-sm">
-          <div class="row">
-            <label class="text-h5">Màn hình đăng nhập</label>
-          </div>
-          <q-form @submit="onSubmit" style="width: 300px">
-            <q-input
-              filled
-              input-class="text-right"
-              bg-color="grey-5"
-              v-model="email"
-              type="text"
-              label="Nhập email của bạn"
-              :rules="[
-                (val) => !!val || 'Hãy điền email của bạn',
-                isValidEmail,
-              ]"
-              lazy-rules
-            >
-              <template v-slot:before>
-                <q-icon name="mail" color="grey-1" />
-              </template>
-            </q-input>
-            <q-input
-              v-model="password"
-              filled
-              input-class="text-right"
-              bg-color="grey-5"
-              :type="isPwd ? 'password' : 'text'"
-              label="Nhập password của bạn"
-              :rules="[(val) => !!val || 'Hãy điền password của bạn']"
-              lazy-rules
-            >
-              <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                />
-              </template>
-              <template v-slot:before>
-                <q-icon name="lock" color="grey-2" />
-              </template>
-            </q-input>
-            <div v-if="isShowAuthentic">
-              <q-input
-                filled
-                input-class="text-right"
-                bg-color="grey-5"
-                v-model="authenticatorCode"
-                type="number"
-                label="Nhập mã Authenticator của bạn"
-                :rules="[
-                  (val) => !!val || 'Hãy điền mã Authenticator',
-                  isValidEmail,
-                ]"
-                lazy-rules
+    <q-page
+      class="window-height window-width row justify-center items-center"
+      style="background: linear-gradient(135deg, #ea5c54 0%, #bb6dec 100%)"
+    >
+      <div class="column">
+        <div class="row">
+          <q-card
+            square
+            dark
+            class="q-pa-md q-ma-none no-shadow bg-grey-10"
+            style="width: 320px"
+          >
+            <q-card-section class="q-mb-md">
+              <p
+                class="
+                  text-weight-bolder
+                  text-grey-1
+                  text-center
+                  text-uppercase
+                  text-h5
+                "
               >
-                <template v-slot:before>
-                  <q-icon name="health_and_safety" color="grey-1" />
-                </template>
-              </q-input>
-            </div>
-            <div v-if="!isShowAuthentic">
-              <q-btn :loading="loading" color="orange-8" type="submit">
+                App copytrade
+              </p>
+            </q-card-section>
+            <q-card-section class="q-mt-xl q-mb-md">
+              <p class="text-weight-bolder text-grey-2 text-center text-h6">
                 Đăng nhập
-                <template v-slot:loading>
-                  <q-spinner-facebook color="light-blue" />
-                </template>
-              </q-btn>
-            </div>
-            <div v-else>
-              <q-btn
-                :loading="loading"
-                color="purple"
-                type="button"
-                @click="onPostAuthenticatorCode"
-              >
-                Đăng nhập
-                <template v-slot:loading>
-                  <q-spinner-facebook color="light-blue" />
-                </template>
-              </q-btn>
-            </div>
-          </q-form>
+              </p>
+            </q-card-section>
+            <q-card-section>
+              <q-form class="q-gutter-md">
+                <q-input
+                  dark
+                  dense
+                  square
+                  filled
+                  clearable
+                  v-model="email"
+                  type="email"
+                  label="Email"
+                  :rules="[
+                    (val) => !!val || 'Hãy điền email của bạn',
+                    isValidEmail,
+                  ]"
+                  lazy-rules
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="email" />
+                  </template>
+                </q-input>
+                <q-input
+                  dark
+                  dense
+                  square
+                  filled
+                  clearable
+                  v-model="password"
+                  type="password"
+                  label="Password"
+                  :rules="[(val) => !!val || 'Hãy điền password của bạn']"
+                  lazy-rules
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="lock" />
+                  </template>
+                </q-input>
+              </q-form>
+            </q-card-section>
+            <q-card-actions>
+              <div class="row full-width items-center">
+                <div class="col-6">
+                  <q-btn
+                    outline
+                    rounded
+                    size="md"
+                    color="deep-orange"
+                    class="full-width text-white"
+                    label="Đăng nhập"
+                    @click="onSubmit()"
+                  />
+                </div>
+                <div class="col-6">
+                  <p class="text-no-wrap text-grey-1 text-caption text-right">
+                    <a href="/register">Đăng ký tài khoản</a>
+                  </p>
+                </div>
+              </div>
+            </q-card-actions>
+            <q-card-section> </q-card-section>
+          </q-card>
         </div>
-      </q-page>
-    </q-page-container>
+      </div>
+    </q-page>
   </q-layout>
 </template>
 
 <script>
-import { useQuasar } from 'quasar';
+import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref } from 'vue';
 import { api } from 'boot/axios';
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 export default {
   setup() {
+    const $router = useRouter();
     const $q = useQuasar();
     const email = ref(null);
     const password = ref(null);
     const isPwd = ref(true);
-    const isShowAuthentic = ref(false);
-    const authenticatorCode = ref(null);
-    const loading = ref(false);
-    const router = useRouter();
-
     function isValidEmail() {
       const emailPattern =
         /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
@@ -116,34 +117,33 @@ export default {
     }
 
     async function onSubmit() {
-      loading.value = true;
+      $q.loading.show({
+        spinner: QSpinnerFacebook,
+        spinnerColor: 'yellow',
+        spinnerSize: 140,
+        backgroundColor: 'purple',
+        message: 'Đang xử lý đăng nhập....',
+        messageColor: 'black',
+      });
       let data = {
         email: email.value,
         password: password.value,
       };
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
-        let response = await api.post('/login', data);
-        if (response.status !== 200) {
+        let response = await api.post('/auth/login', data);
+        if (response.status !== 200 && response.status !== 201) {
           throw new Error();
         }
-        let dataContent = {
-          email: email.value,
-        };
-        let responseContent = await api.post('/content', dataContent);
-        if (responseContent.status !== 200) {
-          throw new Error();
+        let user = response.data.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('jwt', response.data.access_token )
+        if(user.role === 0) {
+          $router.push('/user')
+        } else {
+          $router.push('/admin')
         }
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message:
-            'Đăng nhập email và password thành công . Hãy điền mã Authenticator ',
-          position: 'top',
-        });
-        loading.value = false;
-        isShowAuthentic.value = true;
+        $q.loading.value = false;
       } catch (error) {
         $q.notify({
           color: 'negative',
@@ -151,50 +151,19 @@ export default {
           message: 'Đăng nhập thất bại ! Vui lòng đăng nhập lại',
           icon: 'report_problem',
         });
+      } finally {
+        $q.loading.hide();
       }
     }
-    async function onPostAuthenticatorCode() {
-      try {
-        let dataAuthenticatorCode = {
-          email: email.value,
-          authentication: authenticatorCode.value,
-        };
-        let responseAuthenticatorCode = await api.post(
-          '/authentication',
-          dataAuthenticatorCode
-        );
-        if (responseAuthenticatorCode.status !== 200) {
-          throw new Error();
-        }
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Điền mã Authenticator thành công',
-          position: 'top',
-        });
-        // tslint:disable-next-line:no-floating-promises
-        router.push('/balance');
-      } catch (error) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Mã Authenticator không đúng! Vui lòng gửi lại mã',
-          icon: 'report_problem',
-        });
-      }
-    }
+
     return {
       email,
       onSubmit,
       password,
       isPwd,
       isValidEmail,
-      isShowAuthentic,
-      authenticatorCode,
-      loading,
-      onPostAuthenticatorCode,
     };
   },
 };
 </script>
+<style></style>
