@@ -25,10 +25,8 @@
                 v-model="email"
                 type="email"
                 label="Email"
-                :rules="[
-                  (val) => !!val || 'Hãy điền email của bạn',
-                  isValidEmail,
-                ]"
+                disable
+                readonly
                 lazy-rules
               >
                 <template v-slot:prepend>
@@ -107,7 +105,7 @@
 
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 
@@ -216,6 +214,10 @@ export default {
         $q.loading.hide();
       }
     }
+    function getEmail() {
+      email.value = JSON.parse(localStorage.getItem('user')).email
+    }
+    onMounted(getEmail)
     return {
       email,
       onLogin,

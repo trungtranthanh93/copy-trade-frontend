@@ -138,6 +138,7 @@ export default {
         let user = response.data.user;
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('jwt', response.data.access_token )
+        api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
         if(user.role === 0) {
           $router.push('/user')
         } else {

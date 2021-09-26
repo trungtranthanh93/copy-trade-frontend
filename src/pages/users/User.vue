@@ -47,7 +47,9 @@
     <q-page-container>
       <!-- Effet de transition entre les pages du contenu 
       <transition :name="transitionName">
-      -->
+      --> 
+      <div class="text-right text-h6">Số dư tài khoản của bạn là {{availableBalance}}$</div>
+       <q-separator />
       <transition
         appear
         enter-active-class="animated fadeOut"
@@ -61,6 +63,7 @@
 </template>
 <script>
 import MenuItem from 'components/MenuItem.vue';
+import { api } from 'boot/axios';
 
 const linksData = [
   {
@@ -95,6 +98,14 @@ const linksData = [
     link: '/user/login-exchange',
     separator: false,
   },
+    {
+    title: 'Màn hình cài đặt lệnh',
+    caption: 'Cài đặt số tiền chốt lãi , số tiền chốt lỗ,..',
+    icon: 'settings',
+    iconColor: 'black',
+    link: '/user/setting-follow',
+    separator: false,
+  },
 ];
 
 export default {
@@ -109,6 +120,7 @@ export default {
       menuLinks: linksData, // Structure du menu
       transitionName: 'rotateOut', // Effet de transition entre les pages du <q-page-container> : https://quasar.dev/options/transitions
       // Suppose la dÃ©claration de la transition dans quasar.conf.js : https://quasar.dev/options/animations
+      availableBalance: 0
     };
   },
 
@@ -124,6 +136,16 @@ export default {
         e.stopPropagation();
       }
     },
+    async getSportBalance(){
+      let token = localStorage.getItem('jwt');
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let responseContent = await api.get('/users/spot-balance');
+      // Sau này sẽ thay bằng tài khoản thực
+      this.availableBalance = responseContent.data.demoBalance
+    }
+  },
+  async beforeMount() {
+    await this.getSportBalance()
   },
 };
 </script>

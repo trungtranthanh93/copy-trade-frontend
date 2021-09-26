@@ -23,7 +23,6 @@
         <q-td :props="props">
           <q-btn
             color="positive"
-            icon-right="add_shopping_cart"
             dense
             @click="follow(props.row)"
             >FOLLOW</q-btn
@@ -64,53 +63,17 @@ const columns = [
   }
 ];
 
-const rows = [
-  {
-    id: 2,
-    user_name: 'KhangNV',
-    password: '$2b$10$8AQiR0VqieRiNQArl2Nob.fnekSMNlqbaPA2aTIOKuZc6qNVbS6X6',
-    email: 'khangnvph045133@gmail.com',
-    is_active: 1,
-    refresh_token: null,
-    access_token: null,
-    is_token_valid: null,
-    master_id: null,
-    created_at: '2021-09-21T15:40:42.321Z',
-    updated_at: '2021-09-21T15:40:42.321Z',
-    created_by: null,
-    updated_by: null,
-    role: 1,
-    totalOptionQuantity: '2',
-    winOptionQuantity: '2',
-    loseOptionQuantity: '1',
-  },
-  {
-    id: 2,
-    user_name: 'KhangNV1',
-    password: '$2b$10$8AQiR0VqieRiNQArl2Nob.fnekSMNlqbaPA2aTIOKuZc6qNVbS6X6',
-    email: 'khangnvph045133@gmail.com',
-    is_active: 1,
-    refresh_token: null,
-    access_token: null,
-    is_token_valid: null,
-    master_id: null,
-    created_at: '2021-09-21T15:40:42.321Z',
-    updated_at: '2021-09-21T15:40:42.321Z',
-    created_by: null,
-    updated_by: null,
-    role: 1,
-    totalOptionQuantity: '3',
-    winOptionQuantity: '1',
-    loseOptionQuantity: '1',
-  },
-];
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { api } from 'boot/axios';
+import {ref,onBeforeMount}  from 'vue';
+import { useRouter } from 'vue-router'
+
 export default {
   setup() {
+    const $router = useRouter();
     const $q = useQuasar();
-
-    async function follow(props) {
+    const rows = ref([]);
+    async function follow(row) {
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -122,27 +85,38 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
         let token = localStorage.getItem('jwt');
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.post('/users/valid-token', data);
-        if (responseContent.status !== 200 && responseContent.status !== 201) {
-          throw new Error();
-        }
+
+        await api.post('/users/valid-token');
+        await api.put('/users/folowing-master/'+ row.id);
         $q.notify({
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Hãy điền tiếp mã Authenticator ',
+          message: 'Đã follow theo chuyên gia',
           position: 'top',
         });
         $q.loading.value = false;
       } catch (error) {
-        $q.notify({
+        if(error.response.status === 401) {
+            $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Follow thất bại',
+          message: 'Hãy đăng nhập vào sàn trước khi follow theo chuyên gia',
           icon: 'report_problem',
         });
+        $router.push('/user/login-exchange')
+        } else if (error.response.status === 404) {
+          $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy cài đặt thông tin đánh lệnh trước khi follow theo chuyên gia',
+          icon: 'report_problem',
+        });
+        $router.push('/user/setting-follow')
+        }
+         
       } finally {
         $q.loading.hide();
       }
@@ -155,6 +129,18 @@ export default {
         icon: 'report_problem',
       });
     }
+    async function getListMaster(){
+        let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        let responseContent = await api.get('users/masters');
+        if (responseContent.status !== 200 && responseContent.status !== 201) {
+          throw new Error();
+        }
+        rows.value = responseContent.data
+    }
+    onBeforeMount(getListMaster)
     return {
       columns,
       rows,

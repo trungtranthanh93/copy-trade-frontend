@@ -30,6 +30,7 @@ const routes: RouteRecordRaw[] = [
       { path: '', component: () => import('pages/users/Information.vue')},
       { path: 'list-master', component: () => import('pages/users/ListMaster.vue')},
       { path: 'login-exchange', component: () => import('pages/users/LoginExchange.vue')},
+      { path: 'setting-follow', component: () => import('pages/users/SettingFollow.vue')},
     ],
   },
   {
