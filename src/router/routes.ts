@@ -16,8 +16,8 @@ const routes: RouteRecordRaw[] = [
     component: Admin ,
     meta: { requiresAuth: true},
     children: [
-      { path: '', component: () => import('pages/admin/Trader.vue') }
-      
+      { path: '', component: () => import('pages/admin/Trader.vue') },
+      { path: 'login-exchange', component: () => import('src/pages/LoginExchange.vue')},
     ],
 
   },
@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'history-trading', component: () => import('pages/users/HistoryTrading.vue') },
       { path: '', component: () => import('pages/users/Information.vue')},
       { path: 'list-master', component: () => import('pages/users/ListMaster.vue')},
-      { path: 'login-exchange', component: () => import('pages/users/LoginExchange.vue')},
+      { path: 'login-exchange', component: () => import('src/pages/LoginExchange.vue')},
       { path: 'setting-follow', component: () => import('pages/users/SettingFollow.vue')},
     ],
   },

@@ -200,7 +200,7 @@ export default {
         });
         $q.loading.value = false;
         // tslint:disable-next-line:no-floating-promises
-        $router.push('/user/list-master');
+        $router.back();
       } catch (error) {
         $q.notify({
           color: 'negative',
