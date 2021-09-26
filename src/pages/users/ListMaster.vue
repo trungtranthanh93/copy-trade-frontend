@@ -6,7 +6,7 @@
       icon-right="cancel"
       style=""
       dense
-      @click="unfollow(props.row)"
+      @click="unfollow()"
       >Dừng follow</q-btn
     >
     </div>
@@ -121,13 +121,29 @@ export default {
         $q.loading.hide();
       }
     }
-    function unfollow() {
-      $q.notify({
-        color: 'negative',
-        position: 'top',
-        message: 'Follow thất bại',
-        icon: 'report_problem',
-      });
+    async function unfollow() {
+      try {
+        let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        await api.put('users/unfolow');
+        $q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Đã unfollow chuyên gia',
+          position: 'top',
+        });
+      } catch (error) {
+         $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
+          icon: 'report_problem',
+        });
+      }
+
     }
     async function getListMaster(){
         let token = localStorage.getItem('jwt');

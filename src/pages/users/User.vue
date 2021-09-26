@@ -48,7 +48,7 @@
       <!-- Effet de transition entre les pages du contenu 
       <transition :name="transitionName">
       --> 
-      <div class="text-right text-h6">{{message}}</div>
+      <div class="text-center text-h6">{{message}}</div>
        <q-separator />
       <transition
         appear
@@ -144,7 +144,7 @@ export default {
         // Sau này sẽ thay bằng tài khoản thực
         this.message = `Số dư tài khoản của bạn là ${responseContent.data.demoBalance}$`
       } catch (error) {
-        this.message = "Chưa có thông tin do chưa kết nối với sàn"
+        this.message = 'Chưa có thông tin do chưa kết nối với sàn'
       }
 
     }

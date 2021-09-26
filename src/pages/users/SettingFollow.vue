@@ -63,7 +63,7 @@
               square
               filled
               clearable
-              v-model="stopLoss"
+              v-model="takeProfit"
               type="text"
               label="Mức chốt lãi"
               :rules="[(val) => !!val || 'Hãy điền Mức chốt lãi']"
@@ -76,7 +76,7 @@
               square
               filled
               clearable
-              v-model="takeProfit"
+              v-model="stopLoss"
               type="text"
               label="Mức cắt lỗ"
               :rules="[(val) => !!val || 'Hãy điền Mức cắt lỗ']"
