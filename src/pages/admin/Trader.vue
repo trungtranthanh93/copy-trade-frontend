@@ -46,7 +46,7 @@
               class="q-px-xl q-py-xs"
               color="purple"
               label="Giảm"
-              v
+              v-on:click="onSubmit(`DOWN`)"
             />
           </q-form>
         </q-card-section>
