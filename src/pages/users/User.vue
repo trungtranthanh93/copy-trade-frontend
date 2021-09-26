@@ -48,7 +48,7 @@
       <!-- Effet de transition entre les pages du contenu 
       <transition :name="transitionName">
       --> 
-      <div class="text-right text-h6">Số dư tài khoản của bạn là {{availableBalance}}$</div>
+      <div class="text-right text-h6">{{message}}</div>
        <q-separator />
       <transition
         appear
@@ -120,7 +120,7 @@ export default {
       menuLinks: linksData, // Structure du menu
       transitionName: 'rotateOut', // Effet de transition entre les pages du <q-page-container> : https://quasar.dev/options/transitions
       // Suppose la dÃ©claration de la transition dans quasar.conf.js : https://quasar.dev/options/animations
-      availableBalance: 0
+      message: ''
     };
   },
 
@@ -137,11 +137,16 @@ export default {
       }
     },
     async getSportBalance(){
-      let token = localStorage.getItem('jwt');
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      let responseContent = await api.get('/users/spot-balance');
-      // Sau này sẽ thay bằng tài khoản thực
-      this.availableBalance = responseContent.data.demoBalance
+      try {
+        let token = localStorage.getItem('jwt');
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        let responseContent = await api.get('/users/spot-balance');
+        // Sau này sẽ thay bằng tài khoản thực
+        this.message = `Số dư tài khoản của bạn là ${responseContent.data.demoBalance}$`
+      } catch (error) {
+        this.message = "Chưa có thông tin do chưa kết nối với sàn"
+      }
+
     }
   },
   async beforeMount() {
