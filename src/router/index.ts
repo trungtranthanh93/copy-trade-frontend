@@ -34,20 +34,46 @@ export default route<StateInterface>(function ( /* { store, ssrContext } */) {
     ),
   });
   Router.beforeEach((to, from, next) => {
+    let user: any = localStorage.getItem('user');
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in
       // if not, redirect to login page.
-      if (!localStorage.getItem('user')) {
+      
+      if (!user) {
         next({
           name: 'login',
           query: { redirect: to.fullPath }
         })
+      }
+      user = JSON.parse(user)
+      if(to.matched.some(record => record.meta.isAdmin) && user.role === 0) {
+        next({
+          name: 'infomation'
+        })
+      }
+      if(to.matched.some(record => !record.meta.isAdmin) && user.role === 1) {
+        next({
+          name: 'trader'
+        }) 
+      }
+      next()
+    }
+    if (to.name === 'login') {
+      if (user) {
+        if (user.role === 0) {
+          next({
+            name: 'user'
+          })
+        } else {
+          next({
+            name: 'trader'
+          })
+        }
       } else {
         next()
       }
-    } else {
-      next() // make sure to always call next()!
     }
+    next()
   })
   return Router;
 });

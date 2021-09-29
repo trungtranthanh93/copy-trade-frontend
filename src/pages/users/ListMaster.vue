@@ -1,33 +1,86 @@
 <template>
   <div class="q-pa-md">
-    <div class="mb-5">
-          <q-btn
-      color="negative"
-      icon-right="cancel"
-      style=""
-      dense
-      @click="unfollow()"
-      >Dừng follow</q-btn
-    >
+    <div class="row justify-between">
+      <q-btn
+        size="md"
+        class="bg-accent"
+        label="Đăng nhập sàn"
+        @click="goLoginExchange"
+      />
     </div>
-
+    <q-separator color="black q-mb-md q-mt-md" inset />
+    <template v-if="!isActive">
+      <div class="q-pa-md q-gutter-sm">
+        <q-banner rounded class="bg-red text-white">
+          Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích
+          hoạt tài khoản.
+        </q-banner>
+      </div>
+    </template>
     <q-table
-      title="Treats"
+      :grid="$q.platform.is.mobile"
+      title=""
       :rows="rows"
       :columns="columns"
       row-key="name"
-      dark
-      color="amber"
+      :filter="filter"
     >
+      <template v-slot:top-right>
+        <q-input
+          borderless
+          dense
+          debounce="300"
+          v-model="filter"
+          placeholder="Search"
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
       <template v-slot:body-cell-action="props">
         <q-td :props="props">
-          <q-btn
-            color="positive"
-            dense
-            @click="follow(props.row)"
+          <q-btn color="positive" dense @click="follow(props.row)"
             >FOLLOW</q-btn
           >
         </q-td>
+      </template>
+      <template v-slot:item="props">
+        <div
+          class="
+            q-pa-xs
+            col-xs-12 col-sm-6 col-md-4 col-lg-3
+            grid-style-transition
+          "
+          :style="props.selected ? 'transform: scale(0.95);' : ''"
+        >
+          <q-card :class="props.selected ? 'bg-grey-2' : ''">
+            <q-list dense>
+              <q-item v-for="col in props.cols" :key="col.name">
+                <q-item-section v-if="col.name !== 'action'">
+                  <q-item-label>{{ col.label }}</q-item-label>
+                </q-item-section>
+                <q-item-section side class="justify-center">
+                  <q-btn
+                    v-if="col.name === 'action'"
+                    dense
+                    class="full-width"
+                    color="positive"
+                    field="edit"
+                    label="Follow"
+                    @click="follow(props.row)"
+                  ></q-btn>
+                  <q-item-label
+                    v-else
+                    caption
+                    :class="col.classes ? col.classes : ''"
+                    >{{ col.value }}</q-item-label
+                  >
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card>
+        </div>
       </template>
     </q-table>
   </div>
@@ -40,6 +93,7 @@ const columns = [
     field: 'user_name',
     sortable: true,
     align: 'center',
+    classes: 'text-weight-bolder',
   },
   {
     name: 'totalOptionQuantity',
@@ -54,26 +108,52 @@ const columns = [
     field: 'winOptionQuantity',
     sortable: true,
     align: 'center',
+    classes: 'text-green',
+  },
+  {
+    name: 'userFolowQuantity',
+    label: 'Số người follow',
+    field: 'userFolowQuantity',
+    sortable: true,
+    align: 'center',
   },
   {
     name: 'action',
     label: 'Follow',
     field: 'action',
     align: 'center',
-  }
+  },
 ];
 
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { api } from 'boot/axios';
-import {ref,onBeforeMount}  from 'vue';
-import { useRouter } from 'vue-router'
+import { ref, onBeforeMount,onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
     const $router = useRouter();
     const $q = useQuasar();
     const rows = ref([]);
+    const filter = ref('');
+    const isActive = ref(false);
     async function follow(row) {
+      if (!isActive.value) {
+        $q.dialog({
+          title: 'Thông báo',
+          message: 'Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích hoạt tài khoản.',
+        })
+          .onOk(() => {
+            // console.log('OK')
+          })
+          .onCancel(() => {
+            // console.log('Cancel')
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+          return;
+      }
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -89,7 +169,7 @@ export default {
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         await api.post('/users/valid-token');
-        await api.put('/users/folowing-master/'+ row.id);
+        await api.put('/users/folowing-master/' + row.id);
         $q.notify({
           color: 'green-4',
           textColor: 'white',
@@ -98,75 +178,91 @@ export default {
           position: 'top',
         });
         $q.loading.value = false;
+        $router.push('/user/');
       } catch (error) {
-        if(error.response.status === 401) {
-            $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy đăng nhập vào sàn trước khi follow theo chuyên gia',
-          icon: 'report_problem',
-        });
-        $router.push('/user/login-exchange')
+        if (error.response.status === 401) {
+          $q.dialog({
+          title: 'Thông báo',
+          message: 'Hãy đăng nhập vào sàn trước khi follow theo chuyên gia.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
+          cancel: true,
+          persistent: true
+        })
+          .onOk(() => {
+            $router.push('/user/login-exchange');
+          })
+          .onCancel(() => {
+            return;
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
         } else if (error.response.status === 404) {
-          $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy cài đặt thông tin đánh lệnh trước khi follow theo chuyên gia',
-          icon: 'report_problem',
-        });
-        $router.push('/user/setting-follow')
+        $q.dialog({
+          title: 'Thông báo',
+          message: 'Hãy cài đặt thông tin đánh lệnh trước khi follow theo chuyên gia. Nhấn OK để chuyển sang màn hình cài đặt chuyên gia',
+          cancel: true,
+          persistent: true
+        })
+          .onOk(() => {
+            $router.push('/user/setting-follow');
+          })
+          .onCancel(() => {
+            return;
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
         }
-         
       } finally {
         $q.loading.hide();
       }
     }
-    async function unfollow() {
-      try {
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    function checkActive() {
+      console.log('1');
+      let user = JSON.parse(localStorage.getItem('user'));
+      isActive.value = user.isActive;
+    }
+    async function getListMaster() {
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        await api.put('users/unfolow');
+      let responseContent = await api.get('users/masters');
+      if (responseContent.status !== 200 && responseContent.status !== 201) {
+        throw new Error();
+      }
+      rows.value = responseContent.data;
+    }
+    async function goLoginExchange() {
+      try {
+        await api.post('/users/valid-token');
         $q.notify({
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Đã unfollow chuyên gia',
+          message: 'Bạn đã đăng nhập sàn rồi!',
           position: 'top',
         });
       } catch (error) {
-         $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
-          icon: 'report_problem',
-        });
+        $router.push('/user/login-exchange');
       }
-
-    }
-    async function getListMaster(){
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        let responseContent = await api.get('users/masters');
-        if (responseContent.status !== 200 && responseContent.status !== 201) {
-          throw new Error();
-        }
-        rows.value = responseContent.data
     }
     onBeforeMount(getListMaster)
+    onMounted(checkActive)
     return {
       columns,
       rows,
       follow,
-      unfollow,
+      filter,
+      goLoginExchange,
+      isActive
     };
   },
 };
 </script>
 <style lang="sass" scoped>
-  .mb-5
-    margin-bottom: 5px
+.mb-5
+  margin-bottom: 5px
+.ml-5
+  margin-left: 5px
 </style>

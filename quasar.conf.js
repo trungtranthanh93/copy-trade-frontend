@@ -94,8 +94,11 @@ module.exports = configure(function(ctx) {
                     /* look at QuasarConfOptions from the API card */
                 },
                 brand: {
-                    primary: '#011022',
-                    secondary: '#26A69A',
+                    primary: '#6200EE',
+                    primaryVariant: '#3700B3',
+                    secondary:'#03DAC6',
+                    secondaryVariant: '#018786',
+                    accent:'#BB86FC',
                     // accent: '#9C27B0',
 
                     dark: '#1d1d1d',
@@ -104,7 +107,8 @@ module.exports = configure(function(ctx) {
                     negative: '#C10015',
                     info: '#31CCEC',
                     white: '#ffffff',
-                    orangeButton: '#E66E06'
+                    orangeButton: '#E66E06',
+                    
                 }
             },
 
@@ -119,7 +123,7 @@ module.exports = configure(function(ctx) {
             // directives: [],
 
             // Quasar plugins
-            plugins: ['Notify', 'Loading']
+            plugins: ['Notify', 'Loading', 'Dialog']
         },
 
         // animations: 'all', // --- includes all animations

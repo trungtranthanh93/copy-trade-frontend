@@ -1,23 +1,21 @@
 <template>
   <div class="column">
     <div class="row justify-center items-center">
-      <q-card
-        square
-        dark
-        class="q-pa-md q-ma-none no-shadow bg-grey-10"
-        style="width: 320px"
-      >
-        <q-card-section class="q-mb-md"> </q-card-section>
-        <q-card-section class="q-mt-xl q-mb-md">
-          <p class="text-weight-bolder text-grey-2 text-center text-h6">
+      <q-card square class="q-pa-md q-ma-none bg-grey-3" style="width: 320px">
+        <q-card-section class="q-mb-md">
+          <p class="text-weight-bolder text-center text-h6">
             Đăng nhập vào sàn
           </p>
+        </q-card-section>
+        <q-card-section class="q-mb-md"> 
+           <q-banner inline-actions rounded class="bg-orange text-white">
+            Tài khoản của Quý Khách đã dừng Copytrade. Quý Khách vui lòng đăng nhập lại.
+          </q-banner>
         </q-card-section>
         <q-card-section>
           <q-form class="q-gutter-md">
             <template v-if="!isShowAuthenticator">
               <q-input
-                dark
                 dense
                 square
                 filled
@@ -34,7 +32,6 @@
                 </template>
               </q-input>
               <q-input
-                dark
                 dense
                 square
                 filled
@@ -52,7 +49,6 @@
             </template>
             <template v-else>
               <q-input
-                dark
                 dense
                 square
                 filled
@@ -75,10 +71,8 @@
               <div class="col-6">
                 <q-btn
                   outline
-                  rounded
                   size="md"
-                  color="deep-orange"
-                  class="full-width text-white"
+                  class="full-width bg-accent"
                   label="Đăng nhập"
                   @click="onLogin()"
                 />
@@ -87,10 +81,8 @@
             <template v-else>
               <q-btn
                 outline
-                rounded
                 size="md"
-                color="deep-orange"
-                class="full-width text-white"
+                class="full-width bg-accent"
                 label="Gửi mã"
                 @click="onAuthenticator()"
               />
@@ -105,7 +97,7 @@
 
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
-import { ref,onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 
@@ -156,6 +148,19 @@ export default {
         isShowAuthenticator.value = true;
         $q.loading.value = false;
       } catch (error) {
+        if (
+          error.response.status === 400 &&
+          response.data.d?.err_code === 'user.limit.exceed'
+        ) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message:
+              'Đang có hơn 1000 người vào hệ thống . Vui lòng đăng nhập lại sau vài phút',
+            icon: 'report_problem',
+          });
+          $router.push('/user/setting-follow');
+        }
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -195,7 +200,7 @@ export default {
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Đăng nhập sàn thành công. Hãy chọn chuyên gia muốn follow',
+          message: 'Đăng nhập sàn thành công!',
           position: 'top',
         });
         $q.loading.value = false;
@@ -210,14 +215,30 @@ export default {
           icon: 'report_problem',
         });
         isShowAuthenticator.value = false;
-      }finally {
+      } finally {
         $q.loading.hide();
       }
     }
     function getEmail() {
-      email.value = JSON.parse(localStorage.getItem('user')).email
+      email.value = JSON.parse(localStorage.getItem('user')).email;
     }
-    onMounted(getEmail)
+    async function checkIsLogin() {
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      await api.post('/users/valid-token');
+      console.log('Tro lai');
+      $q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: 'Bạn đã đăng nhập sàn rồi!',
+        position: 'top',
+      });
+      $router.back();
+    }
+    onMounted(getEmail);
+    onBeforeMount(checkIsLogin);
     return {
       email,
       onLogin,

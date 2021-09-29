@@ -21,7 +21,7 @@
               </p>
             </q-card-section>
             <q-card-section class="q-mt-xl q-mb-md">
-              <p class="text-weight-bolder text-center text-h6">Đăng nhập</p>
+              <p class="text-weight-bolder text-center text-h6">Đăng ký tài khoản</p>
             </q-card-section>
             <q-card-section>
               <q-form class="q-gutter-md">
@@ -58,6 +58,21 @@
                     <q-icon name="lock" />
                   </template>
                 </q-input>
+                <q-input
+                dense
+                square
+                filled
+                clearable
+                v-model="username"
+                type="text"
+                label="Biệt danh"
+                :rules="[(val) => !!val || 'Hãy điền biệt danh của bạn']"
+                lazy-rules
+              >
+                <template v-slot:prepend>
+                  <q-icon name="lock" />
+                </template>
+              </q-input>
               </q-form>
             </q-card-section>
             <q-card-actions>
@@ -67,13 +82,13 @@
                     outline
                     size="md"
                     class="full-width bg-accent"
-                    label="Đăng nhập"
+                    label="Đăng ký"
                     @click="onSubmit()"
                   />
                 </div>
                 <div class="col-6">
                   <p class="text-no-wrap text-grey-1 text-caption text-right">
-                    <a href="/register">Đăng ký tài khoản</a>
+                    <a href="/login">Đăng nhập</a>
                   </p>
                 </div>
               </div>
@@ -94,7 +109,7 @@
             </p>
           </q-card-section>
           <q-card-section class="q-mt-xl q-mb-md">
-            <p class="text-weight-bolder text-center text-h6">Đăng nhập</p>
+            <p class="text-weight-bolder text-center text-h6">Đăng ký tài khoản</p>
           </q-card-section>
           <q-card-section>
             <q-form class="q-gutter-md">
@@ -131,6 +146,21 @@
                   <q-icon name="lock" />
                 </template>
               </q-input>
+              <q-input
+                dense
+                square
+                filled
+                clearable
+                v-model="username"
+                type="text"
+                label="Biệt danh"
+                :rules="[(val) => !!val || 'Hãy điền biệt danh của bạn']"
+                lazy-rules
+              >
+                <template v-slot:prepend>
+                  <q-icon name="lock" />
+                </template>
+              </q-input>
             </q-form>
           </q-card-section>
           <q-card-actions>
@@ -140,18 +170,13 @@
                   outline
                   size="md"
                   class="full-width bg-accent"
-                  label="Đăng nhập"
+                  label="Đăng ký"
                   @click="onSubmit()"
                 />
               </div>
               <div class="col-6">
                 <p class="text-no-wrap text-grey-1 text-caption text-right">
-                  <a href="/register">Đăng ký tài khoản</a>
-                </p>
-              </div>
-              <div class="col-6">
-                <p class="text-no-wrap text-grey-1 text-caption text-right">
-                  <a href="/forgot-password">Quên mật khẩu</a>
+                  <a href="/login">Đăng nhập</a>
                 </p>
               </div>
             </div>
@@ -175,6 +200,7 @@ export default {
     const $q = useQuasar();
     const email = ref(null);
     const password = ref(null);
+    const username = ref(null);
     const isPwd = ref(true);
     function isValidEmail() {
       const emailPattern =
@@ -194,29 +220,30 @@ export default {
       let data = {
         email: email.value,
         password: password.value,
+        username: username.value,
+        isActive: false,
+        role: 0
       };
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
-        let response = await api.post('/auth/login', data);
+        let response = await api.post('/users', data);
         if (response.status !== 200 && response.status !== 201) {
           throw new Error();
         }
-        let user = response.data.user;
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('jwt', response.data.access_token);
-        api.defaults.headers.common['Authorization'] =
-          'Bearer ' + response.data.access_token;
-        if (user.role === 0) {
-          $router.push('/user');
-        } else {
-          $router.push('/admin');
-        }
+        $q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Đăng ký thành công',
+          position: 'top',
+        });
         $q.loading.value = false;
+        $router.push('/');
       } catch (error) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Đăng nhập thất bại ! Vui lòng đăng nhập lại',
+          message: 'Đăng ký thất bại ! Vui lòng đăng ký lại',
           icon: 'report_problem',
         });
       } finally {
@@ -230,6 +257,7 @@ export default {
       password,
       isPwd,
       isValidEmail,
+      username
     };
   },
 };

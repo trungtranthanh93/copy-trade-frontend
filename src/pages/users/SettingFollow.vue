@@ -1,88 +1,42 @@
 <template>
   <div class="column">
     <div class="row justify-center items-center">
-      <q-card
-        square
-        dark
-        class="q-pa-md q-ma-none no-shadow bg-grey-10"
-        style="width: 320px"
-      >
+      <q-card square class="q-pa-md q-ma-none" style="width: 320px">
         <q-card-section class="">
-          <p class="text-weight-bolder text-grey-2 text-center text-h6">
+          <p class="text-weight-bolder text-center text-h6">
             Màn hình cài đặt lệnh
           </p>
         </q-card-section>
         <q-card-section>
           <q-form class="q-gutter-md">
-            <q-input
-              dark
-              dense
-              square
+            <q-select
               filled
-              clearable
-              v-model="percentAmount"
-              type="text"
-              label="Phần trăm lệnh theo chuyên gia"
-              lazy-rules
-            >
-            </q-input>
-            <q-input
-              dark
-              dense
-              square
-              filled
-              clearable
               v-model="maxAmount"
-              type="text"
+              :options="optionsAmount"
+              :rules="[(val) => !!val || 'Hãy chọn % lệnh tối đa']"
               label="Lệnh tối đa"
-              :rules="[
-                (val) => !!val || 'Hãy điền giá trị tiền tối đa của một lệnh ',
-              ]"
-              lazy-rules
-            >
-            </q-input>
-            <q-input
-              dark
-              dense
-              square
+            />
+            <q-select
               filled
-              clearable
               v-model="minAmount"
-              type="text"
+              :options="optionsAmount"
+              :rules="[(val) => !!val || 'Hãy chọn % lệnh tối thiểu']"
               label="Lệnh tối thiểu"
-              :rules="[
-                (val) =>
-                  !!val || 'Hãy điền giá trị tiền tối thiểu của một lệnh ',
-              ]"
-              lazy-rules
-            >
-            </q-input>
-            <q-input
-              dark
-              dense
-              square
+            />
+            <q-select
               filled
-              clearable
               v-model="takeProfit"
-              type="text"
+              :options="optionsProfit"
               label="Mức chốt lãi"
-              :rules="[(val) => !!val || 'Hãy điền Mức chốt lãi']"
-              lazy-rules
-            >
-            </q-input>
-            <q-input
-              dark
-              dense
-              square
+              :rules="[(val) => !!val || 'Hãy chọn % mức chốt lãi']"
+            />
+            <q-select
               filled
-              clearable
               v-model="stopLoss"
-              type="text"
+              :options="optionsLost"
               label="Mức cắt lỗ"
-              :rules="[(val) => !!val || 'Hãy điền Mức cắt lỗ']"
-              lazy-rules
-            >
-            </q-input>
+              :rules="[(val) => !!val || 'Hãy chọn % mức cắt lỗ']"
+            />
           </q-form>
         </q-card-section>
         <q-card-actions>
@@ -90,10 +44,8 @@
             <div class="col-6">
               <q-btn
                 outline
-                rounded
                 size="md"
-                color="deep-orange"
-                class="full-width text-white"
+                class="full-width bg-accent"
                 label="Bắt đầu follow"
                 @click="onSetting()"
               />
@@ -132,11 +84,10 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
         let data = {
-          percentAmount: percentAmount.value,
-          maxAmount: maxAmount.value,
-          minAmount: minAmount.value,
-          stopLoss: stopLoss.value,
-          takeProfit: takeProfit.value,
+          maxAmount: maxAmount.value.value,
+          minAmount: minAmount.value.value,
+          stopLoss: stopLoss.value.value,
+          takeProfit: takeProfit.value.value,
         };
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -153,15 +104,14 @@ export default {
           position: 'top',
         });
         $q.loading.value = false;
-        $router.push('/user/list-master')
+        $router.push('/user/list-master');
       } catch (error) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Đăng nhập thất bại ! Vui lòng đăng nhập lại',
+          message: 'Cài đặt thất bại. Vui lòng cài đặt lại',
           icon: 'report_problem',
         });
-        isShowAuthenticator.value = false;
       } finally {
         $q.loading.hide();
       }
@@ -173,6 +123,292 @@ export default {
       stopLoss,
       takeProfit,
       onSetting,
+      optionsAmount: [
+        {
+          label: '1%',
+          value: 1,
+        },
+        {
+          label: '2%',
+          value: 2,
+        },
+        {
+          label: '3%',
+          value: 3,
+        },
+        {
+          label: '4%',
+          value: 4,
+        },
+        {
+          label: '5%',
+          value: 5,
+        },
+        {
+          label: '6%',
+          value: 6,
+        },
+        {
+          label: '7%',
+          value: 7,
+        },
+        {
+          label: '8%',
+          value: 8,
+        },
+        {
+          label: '9%',
+          value: 9,
+        },
+        {
+          label: '10%',
+          value: 10,
+        },
+      ],
+      optionsProfit: [
+        {
+          label: '1%',
+          value: 1,
+        },
+        {
+          label: '2%',
+          value: 2,
+        },
+        {
+          label: '3%',
+          value: 3,
+        },
+        {
+          label: '4%',
+          value: 4,
+        },
+        {
+          label: '5%',
+          value: 5,
+        },
+        {
+          label: '6%',
+          value: 6,
+        },
+        {
+          label: '7%',
+          value: 7,
+        },
+        {
+          label: '8%',
+          value: 8,
+        },
+        {
+          label: '9%',
+          value: 9,
+        },
+        {
+          label: '10%',
+          value: 10,
+        },
+        {
+          label: '11%',
+          value: 11,
+        },
+        {
+          label: '12%',
+          value: 12,
+        },
+        {
+          label: '13%',
+          value: 13,
+        },
+        {
+          label: '14%',
+          value: 14,
+        },
+        {
+          label: '15%',
+          value: 15,
+        },
+        {
+          label: '16%',
+          value: 16,
+        },
+        {
+          label: '17%',
+          value: 17,
+        },
+        {
+          label: '18%',
+          value: 18,
+        },
+        {
+          label: '19%',
+          value: 19,
+        },
+        {
+          label: '20%',
+          value: 20,
+        },
+        {
+          label: '21%',
+          value: 21,
+        },
+        {
+          label: '22%',
+          value: 22,
+        },
+        {
+          label: '23%',
+          value: 23,
+        },
+        {
+          label: '24%',
+          value: 24,
+        },
+        {
+          label: '25%',
+          value: 25,
+        },
+        {
+          label: '26%',
+          value: 26,
+        },
+        {
+          label: '27%',
+          value: 27,
+        },
+        {
+          label: '28%',
+          value: 28,
+        },
+        {
+          label: '29%',
+          value: 29,
+        },
+        {
+          label: '30%',
+          value: 30,
+        },
+      ],
+      optionsLost: [
+        {
+          label: '-1%',
+          value: 1,
+        },
+        {
+          label: '-2%',
+          value: 2,
+        },
+        {
+          label: '-3%',
+          value: 3,
+        },
+        {
+          label: '-4%',
+          value: 4,
+        },
+        {
+          label: '-5%',
+          value: 5,
+        },
+        {
+          label: '-6%',
+          value: 6,
+        },
+        {
+          label: '-7%',
+          value: 7,
+        },
+        {
+          label: '-8%',
+          value: 8,
+        },
+        {
+          label: '-9%',
+          value: 9,
+        },
+        {
+          label: '-10%',
+          value: 10,
+        },
+        {
+          label: '-11%',
+          value: 11,
+        },
+        {
+          label: '-12%',
+          value: 12,
+        },
+        {
+          label: '-13%',
+          value: 13,
+        },
+        {
+          label: '-14%',
+          value: 14,
+        },
+        {
+          label: '-15%',
+          value: 15,
+        },
+        {
+          label: '-16%',
+          value: 16,
+        },
+        {
+          label: '-17%',
+          value: 17,
+        },
+        {
+          label: '-18%',
+          value: 18,
+        },
+        {
+          label: '-19%',
+          value: 19,
+        },
+        {
+          label: '-20%',
+          value: 20,
+        },
+        {
+          label: '-21%',
+          value: -21,
+        },
+        {
+          label: '-22%',
+          value: 22,
+        },
+        {
+          label: '-23%',
+          value: 23,
+        },
+        {
+          label: '-24%',
+          value: 24,
+        },
+        {
+          label: '-25%',
+          value: 25,
+        },
+        {
+          label: '-26%',
+          value: 26,
+        },
+        {
+          label: '-27%',
+          value: 27,
+        },
+        {
+          label: '-28%',
+          value: 28,
+        },
+        {
+          label: '-29%',
+          value: 29,
+        },
+        {
+          label: '-30%',
+          value: 30,
+        },
+      ],
     };
   },
 };
