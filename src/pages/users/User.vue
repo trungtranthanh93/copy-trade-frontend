@@ -94,6 +94,7 @@ export default {
         await api.post('/users/valid-token');
         //TODO follow theo chuyên gia
       } catch (error) {
+        console.log(error)
         $router.push('/user/list-master');
       }
     }

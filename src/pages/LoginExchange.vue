@@ -56,6 +56,7 @@
                 v-model="authenticatorCode"
                 type="text"
                 label="Authenticator"
+                :rules="[(val) => (!!val) || 'Hãy điền Authenticator chỉ bao gồm 6 kí tự']"
                 lazy-rules
               >
                 <template v-slot:prepend>
@@ -146,6 +147,7 @@ export default {
           position: 'top',
         });
         isShowAuthenticator.value = true;
+        authenticatorCode.value='';
         $q.loading.value = false;
       } catch (error) {
         if (
@@ -207,14 +209,23 @@ export default {
         // tslint:disable-next-line:no-floating-promises
         $router.back();
       } catch (error) {
+        if(error.response.data.message === 'Invalid.2faCode') {
         $q.notify({
           color: 'negative',
           position: 'top',
           message:
-            'Mã Authenticator không đúng! Vui lòng thực hiện đăng nhập lại',
+            'Mã Authenticator không đúng định dạng! Vui lòng nhập mã gồm 6 kí tự',
           icon: 'report_problem',
         });
-        isShowAuthenticator.value = false;
+        } else {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message:
+            'Mã Authenticator bị sai! Vui lòng nhập lại mã Authenticator',
+          icon: 'report_problem',
+        });
+        }
       } finally {
         $q.loading.hide();
       }
@@ -226,6 +237,7 @@ export default {
       let token = localStorage.getItem('jwt');
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      console.log(1)
       await api.post('/users/valid-token');
       console.log('Tro lai');
       $q.notify({

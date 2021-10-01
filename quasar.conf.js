@@ -101,15 +101,14 @@ module.exports = configure(function(ctx) {
                     accent:'#BB86FC',
                     // accent: '#9C27B0',
 
-                    dark: '#1d1d1d',
-
-                    positive: '#21BA45',
+                    dark: '#011022',
+                    // màu button 
+                    positive: '#D86908',
                     negative: '#C10015',
                     info: '#31CCEC',
-                    white: '#ffffff',
-                    orangeButton: '#E66E06',
                     
-                }
+                },
+                dark: true
             },
 
             // iconSet: 'material-icons', // Quasar icon set

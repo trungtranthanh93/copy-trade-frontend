@@ -176,7 +176,7 @@
               </div>
               <div class="col-6">
                 <p class="text-no-wrap text-grey-1 text-caption text-right">
-                  <a href="/login">Đăng nhập</a>
+                  <a href="/">Đăng nhập</a>
                 </p>
               </div>
             </div>

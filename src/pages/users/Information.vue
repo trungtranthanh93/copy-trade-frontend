@@ -99,12 +99,57 @@
       >
     </div>
     <q-separator color="black q-mt-md q-mb-md" inset />
-    <div class="row items-center justify-center q-gutter-md">
-      Hiện thị lịch sử lệnh
+    <div class="q-pa-md">
+      <q-table
+        color="primary"
+        flat
+        bordered
+        title="Kết quả(Tính năng đang phát triển)"
+        :rows="rows"
+        :columns="columns"
+        row-key="name"
+      />
     </div>
   </div>
 </template>
 <script>
+const columns = [
+  { name: 'betType', align: 'center', label: 'Lệnh đánh', field: 'betType' },
+  {
+    name: 'valueMoney',
+    align: 'center',
+    label: 'Số tiền',
+    field: 'valueMoney',
+  },
+  { name: 'result', align: 'center', label: 'Kết quả', field: 'result' },
+  { name: 'time', align: 'center', label: 'Thời gian', field: 'time' },
+];
+const rows = [
+  {
+    betType: 'UP',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+  {
+    betType: 'Down',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+  {
+    betType: 'UP',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+  {
+    betType: 'UP',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+];
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
@@ -130,7 +175,7 @@ export default {
           $q.dialog({
             title: 'Thông báo',
             message: `Lợi nhuận hiện tại: <span class="text-green">${incomeAmount.value}</span> đã đạt giới hạn [Chốt lãi:<span class="text-green">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
-            html: true
+            html: true,
           })
             .onOk(() => {
               return;
@@ -146,7 +191,7 @@ export default {
           $q.dialog({
             title: 'Thông báo',
             message: `Lợi nhuận hiện tại: <span class="text-red">${incomeAmount.value}</span> đã đạt giới hạn [Cắt lỗ: <span class="text-red">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
-            html: true
+            html: true,
           })
             .onOk(() => {
               return;
@@ -160,7 +205,7 @@ export default {
         }
         return;
       } catch (error) {
-        $router.push('user/list-master');
+        $router.push('/user/list-master');
       }
     }
     async function unfollow() {
@@ -197,6 +242,8 @@ export default {
       incomeAmount,
       unfollow,
       continueFollow,
+      columns,
+      rows,
     };
   },
 };

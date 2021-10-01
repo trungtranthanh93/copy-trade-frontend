@@ -88,11 +88,59 @@
       </q-card>
     </div>
     <q-separator color="black q-mt-md q-mb-md" inset />
+    <div class="q-pa-md">
+      <q-table
+        color="primary"
+        flat
+        bordered
+        title="Kết quả(Tính năng đang phát triển)"
+        :rows="rows"
+        :columns="columns"
+        row-key="name"
+      />
+    </div>
   </div>
 </template>
 
 
 <script>
+const columns = [
+  { name: 'betType', align: 'center', label: 'Lệnh đánh', field: 'betType' },
+  {
+    name: 'valueMoney',
+    align: 'center',
+    label: 'Số tiền',
+    field: 'valueMoney',
+  },
+  { name: 'result', align: 'center', label: 'Kết quả', field: 'result' },
+  { name: 'time', align: 'center', label: 'Thời gian', field: 'time' },
+];
+const rows = [
+  {
+    betType: 'UP',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+  {
+    betType: 'Down',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+  {
+    betType: 'UP',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+  {
+    betType: 'UP',
+    valueMoney: 159,
+    result: 6.0,
+    time: 24,
+  },
+];
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onBeforeMount, onMounted } from 'vue';
 import { api } from 'boot/axios';
@@ -139,27 +187,23 @@ export default {
           betAmount: Number(money.value),
         };
         let response = await api.post('/trade/v1/bet', data);
-        if (
-          response.data.ok === false
-        ) {
-          if(response.data.d?.err_code === 'betsession_is_invalid'){
-                      $q.notify({
-            color: 'negative',
-            position: 'top',
-            message:
-              'Chưa đến thời điểm đánh lệnh. Hãy đánh đúng thời điểm đánh lệnh',
-            icon: 'report_problem',
-          });
+        if (response.data.ok === false) {
+          if (response.data.d?.err_code === 'betsession_is_invalid') {
+            $q.notify({
+              color: 'negative',
+              position: 'top',
+              message:
+                'Chưa đến thời điểm đánh lệnh. Hãy đánh đúng thời điểm đánh lệnh',
+              icon: 'report_problem',
+            });
           } else {
             $q.notify({
-            color: 'negative',
-            position: 'top',
-            message:
-              response.data.d?.message,
-            icon: 'report_problem',
-          });
+              color: 'negative',
+              position: 'top',
+              message: response.data.d?.message,
+              icon: 'report_problem',
+            });
           }
-
         } else if (response.data.ok === true) {
           $q.notify({
             color: 'green-4',
@@ -185,7 +229,7 @@ export default {
         let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
+        
         await api.post('/users/valid-token');
       } catch (error) {
         $q.notify({
@@ -194,11 +238,12 @@ export default {
           message: 'Hãy đăng nhập vào sàn trước khi đánh lệnh',
           icon: 'report_problem',
         });
+        console.log(1)
         $router.push('/admin/login-exchange');
       }
     }
     onBeforeMount(onCheckValid);
-    onMounted(getSportBalance)
+    onMounted(getSportBalance);
     return {
       putOptions,
       money,
@@ -206,7 +251,9 @@ export default {
       onSubmit,
       capital,
       availableBalance,
-      incomeAmount
+      incomeAmount,
+      columns,
+      rows,
     };
   },
 };

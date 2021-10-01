@@ -34,6 +34,7 @@ export default route<StateInterface>(function ( /* { store, ssrContext } */) {
     ),
   });
   Router.beforeEach((to, from, next) => {
+    console.log(2)
     let user: any = localStorage.getItem('user');
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in

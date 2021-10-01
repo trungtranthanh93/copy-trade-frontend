@@ -11,6 +11,15 @@
 // It's highly recommended to change the default colors
 // to match your app's branding.
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
+// Example: Import Inter with multiple weights
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+// Set the default font-family
+$typography-font-family : 'Inter', sans-serif !default;
+
+// Fix font-weight values to match the imported font family weights
+$text-weights: (thin: 300, light: 400, regular: 600, medium: 700, bold: 800, bolder: 800) !default;
+$button-font-weight: 600; // or 400 if you prefer thinner
 
 $primary   : #1976D2;
 $secondary : #26A69A;

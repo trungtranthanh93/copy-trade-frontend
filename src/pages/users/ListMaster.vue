@@ -127,7 +127,7 @@ const columns = [
 
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { api } from 'boot/axios';
-import { ref, onBeforeMount,onMounted } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -141,7 +141,8 @@ export default {
       if (!isActive.value) {
         $q.dialog({
           title: 'Thông báo',
-          message: 'Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích hoạt tài khoản.',
+          message:
+            'Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích hoạt tài khoản.',
         })
           .onOk(() => {
             // console.log('OK')
@@ -152,7 +153,7 @@ export default {
           .onDismiss(() => {
             // console.log('I am triggered on both OK and Cancel')
           });
-          return;
+        return;
       }
       $q.loading.show({
         spinner: QSpinnerFacebook,
@@ -167,51 +168,31 @@ export default {
         let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        await api.post('/users/valid-token');
+        let isVaildSuccess = await onCheckValid();
+        if(!isVaildSuccess){
+          return;
+        }
         await api.put('/users/folowing-master/' + row.id);
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Đã follow theo chuyên gia',
-          position: 'top',
-        });
         $q.loading.value = false;
-        $router.push('/user/');
+        $router.push('/user/setting-follow');
       } catch (error) {
-        if (error.response.status === 401) {
+       if (error.response.status === 404) {
           $q.dialog({
-          title: 'Thông báo',
-          message: 'Hãy đăng nhập vào sàn trước khi follow theo chuyên gia.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
-          cancel: true,
-          persistent: true
-        })
-          .onOk(() => {
-            $router.push('/user/login-exchange');
+            title: 'Thông báo',
+            message:
+              'Hãy cài đặt thông tin đánh lệnh trước khi follow theo chuyên gia. Nhấn OK để chuyển sang màn hình cài đặt chuyên gia',
+            cancel: true,
+            persistent: true,
           })
-          .onCancel(() => {
-            return;
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
-        } else if (error.response.status === 404) {
-        $q.dialog({
-          title: 'Thông báo',
-          message: 'Hãy cài đặt thông tin đánh lệnh trước khi follow theo chuyên gia. Nhấn OK để chuyển sang màn hình cài đặt chuyên gia',
-          cancel: true,
-          persistent: true
-        })
-          .onOk(() => {
-            $router.push('/user/setting-follow');
-          })
-          .onCancel(() => {
-            return;
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
+            .onOk(() => {
+              $router.push('/user/setting-follow');
+            })
+            .onCancel(() => {
+              return;
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
         }
       } finally {
         $q.loading.hide();
@@ -247,15 +228,65 @@ export default {
         $router.push('/user/login-exchange');
       }
     }
-    onBeforeMount(getListMaster)
-    onMounted(checkActive)
+    async function onCheckValid() {
+      try {
+        let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        await api.post('/users/valid-token');
+        return true;
+      } catch (error) {
+        if (
+          error.response.data.status === 404 &&
+          error.response.data.message === 'token.notFound'
+        ) {
+          $q.dialog({
+            title: 'Thông báo',
+            message:
+              'Hãy đăng nhập vào sàn trước khi follow theo chuyên gia.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
+            cancel: true,
+            persistent: true,
+          })
+            .onOk(() => {
+              $router.push('/user/login-exchange');
+            })
+            .onCancel(() => {
+              return;
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
+        } else {
+          $q.dialog({
+            title: 'Thông báo',
+            message:
+              'Bạn đã đăng nhập trên sàn chính nên bạn cần đăng nhập lại sàn ở đây.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
+            cancel: true,
+            persistent: true,
+          })
+            .onOk(() => {
+              $router.push('/user/login-exchange');
+            })
+            .onCancel(() => {
+              return;
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
+        }
+        return false;
+      }
+    }
+    onBeforeMount(getListMaster);
+    onMounted(checkActive);
     return {
       columns,
       rows,
       follow,
       filter,
       goLoginExchange,
-      isActive
+      isActive,
     };
   },
 };

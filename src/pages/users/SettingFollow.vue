@@ -96,15 +96,8 @@ export default {
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Cài đặt lệnh thành công ',
-          position: 'top',
-        });
         $q.loading.value = false;
-        $router.push('/user/list-master');
+        autoClose();
       } catch (error) {
         $q.notify({
           color: 'negative',
@@ -115,6 +108,37 @@ export default {
       } finally {
         $q.loading.hide();
       }
+    }
+    function autoClose () {
+      let seconds = 3
+
+      const dialog = $q.dialog({
+        title: 'Thông báo',
+        message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+        html: true
+      }).onOk(() => {
+        $router.push('/user/');
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        clearTimeout(timer)
+        // console.log('I am triggered on both OK and Cancel')
+      })
+
+      const timer = setInterval(() => {
+        seconds--
+
+        if (seconds > 0) {
+          dialog.update({
+            message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`
+          })
+        }
+        else {
+          clearInterval(timer)
+          $router.push('/user/');
+          dialog.hide()
+        }
+      }, 1000)
     }
     return {
       percentAmount,

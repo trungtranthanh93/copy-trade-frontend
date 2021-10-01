@@ -2,6 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 import Admin from 'pages/admin/Admin.vue';
 import User from 'pages/users/User.vue';
 import Login from 'pages/Login.vue';
+import Login1 from 'pages/Login1.vue';
 import Logout from 'pages/Logout.vue';
 import Register from 'pages/users/Register.vue';
 import 'vue-router';
@@ -14,7 +15,7 @@ declare module 'vue-router' {
 }
 const routes: RouteRecordRaw[] = [
   {
-    path: '/admin',
+    path: '/admin/',
     component: Admin,
     name: 'admin',
     meta: { requiresAuth: true, isAdmin: true },
@@ -27,6 +28,8 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'login-exchange',
+        name: 'admin-exchange',
+        meta: { requiresAuth: true, isAdmin: true },
         component: () => import('src/pages/LoginExchange.vue'),
       },
     ],
@@ -70,6 +73,11 @@ const routes: RouteRecordRaw[] = [
     path: '/logout',
     name: 'logout',
     component: Logout,
+  },
+  {
+    path: '/login1',
+    name: 'login1',
+    component: Login1,
   },
   {
     path: '/register',
