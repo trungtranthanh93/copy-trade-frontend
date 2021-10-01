@@ -93,7 +93,7 @@
         color="primary"
         flat
         bordered
-        title="Kết quả(Tính năng đang phát triển)"
+        title="Kết quả"
         :rows="rows"
         :columns="columns"
         row-key="name"
@@ -105,43 +105,19 @@
 
 <script>
 const columns = [
+  { name: 'stt', align: 'center', label: 'STT', field: 'stt' },
+  { name: 'createdDatetime', align: 'center', label: 'Thời gian', field: 'createdDatetime' },
   { name: 'betType', align: 'center', label: 'Lệnh đánh', field: 'betType' },
   {
-    name: 'valueMoney',
+    name: 'betAmount',
     align: 'center',
     label: 'Số tiền',
-    field: 'valueMoney',
+    field: 'betAmount',
   },
-  { name: 'result', align: 'center', label: 'Kết quả', field: 'result' },
-  { name: 'time', align: 'center', label: 'Thời gian', field: 'time' },
+  { name: 'winAmount', align: 'center', label: 'Kết quả', field: 'winAmount' },
 ];
-const rows = [
-  {
-    betType: 'UP',
-    valueMoney: 159,
-    result: 6.0,
-    time: 24,
-  },
-  {
-    betType: 'Down',
-    valueMoney: 159,
-    result: 6.0,
-    time: 24,
-  },
-  {
-    betType: 'UP',
-    valueMoney: 159,
-    result: 6.0,
-    time: 24,
-  },
-  {
-    betType: 'UP',
-    valueMoney: 159,
-    result: 6.0,
-    time: 24,
-  },
-];
-import { useQuasar, QSpinnerFacebook } from 'quasar';
+
+import { useQuasar, QSpinnerFacebook, date } from 'quasar';
 import { ref, onBeforeMount, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
@@ -156,6 +132,7 @@ export default {
     const capital = ref('');
     const availableBalance = ref('');
     const incomeAmount = ref('');
+    const rows = ref([]);
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
@@ -242,9 +219,29 @@ export default {
         $router.push('/admin/login-exchange');
       }
     }
+    async function getStatistic() {
+      let token = localStorage.getItem('jwt');
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let responseContent = await api.get('/statistics');
+      let data = responseContent.data;
+      let index = 1;
+      rows.value = data.map(obj => {
+        obj.stt = index
+        index++;
+        if(obj.winAmount  === 0) {
+          obj.winAmount = `$0`
+        } else {
+          obj.winAmount = `+$${obj.winAmount}`
+        }
+        obj.createdDatetime = date.formatDate(Number(obj.createdDatetime), 'DD/MM/YYYY HH:mm:ss')
+        return obj
+      })
+      
+    }
     onBeforeMount(onCheckValid);
-    onMounted(getSportBalance);
-    return {
+    onMounted(async () => {
+      await getSportBalance(), await getStatistic();
+    });    return {
       putOptions,
       money,
       loading,
