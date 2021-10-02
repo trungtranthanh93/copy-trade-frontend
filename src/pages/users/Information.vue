@@ -205,13 +205,7 @@ export default {
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         await onCheckValid();
         let responseContent = await api.get('/users/spot-balance');
-        // Sau này sẽ thay bằng tài khoản thực
-        // availableBalance.value = `${responseContent.data.availableBalance}$`;
-        if(responseContent.data.userType === 'DEMO') {
-          availableBalance.value = `${responseContent.data.demoBalance}$`;
-        } else {
-          availableBalance.value = `${responseContent.data.availableBalance}$`;
-        }
+        availableBalance.value = responseContent.data.balance;
         capital.value = `${responseContent.data.capital}$`;
         incomeAmount.value = `${responseContent.data.incomeAmount}$`;
         accountType.value = `${responseContent.data.userType}`;

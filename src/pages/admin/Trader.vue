@@ -276,11 +276,7 @@ export default {
         let token = localStorage.getItem('jwt');
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         let responseContent = await api.get('/users/spot-balance');
-        if(responseContent.data.userType === 'DEMO') {
-          availableBalance.value = `${responseContent.data.demoBalance}$`;
-        } else {
-          availableBalance.value = `${responseContent.data.availableBalance}$`;
-        }
+        availableBalance.value = responseContent.data.balance;
         capital.value = `${responseContent.data.capital}$`;
         incomeAmount.value = `${responseContent.data.incomeAmount}$`;
         accountType.value = `${responseContent.data.userType}`
