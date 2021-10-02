@@ -27,7 +27,7 @@
             <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
             <q-select
               filled
-              v-model="acountType"
+              v-model="accountType"
               :options="optionAccount"
               style="width: 295px"
             />
@@ -82,7 +82,7 @@
 </template>
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
-import { ref,onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 
@@ -94,9 +94,19 @@ export default {
     const minAmount = ref(null);
     const stopLoss = ref(null);
     const takeProfit = ref(null);
-    const acountType = ref(null);
+    const accountType = ref(null);
+    const optionAccount = ref([
+      {
+        label: 'Tài khoản demo',
+        value: 'DEMO',
+      },
+      {
+        label: 'Tài khoản thực',
+        value: 'LIVE',
+      },
+    ]);
     async function onSetting() {
-      if (!acountType.value) {
+      if (!accountType.value) {
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -161,7 +171,7 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
         let data = {
-          acountType: acountType.value.value,
+          accountType: accountType.value.value,
           maxAmount: maxAmount.value.value,
           minAmount: minAmount.value.value,
           stopLoss: stopLoss.value.value,
@@ -222,24 +232,16 @@ export default {
       }, 1000);
     }
     onMounted(() => {
-      acountType.value = {
-          label: 'Tài khoản demo',
-          value: 'DEMO',
-      }
+      accountType.value = optionAccount.value[0];
     });
     return {
-      acountType,
+      accountType,
       maxAmount,
       minAmount,
       stopLoss,
       takeProfit,
       onSetting,
-      optionAccount: [
-        {
-          label: 'Tài khoản thực',
-          value: 'LIVE',
-        }
-      ],
+      optionAccount,
       optionsAmount: [
         {
           label: '1%',
