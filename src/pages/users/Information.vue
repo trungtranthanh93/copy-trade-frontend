@@ -366,7 +366,8 @@ export default {
       continueFollow,
       columns,
       rows,
-      pagination
+      pagination,
+      acountType
     };
   },
 };
