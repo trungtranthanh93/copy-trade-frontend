@@ -175,8 +175,8 @@ export default {
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         await api.put('/users/unfolowing-users/' + row.id);
+        await getFollowingUserList();
         $q.loading.value = false;
-
       } catch (error) {
         $q.notify({
           color: 'negative',

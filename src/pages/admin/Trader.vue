@@ -388,7 +388,7 @@ export default {
       });
     }
     function goUserFollow() {
-      $router.push('user-follow');
+      $router.push('/admin/user-follow');
     }
     onBeforeMount(onCheckValid);
     onMounted(async () => {
