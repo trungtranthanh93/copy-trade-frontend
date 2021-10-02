@@ -3,7 +3,7 @@
     <div class="row justify-between">
       <q-btn
         size="md"
-        class="bg-accent"
+        class="bg-positive"
         label="Đăng nhập sàn"
         @click="goLoginExchange"
       />
@@ -24,6 +24,7 @@
       :columns="columns"
       row-key="name"
       :filter="filter"
+      :pagination="pagination"
     >
       <template v-slot:top-right>
         <q-input
@@ -40,7 +41,7 @@
       </template>
       <template v-slot:body-cell-action="props">
         <q-td :props="props">
-          <q-btn color="positive" dense @click="follow(props.row)"
+          <q-btn color="green" dense @click="follow(props.row)"
             >FOLLOW</q-btn
           >
         </q-td>
@@ -51,6 +52,7 @@
             q-pa-xs
             col-xs-12 col-sm-6 col-md-4 col-lg-3
             grid-style-transition
+            bg-blue-grey-9
           "
           :style="props.selected ? 'transform: scale(0.95);' : ''"
         >
@@ -65,7 +67,7 @@
                     v-if="col.name === 'action'"
                     dense
                     class="full-width"
-                    color="positive"
+                    color="green"
                     field="edit"
                     label="Follow"
                     @click="follow(props.row)"
@@ -137,6 +139,9 @@ export default {
     const rows = ref([]);
     const filter = ref('');
     const isActive = ref(false);
+    const pagination = ref({
+      rowsPerPage: 10, // current rows per page being displayed
+    });
     async function follow(row) {
       if (!isActive.value) {
         $q.dialog({
@@ -169,14 +174,14 @@ export default {
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         let isVaildSuccess = await onCheckValid();
-        if(!isVaildSuccess){
+        if (!isVaildSuccess) {
           return;
         }
         await api.put('/users/folowing-master/' + row.id);
         $q.loading.value = false;
         $router.push('/user/setting-follow');
       } catch (error) {
-       if (error.response.status === 404) {
+        if (error.response.status === 404) {
           $q.dialog({
             title: 'Thông báo',
             message:
@@ -199,7 +204,6 @@ export default {
       }
     }
     function checkActive() {
-      console.log('1');
       let user = JSON.parse(localStorage.getItem('user'));
       isActive.value = user.isActive;
     }
@@ -287,6 +291,7 @@ export default {
       filter,
       goLoginExchange,
       isActive,
+      pagination,
     };
   },
 };

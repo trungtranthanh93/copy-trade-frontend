@@ -1,8 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
-import Admin from 'pages/admin/Admin.vue';
-import User from 'pages/users/User.vue';
 import Login from 'pages/Login.vue';
-import Login1 from 'pages/Login1.vue';
 import Logout from 'pages/Logout.vue';
 import Register from 'pages/users/Register.vue';
 import 'vue-router';
@@ -16,53 +13,45 @@ declare module 'vue-router' {
 const routes: RouteRecordRaw[] = [
   {
     path: '/admin/',
-    component: Admin,
-    name: 'admin',
+    name: 'trader',
     meta: { requiresAuth: true, isAdmin: true },
-    children: [
-      {
-        path: '',
-        name: 'trader',
-        meta: { requiresAuth: true, isAdmin: true },
-        component: () => import('pages/admin/Trader.vue'),
-      },
-      {
-        path: 'login-exchange',
-        name: 'admin-exchange',
-        meta: { requiresAuth: true, isAdmin: true },
-        component: () => import('src/pages/LoginExchange.vue'),
-      },
-    ],
+    component: () => import('pages/admin/Trader.vue'),
+  },
+  {
+    path: '/admin/login-exchange',
+    name: 'admin-exchange',
+    meta: { requiresAuth: true, isAdmin: true },
+    component: () => import('src/pages/LoginExchange.vue'),
+  },
+  {
+    path: '/admin/user-follow',
+    name: 'user-follow',
+    meta: { requiresAuth: true, isAdmin: true },
+    component: () => import('pages/admin/UserFollow.vue'),
   },
   {
     path: '/user/',
-    component: User,
-    name: 'user',
+    name: 'infomation',
     meta: { requiresAuth: true, isAdmin: false },
-    children: [
-      {
-        path: 'history-trading',
-        component: () => import('pages/users/HistoryTrading.vue'),
-      },
-      {
-        path: '',
-        name: 'infomation',
-        meta: { requiresAuth: true, isAdmin: false },
-        component: () => import('pages/users/Information.vue'),
-      },
-      {
-        path: 'list-master',
-        component: () => import('pages/users/ListMaster.vue'),
-      },
-      {
-        path: 'login-exchange',
-        component: () => import('src/pages/LoginExchange.vue'),
-      },
-      {
-        path: 'setting-follow',
-        component: () => import('pages/users/SettingFollow.vue'),
-      },
-    ],
+    component: () => import('pages/users/Information.vue'),
+  },
+  {
+    path: '/user/list-master',
+    name: 'list-master',
+    meta: { requiresAuth: true, isAdmin: false },
+    component: () => import('pages/users/ListMaster.vue'),
+  },
+  {
+    path: '/user/login-exchange',
+    name: 'user-exchange',
+    meta: { requiresAuth: true, isAdmin: false },
+    component: () => import('src/pages/LoginExchange.vue'),
+  },
+  {
+    path: '/user/setting-follow',
+    name: 'setting-follow',
+    meta: { requiresAuth: true, isAdmin: false },
+    component: () => import('pages/users/SettingFollow.vue'),
   },
   {
     path: '',
@@ -73,11 +62,6 @@ const routes: RouteRecordRaw[] = [
     path: '/logout',
     name: 'logout',
     component: Logout,
-  },
-  {
-    path: '/login1',
-    name: 'login1',
-    component: Login1,
   },
   {
     path: '/register',

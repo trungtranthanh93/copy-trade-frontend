@@ -1,65 +1,88 @@
 <template>
-  <div class="column">
-    <div class="row justify-center items-center">
-      <q-card square class="q-pa-md q-ma-none" style="width: 320px">
-        <q-card-section class="">
-          <p class="text-weight-bolder text-center text-h6">
-            Màn hình cài đặt lệnh
-          </p>
-        </q-card-section>
-        <q-card-section>
-          <q-form class="q-gutter-md">
+  <!-- <q-layout container style="height: 600px"> -->
+  <q-layout class="justify-center">
+    <q-page-container class="window-height">
+      <div
+        class="
+          q-pa-md
+          fit
+          row
+          wrap
+          justify-center
+          items-end
+          content-center
+          rounded-borders
+          dark
+          fixed-center
+          relative-position
+        "
+        style="max-width: 428px"
+      >
+        <div>
+          <img class="absolute-top-left" src="logo.png" style="height: 80px" />
+        </div>
+        <h5 class="text-weight-bolder">Màn hình cài đặt lệnh</h5>
+        <form class="q-gutter-x-xs q-gutter-y-lg">
+          <div>
+            <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
             <q-select
               filled
-              v-model="maxAmount"
-              :options="optionsAmount"
-              :rules="[(val) => !!val || 'Hãy chọn % lệnh tối đa']"
-              label="Lệnh tối đa"
+              v-model="acountType"
+              :options="optionAccount"
+              style="width: 295px"
             />
+          </div>
+          <div>
+            <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
             <q-select
               filled
               v-model="minAmount"
               :options="optionsAmount"
-              :rules="[(val) => !!val || 'Hãy chọn % lệnh tối thiểu']"
-              label="Lệnh tối thiểu"
+              style="width: 295px"
             />
+          </div>
+          <div>
+            <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
+            <q-select
+              filled
+              v-model="maxAmount"
+              :options="optionsAmount"
+              style="width: 295px"
+            />
+          </div>
+          <div>
+            <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
             <q-select
               filled
               v-model="takeProfit"
               :options="optionsProfit"
-              label="Mức chốt lãi"
-              :rules="[(val) => !!val || 'Hãy chọn % mức chốt lãi']"
+              style="width: 295px"
             />
+          </div>
+          <div>
+            <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
             <q-select
               filled
               v-model="stopLoss"
               :options="optionsLost"
-              label="Mức cắt lỗ"
-              :rules="[(val) => !!val || 'Hãy chọn % mức cắt lỗ']"
+              style="width: 295px"
             />
-          </q-form>
-        </q-card-section>
-        <q-card-actions>
-          <div class="row full-width items-center">
-            <div class="col-6">
-              <q-btn
-                outline
-                size="md"
-                class="full-width bg-accent"
-                label="Bắt đầu follow"
-                @click="onSetting()"
-              />
-            </div>
           </div>
-        </q-card-actions>
-        <q-card-section> </q-card-section>
-      </q-card>
-    </div>
-  </div>
+          <q-btn
+            class="full-width bg-positive"
+            @click="onSetting()"
+            label="Cài đặt"
+            style=""
+          />
+        </form>
+      </div>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 
@@ -67,12 +90,66 @@ export default {
   setup() {
     const $router = useRouter();
     const $q = useQuasar();
-    const percentAmount = ref(null);
     const maxAmount = ref(null);
     const minAmount = ref(null);
     const stopLoss = ref(null);
     const takeProfit = ref(null);
+    const acountType = ref(null);
     async function onSetting() {
+      if (!acountType.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Loại tài khoản!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!minAmount.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Lệnh tối thiểu!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!maxAmount.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Lệnh tối đa!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!takeProfit.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Mức chốt lãi!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!stopLoss.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Mức cắt lỗ!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (maxAmount.value.value < minAmount.value.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Lệnh tối đa phải lớn hơn lệnh tối thiểu!!',
+          icon: 'report_problem',
+        });
+        return;
+      }
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -84,6 +161,7 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
         let data = {
+          acountType: acountType.value.value,
           maxAmount: maxAmount.value.value,
           minAmount: minAmount.value.value,
           stopLoss: stopLoss.value.value,
@@ -109,44 +187,59 @@ export default {
         $q.loading.hide();
       }
     }
-    function autoClose () {
-      let seconds = 3
+    function autoClose() {
+      let seconds = 3;
 
-      const dialog = $q.dialog({
-        title: 'Thông báo',
-        message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
-        html: true
-      }).onOk(() => {
-        $router.push('/user/');
-      }).onCancel(() => {
-        // console.log('Cancel')
-      }).onDismiss(() => {
-        clearTimeout(timer)
-        // console.log('I am triggered on both OK and Cancel')
-      })
+      const dialog = $q
+        .dialog({
+          title: 'Thông báo',
+          message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+          html: true,
+        })
+        .onOk(() => {
+          $router.push('/user/');
+        })
+        .onCancel(() => {
+          // console.log('Cancel')
+        })
+        .onDismiss(() => {
+          clearTimeout(timer);
+          // console.log('I am triggered on both OK and Cancel')
+        });
 
       const timer = setInterval(() => {
-        seconds--
+        seconds--;
 
         if (seconds > 0) {
           dialog.update({
-            message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`
-          })
-        }
-        else {
-          clearInterval(timer)
+            message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+          });
+        } else {
+          clearInterval(timer);
           $router.push('/user/');
-          dialog.hide()
+          dialog.hide();
         }
-      }, 1000)
+      }, 1000);
     }
+    onMounted(() => {
+      acountType.value = {
+          label: 'Tài khoản demo',
+          value: 'DEMO',
+      }
+    });
     return {
-      percentAmount,
+      acountType,
       maxAmount,
       minAmount,
       stopLoss,
       takeProfit,
       onSetting,
+      optionAccount: [
+        {
+          label: 'Tài khoản thực',
+          value: 'LIVE',
+        }
+      ],
       optionsAmount: [
         {
           label: '1%',

@@ -1,101 +1,103 @@
 <template>
-  <div class="column">
-    <div class="row justify-center items-center">
-      <q-card square class="q-pa-md q-ma-none bg-grey-3" style="width: 320px">
-        <q-card-section class="q-mb-md">
-          <p class="text-weight-bolder text-center text-h6">
-            Đăng nhập vào sàn
-          </p>
-        </q-card-section>
-        <q-card-section class="q-mb-md"> 
-           <q-banner inline-actions rounded class="bg-orange text-white">
-            Tài khoản của Quý Khách đã dừng Copytrade. Quý Khách vui lòng đăng nhập lại.
-          </q-banner>
-        </q-card-section>
-        <q-card-section>
-          <q-form class="q-gutter-md">
-            <template v-if="!isShowAuthenticator">
+  <!-- <q-layout container style="height: 600px"> -->
+  <q-layout class="justify-center">
+    <q-page-container class="window-height">
+      <div
+        class="
+          q-pa-md
+          fit
+          row
+          wrap
+          justify-center
+          items-end
+          content-center
+          rounded-borders
+          dark
+          fixed-center
+          relative-position
+        "
+        style="max-width: 428px"
+      >
+        <div>
+          <img class="absolute-top-left" src="logo.png" style="height: 80px" />
+        </div>
+        <h5 class="text-weight-bolder">Đăng nhập vào sàn</h5>
+        <q-banner
+          inline-actions
+          rounded
+          class="bg-positive text-white q-mb-md"
+          style="width: 295px"
+        >
+          Tài khoản của Quý Khách đã dừng Copytrade. Quý Khách vui lòng đăng
+          nhập lại.
+        </q-banner>
+        <template v-if="!isShowAuthenticator">
+          <form class="q-gutter-x-xs q-gutter-y-lg">
+            <div>
+              <q-item-label class="q-mb-sm">Địa chỉ email*</q-item-label>
               <q-input
-                dense
-                square
-                filled
-                clearable
+                dark
+                outlined
                 v-model="email"
-                type="email"
-                label="Email"
-                disable
                 readonly
-                lazy-rules
+                style="width: 295px"
+                placeholder="Điền email"
               >
-                <template v-slot:prepend>
-                  <q-icon name="email" />
-                </template>
               </q-input>
+            </div>
+            <div>
+              <q-item-label class="q-mb-sm">Mật khẩu*</q-item-label>
               <q-input
-                dense
-                square
-                filled
-                clearable
+                dark
+                outlined
                 v-model="password"
-                type="password"
-                label="Password"
-                :rules="[(val) => !!val || 'Hãy điền password của bạn']"
-                lazy-rules
+                style="width: 295px"
+                :type="isPwd ? 'password' : 'text'"
+                placeholder="Điền mật khẩu"
               >
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
                 </template>
               </q-input>
-            </template>
-            <template v-else>
+            </div>
+            <q-btn
+              class="full-width bg-positive"
+              @click="onLogin()"
+              label="Đăng nhập sàn"
+              style=""
+            />
+          </form>
+        </template>
+        <template v-else>
+                 <form class="q-gutter-x-xs q-gutter-y-lg">
+            <div>
+              <q-item-label class="q-mb-sm">Mã Google Authentication*</q-item-label>
               <q-input
-                dense
-                square
-                filled
-                clearable
+                dark
+                outlined
                 v-model="authenticatorCode"
-                type="text"
-                label="Authenticator"
-                :rules="[(val) => (!!val) || 'Hãy điền Authenticator chỉ bao gồm 6 kí tự']"
-                lazy-rules
+                style="width: 295px"
+                placeholder="Điền mã Google Authentication"
               >
-                <template v-slot:prepend>
-                  <q-icon name="vpn_key" />
-                </template>
               </q-input>
-            </template>
-          </q-form>
-        </q-card-section>
-        <q-card-actions>
-          <div class="row full-width items-center">
-            <template v-if="!isShowAuthenticator">
-              <div class="col-6">
-                <q-btn
-                  outline
-                  size="md"
-                  class="full-width bg-accent"
-                  label="Đăng nhập"
-                  @click="onLogin()"
-                />
-              </div>
-            </template>
-            <template v-else>
-              <q-btn
-                outline
-                size="md"
-                class="full-width bg-accent"
-                label="Gửi mã"
-                @click="onAuthenticator()"
-              />
-            </template>
-          </div>
-        </q-card-actions>
-        <q-card-section> </q-card-section>
-      </q-card>
-    </div>
-  </div>
+            </div>
+            <q-btn
+              class="full-width bg-positive"
+              @click="onAuthenticator()"
+              label="Đăng nhập sàn"
+              style=""
+            />
+          </form>  
+        </template>
+      </div>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
-
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted, onBeforeMount } from 'vue';
@@ -118,6 +120,33 @@ export default {
     }
 
     async function onLogin() {
+      if(!email.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy điền email!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if(!isValidEmail()){
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Email không đúng định dạng!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if(!password.value){
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy điền password!',
+          icon: 'report_problem',
+        });
+        return;
+      }
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -175,6 +204,24 @@ export default {
       }
     }
     async function onAuthenticator() {
+      if(!authenticatorCode.value){
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy điền mã Google Authentication!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if(authenticatorCode.value.length !== 6){
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy điền mã Google Authentication bao gồm 6 số',
+          icon: 'report_problem',
+        });
+        return;
+      }
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -237,9 +284,7 @@ export default {
       let token = localStorage.getItem('jwt');
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log(1)
       await api.post('/users/valid-token');
-      console.log('Tro lai');
       $q.notify({
         color: 'green-4',
         textColor: 'white',

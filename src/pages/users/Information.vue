@@ -1,121 +1,178 @@
 <template>
-  <div class="q-pa-md">
-    <div
-      :class="{
-        'row justify-between q-gutter-md': !$q.platform.is.mobile,
-        'row justify-center q-gutter-md': $q.platform.is.mobile,
-      }"
-    >
-      <template v-if="!$q.platform.is.mobile">
-        <div class="row justify-center">
-          <q-card class="bg-primary q-ml-md">
-            <q-card-section>
-              <div class="text-h6">Số dư ban đầu</div>
-            </q-card-section>
-
-            <q-card-section :class="'q-pt-none'">
-              {{ capital }}
-            </q-card-section>
-          </q-card>
-          <q-card class="bg-indigo-14 q-ml-md">
-            <q-card-section>
-              <div class="text-h6">Số dư hiện tại</div>
-            </q-card-section>
-
-            <q-card-section :class="'q-pt-none'">
-              {{ availableBalance }}
-            </q-card-section>
-          </q-card>
-          <q-card class="bg-purple-14 q-ml-md">
-            <q-card-section>
-              <div class="text-h6">Lợi nhuận</div>
-            </q-card-section>
-
-            <q-card-section :class="'q-pt-none'">
-              {{ incomeAmount }}
-            </q-card-section>
-          </q-card>
+  <!-- <q-layout container style="height: 600px"> -->
+  <q-layout class="justify-center">
+    <q-page-container class="window-height">
+      <div
+        class="
+          q-pa-md
+          fit
+          wrap
+          justify-center
+          items-end
+          content-center
+          rounded-borders
+          relative-position
+        "
+      >
+        <div>
+          <img class="relative-top-left" src="logo.png" style="height: 80px" />
         </div>
-      </template>
-      <template v-else>
-        <q-card class="bg-primary q-ml-md">
-          <q-card-section>
-            <div class="text-h6">Số dư ban đầu</div>
-          </q-card-section>
+        <template v-if="!$q.platform.is.mobile">
+          <div class="row justify-center">
+            <q-card
+              class="bg-blue-grey-14 q-ml-md"
+              style="
+                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
+              "
+            >
+              <q-card-section>
+                <div class="text-h5">Loại tài khoản</div>
+              </q-card-section>
 
-          <q-card-section :class="'q-pt-none'">
-            {{ capital }}
-          </q-card-section>
-        </q-card>
-        <q-card class="bg-indigo-14 q-ml-md">
-          <q-card-section>
-            <div class="text-h6">Số dư hiện tại</div>
-          </q-card-section>
+              <q-card-section :class="'q-pt-none'">
+                {{ accountType }}
+              </q-card-section>
+            </q-card>
+            <q-card
+              class="bg-blue-grey-14 q-ml-md"
+              style="
+                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
+              "
+            >
+              <q-card-section>
+                <div class="text-h5">Số dư ban đầu</div>
+              </q-card-section>
 
-          <q-card-section :class="'q-pt-none'">
-            {{ availableBalance }}
-          </q-card-section>
-        </q-card>
-        <q-card class="bg-purple-14 q-ml-md">
-          <q-card-section>
-            <div class="text-h6">Lợi nhuận</div>
-          </q-card-section>
+              <q-card-section :class="'q-pt-none'">
+                {{ capital }}
+              </q-card-section>
+            </q-card>
+            <q-card
+              class="q-ml-md"
+              style="
+                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
+              "
+            >
+              <q-card-section>
+                <div class="text-h5">Số dư hiện tại</div>
+              </q-card-section>
 
-          <q-card-section :class="'q-pt-none'">
-            {{ incomeAmount }}
-          </q-card-section>
-        </q-card>
-      </template>
-      <q-card
-        :class="{
-          'my-card justify-left': true,
-          'order-first': $q.platform.is.mobile,
-        }"
-      >
-        <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-          <div class="absolute-bottom text-subtitle2 text-center">
-            CopyTrade App Logo
+              <q-card-section :class="'q-pt-none'">
+                {{ availableBalance }}
+              </q-card-section>
+            </q-card>
+            <q-card
+              class="q-ml-md"
+              style="
+                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
+              "
+            >
+              <q-card-section>
+                <div class="text-h5">Lợi nhuận</div>
+              </q-card-section>
+
+              <q-card-section :class="'q-pt-none'">
+                {{ incomeAmount }}
+              </q-card-section>
+            </q-card>
           </div>
-        </q-img>
-      </q-card>
-    </div>
-    <q-separator color="black q-mt-md q-mb-md" inset />
-    <div class="row items-center q-gutter-md justify-center">
-      <q-btn
-        color="negative"
-        icon-right="cancel"
-        style=""
-        dense
-        @click="unfollow()"
-        >Dừng follow</q-btn
-      >
-      <q-btn
-        color="positive"
-        icon-right="cancel"
-        style=""
-        dense
-        @click="continueFollow()"
-        >Tiếp tục</q-btn
-      >
-    </div>
-    <q-separator color="black q-mt-md q-mb-md" inset />
-    <div class="q-pa-md">
-      <q-table
-        color="primary"
-        flat
-        bordered
-        title="Kết quả"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-      />
-    </div>
-  </div>
+        </template>
+        <template v-else>
+          <div class="q-pa-md row items-start q-gutter-md">
+            <q-card class="my-card">
+              <q-list>
+                <q-item clickable>
+                  <q-item-section avatar>
+                    <q-icon color="orange" name="payment" />
+                  </q-item-section>
+
+                  <q-item-section>
+                    <q-item-label>Loại tài khoản</q-item-label>
+                    <q-item-label caption>{{ accountType }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="local_atm" />
+                  </q-item-section>
+
+                  <q-item-section>
+                    <q-item-label>Số dư ban đầu</q-item-label>
+                    <q-item-label caption>{{ capital }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item clickable>
+                  <q-item-section avatar>
+                    <q-icon color="red" name="price_check" />
+                  </q-item-section>
+
+                  <q-item-section>
+                    <q-item-label>Số dư hiện tại</q-item-label>
+                    <q-item-label caption>{{ availableBalance }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item clickable>
+                  <q-item-section avatar>
+                    <q-icon color="amber" name="price_change" />
+                  </q-item-section>
+
+                  <q-item-section>
+                    <q-item-label>Lợi nhuận</q-item-label>
+                    <q-item-label caption>{{ incomeAmount }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card>
+          </div>
+        </template>
+        <q-separator color="dark" class="q-mt-md q-mb-md" inset />
+        <div class="row items-center q-gutter-md justify-center">
+          <q-btn
+            color="negative"
+            icon-right="cancel"
+            style=""
+            dense
+            @click="unfollow()"
+            >Dừng follow</q-btn
+          >
+          <q-btn
+            color="green"
+            icon-right="cancel"
+            style=""
+            dense
+            @click="continueFollow()"
+            >Tiếp tục</q-btn
+          >
+        </div>
+        <q-separator color="dark" class="q-mt-md q-mb-md" inset />
+        <div class="q-pa-md">
+          <q-table
+            color="primary"
+            flat
+            bordered
+            title="Kết quả"
+            :rows="rows"
+            :columns="columns"
+            row-key="name"
+            :pagination="pagination"
+          />
+        </div>
+      </div>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
 <script>
 const columns = [
   { name: 'stt', align: 'center', label: 'STT', field: 'stt' },
-  { name: 'createdDatetime', align: 'center', label: 'Thời gian', field: 'createdDatetime' },
+  {
+    name: 'createdDatetime',
+    align: 'center',
+    label: 'Thời gian',
+    field: 'createdDatetime',
+  },
   { name: 'betType', align: 'center', label: 'Lệnh đánh', field: 'betType' },
   {
     name: 'betAmount',
@@ -137,17 +194,27 @@ export default {
     const capital = ref('');
     const availableBalance = ref('');
     const incomeAmount = ref('');
+    const accountType = ref('');
     const rows = ref([]);
+    const pagination = ref({
+      rowsPerPage: 10, // current rows per page being displayed
+    });
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        await onCheckValid();
         let responseContent = await api.get('/users/spot-balance');
         // Sau này sẽ thay bằng tài khoản thực
         // availableBalance.value = `${responseContent.data.availableBalance}$`;
-        availableBalance.value = `${responseContent.data.demoBalance}$`;
+        if(responseContent.data.userType === 'DEMO') {
+          availableBalance.value = `${responseContent.data.demoBalance}$`;
+        } else {
+          availableBalance.value = `${responseContent.data.availableBalance}$`;
+        }
         capital.value = `${responseContent.data.capital}$`;
         incomeAmount.value = `${responseContent.data.incomeAmount}$`;
+        accountType.value = `${responseContent.data.userType}`;
         if (responseContent.data.isTakeProfit) {
           $q.dialog({
             title: 'Thông báo',
@@ -185,6 +252,61 @@ export default {
         $router.push('/user/list-master');
       }
     }
+    async function onCheckValid() {
+      try {
+      let user = JSON.parse(localStorage.getItem('user'));
+      // Nếu chưa follow ai thì sẽ chuyển sang màn follow
+      if(user.masterId === null) {
+          $router.push('/user/list-master');
+      }
+      let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        await api.post('/users/valid-token');
+        return true;
+      } catch (error) {
+        if (
+          error.response.data.status === 404 &&
+          error.response.data.message === 'token.notFound'
+        ) {
+          $q.dialog({
+            title: 'Thông báo',
+            message:
+              'Hãy đăng nhập vào sàn trước khi follow theo chuyên gia.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
+            cancel: true,
+            persistent: true,
+          })
+            .onOk(() => {
+              $router.push('/user/login-exchange');
+            })
+            .onCancel(() => {
+              return;
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
+        } else {
+          $q.dialog({
+            title: 'Thông báo',
+            message:
+              'Bạn đã đăng nhập trên sàn chính nên bạn cần đăng nhập lại sàn ở đây.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
+            cancel: true,
+            persistent: true,
+          })
+            .onOk(() => {
+              $router.push('/user/login-exchange');
+            })
+            .onCancel(() => {
+              return;
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
+        }
+        return false;
+      }
+    }
     async function unfollow() {
       try {
         let token = localStorage.getItem('jwt');
@@ -218,18 +340,20 @@ export default {
       let responseContent = await api.get('/statistics');
       let data = responseContent.data;
       let index = 1;
-      rows.value = data.map(obj => {
-        obj.stt = index
+      rows.value = data.map((obj) => {
+        obj.stt = index;
         index++;
-        if(obj.winAmount  === 0) {
-          obj.winAmount = `$0`
+        if (obj.winAmount === 0) {
+          obj.winAmount = '$0';
         } else {
-          obj.winAmount = `+$${obj.winAmount}`
+          obj.winAmount = `+$${obj.winAmount}`;
         }
-        obj.createdDatetime = date.formatDate(Number(obj.createdDatetime), 'DD/MM/YYYY HH:mm:ss')
-        return obj
-      })
-      
+        obj.createdDatetime = date.formatDate(
+          Number(obj.createdDatetime),
+          'DD/MM/YYYY HH:mm:ss'
+        );
+        return obj;
+      });
     }
     onMounted(async () => {
       await getSportBalance(), await getStatistic();
@@ -242,6 +366,7 @@ export default {
       continueFollow,
       columns,
       rows,
+      pagination
     };
   },
 };

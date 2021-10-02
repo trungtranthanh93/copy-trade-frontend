@@ -104,11 +104,12 @@ module.exports = configure(function(ctx) {
                     dark: '#011022',
                     // màu button 
                     positive: '#D86908',
-                    negative: '#C10015',
+                    negative1: '#21BA45',
+                    negative:'#C10015',
                     info: '#31CCEC',
                     
                 },
-                // dark: true
+                dark: true
             },
 
             // iconSet: 'material-icons', // Quasar icon set

@@ -1,193 +1,76 @@
 <template>
-  <q-layout>
-    <q-page
-      :class="{
-        'window-height window-width row justify-center items-center':
-          !$q.platform.is.mobile,
-        'window-height window-width justify-center items-center':
-          $q.platform.is.mobile,
-      }"
-    >
-      <template v-if="!$q.platform.is.mobile">
-        <div class="column row">
-          <q-card
-            square
-            class="q-pa-md q-ma-none no-shadow bg-grey-3"
-            style="width: 320px"
-          >
-            <q-card-section class="q-mb-md">
-              <p class="text-weight-bolder text-center text-uppercase text-h5">
-                App copytrade
-              </p>
-            </q-card-section>
-            <q-card-section class="q-mt-xl q-mb-md">
-              <p class="text-weight-bolder text-center text-h6">Đăng ký tài khoản</p>
-            </q-card-section>
-            <q-card-section>
-              <q-form class="q-gutter-md">
-                <q-input
-                  dense
-                  square
-                  filled
-                  clearable
-                  v-model="email"
-                  type="email"
-                  label="Email"
-                  :rules="[
-                    (val) => !!val || 'Hãy điền email của bạn',
-                    isValidEmail,
-                  ]"
-                  lazy-rules
-                >
-                  <template v-slot:prepend>
-                    <q-icon name="email" />
-                  </template>
-                </q-input>
-                <q-input
-                  dense
-                  square
-                  filled
-                  clearable
-                  v-model="password"
-                  type="password"
-                  label="Password"
-                  :rules="[(val) => !!val || 'Hãy điền password của bạn']"
-                  lazy-rules
-                >
-                  <template v-slot:prepend>
-                    <q-icon name="lock" />
-                  </template>
-                </q-input>
-                <q-input
-                dense
-                square
-                filled
-                clearable
-                v-model="username"
-                type="text"
-                label="Biệt danh"
-                :rules="[(val) => !!val || 'Hãy điền biệt danh của bạn']"
-                lazy-rules
-              >
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
-                </template>
-              </q-input>
-              </q-form>
-            </q-card-section>
-            <q-card-actions>
-              <div class="row full-width items-center">
-                <div class="col-6">
-                  <q-btn
-                    outline
-                    size="md"
-                    class="full-width bg-accent"
-                    label="Đăng ký"
-                    @click="onSubmit()"
-                  />
-                </div>
-                <div class="col-6">
-                  <p class="text-no-wrap text-grey-1 text-caption text-right">
-                    <a href="/login">Đăng nhập</a>
-                  </p>
-                </div>
-              </div>
-            </q-card-actions>
-            <q-card-section> </q-card-section>
-          </q-card>
+  <!-- <q-layout container style="height: 600px"> -->
+  <q-layout class="justify-center">
+    <q-page-container class="window-height">
+      <div
+        class="
+          q-pa-md
+          fit
+          row
+          wrap
+          justify-center
+          items-end
+          content-center
+          rounded-borders
+          dark
+          fixed-center
+          relative-position
+        "
+        style="max-width: 428px"
+      >
+        <div>
+          <img class="absolute-top-left" src="logo.png" style="height: 80px" />
         </div>
-      </template>
-      <template v-else>
-        <q-card
-          square
-          class="q-pa-md q-ma-none full-width full-height no-shadow bg-grey-3"
-          style="width: 320px"
-        >
-          <q-card-section class="q-mb-md">
-            <p class="text-weight-bolder text-center text-uppercase text-h5">
-              App copytrade
-            </p>
-          </q-card-section>
-          <q-card-section class="q-mt-xl q-mb-md">
-            <p class="text-weight-bolder text-center text-h6">Đăng ký tài khoản</p>
-          </q-card-section>
-          <q-card-section>
-            <q-form class="q-gutter-md">
-              <q-input
-                dense
-                square
-                filled
-                clearable
-                v-model="email"
-                type="email"
-                label="Email"
-                :rules="[
-                  (val) => !!val || 'Hãy điền email của bạn',
-                  isValidEmail,
-                ]"
-                lazy-rules
-              >
-                <template v-slot:prepend>
-                  <q-icon name="email" />
-                </template>
-              </q-input>
-              <q-input
-                dense
-                square
-                filled
-                clearable
-                v-model="password"
-                type="password"
-                label="Password"
-                :rules="[(val) => !!val || 'Hãy điền password của bạn']"
-                lazy-rules
-              >
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
-                </template>
-              </q-input>
-              <q-input
-                dense
-                square
-                filled
-                clearable
-                v-model="username"
-                type="text"
-                label="Biệt danh"
-                :rules="[(val) => !!val || 'Hãy điền biệt danh của bạn']"
-                lazy-rules
-              >
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
-                </template>
-              </q-input>
-            </q-form>
-          </q-card-section>
-          <q-card-actions>
-            <div class="row full-width items-center">
-              <div class="col-12">
-                <q-btn
-                  outline
-                  size="md"
-                  class="full-width bg-accent"
-                  label="Đăng ký"
-                  @click="onSubmit()"
+        <h5 class="text-weight-bolder">Tạo tài khoản BossGroup</h5>
+        <form class="q-gutter-x-xs q-gutter-y-lg">
+          <div>
+            <q-item-label class="q-mb-sm">Địa chỉ email*</q-item-label>
+            <q-input
+              dark
+              outlined
+              v-model="email"
+              style="width: 295px"
+              placeholder="Điền email"
+            >
+            </q-input>
+          </div>
+          <div>
+            <q-item-label class="q-mb-sm">Mật khẩu*</q-item-label>
+            <q-input
+              dark
+              outlined
+              v-model="password"
+              style="width: 295px"
+              :type="isPwd ? 'password' : 'text'"
+              placeholder="Điền mật khẩu"
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
                 />
-              </div>
-              <div class="col-6">
-                <p class="text-no-wrap text-grey-1 text-caption text-right">
-                  <a href="/">Đăng nhập</a>
-                </p>
-              </div>
-            </div>
-          </q-card-actions>
-          <q-card-section> </q-card-section>
-        </q-card>
-      </template>
-    </q-page>
+              </template>
+            </q-input>
+          </div>
+          <q-btn
+            class="full-width bg-positive"
+            @click="onSubmit()"
+            label="Đăng ký"
+            style=""
+          />
+          <div class="q-mt-md">
+            Có tài khoản Bossgroup?
+            <a href="/" class="text-positive"
+              >Đăng nhập tài khoản</a
+            >
+          </div>
+        </form>
+      </div>
+      <router-view />
+    </q-page-container>
   </q-layout>
 </template>
-
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref } from 'vue';
@@ -200,15 +83,41 @@ export default {
     const $q = useQuasar();
     const email = ref(null);
     const password = ref(null);
-    const username = ref(null);
     const isPwd = ref(true);
     function isValidEmail() {
       const emailPattern =
         /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return emailPattern.test(email.value) || 'Hãy nhập đúng định dạng email';
+      return emailPattern.test(email.value);
     }
 
     async function onSubmit() {
+      if (!email.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy điền email!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!isValidEmail()) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Email không đúng định dạng!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!password.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy điền password!',
+          icon: 'report_problem',
+        });
+        return;
+      }
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -220,9 +129,8 @@ export default {
       let data = {
         email: email.value,
         password: password.value,
-        username: username.value,
         isActive: false,
-        role: 0
+        role: 0,
       };
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
@@ -243,7 +151,7 @@ export default {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Đăng ký thất bại ! Vui lòng đăng ký lại',
+          message: 'Đăng ký thất bại!',
           icon: 'report_problem',
         });
       } finally {
@@ -257,7 +165,6 @@ export default {
       password,
       isPwd,
       isValidEmail,
-      username
     };
   },
 };
