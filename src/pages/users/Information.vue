@@ -367,7 +367,7 @@ export default {
       columns,
       rows,
       pagination,
-      acountType
+      accountType
     };
   },
 };
