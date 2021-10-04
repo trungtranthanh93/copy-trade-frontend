@@ -175,7 +175,7 @@ export default {
         if (!isVaildSuccess) {
           return;
         }
-        await api.put('/users/folowing-master/' + id);
+        await api.put('/users/folowing-master/' + row.id);
         $q.loading.value = false;
         $router.push('/user/setting-follow');
       } catch (error) {
@@ -283,31 +283,6 @@ export default {
         }
         return false;
       }
-    }
-    async function checkIsActive(id) {
-      try {
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        await api.get('/users/get-profile' + id);
-        return true;
-      } catch (error) {
-        $q.dialog({
-          title: 'Thông báo',
-          message:
-            'Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích hoạt tài khoản.',
-        })
-          .onOk(() => {
-            // console.log('OK')
-          })
-          .onCancel(() => {
-            // console.log('Cancel')
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
-      }
-      return false;
     }
     onBeforeMount(getListMaster);
     onMounted(checkActive);
