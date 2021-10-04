@@ -87,7 +87,9 @@
               </q-card-section>
               <q-card-section :class="'q-pt-none'">
                 {{ countUser }} người
-                <q-btn class="bg-positive q-ml-lg" @click="goUserFollow">Chi tiết</q-btn>
+                <q-btn class="bg-positive q-ml-lg" @click="goUserFollow"
+                  >Chi tiết</q-btn
+                >
               </q-card-section>
             </q-card>
           </div>
@@ -279,7 +281,7 @@ export default {
         availableBalance.value = responseContent.data.balance;
         capital.value = `${responseContent.data.capital}$`;
         incomeAmount.value = `${responseContent.data.incomeAmount}$`;
-        accountType.value = `${responseContent.data.userType}`
+        accountType.value = `${responseContent.data.userType}`;
       } catch (error) {
         capital.value = 'Chưa có thông tin';
         availableBalance.value = 'Chưa có thông tin';
@@ -320,7 +322,7 @@ export default {
             $q.notify({
               color: 'negative',
               position: 'top',
-              message: response.data.d?.message,
+              message: response.data.m,
               icon: 'report_problem',
             });
           }
@@ -334,6 +336,26 @@ export default {
           });
         }
       } catch (error) {
+        if (
+          error.response.status === 400 &&
+          response.data.d?.err_code === 'notEnough.betAmount'
+        ) {
+          $q.dialog({
+            title: 'Thông báo',
+            message: 'Đặt lệnh thất bại, lệnh phải bằng tối thiểu 0.8% vốn',
+            persistent: true,
+          })
+            .onOk(() => {
+              return;
+            })
+            .onCancel(() => {
+              return;
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
+          return;
+        }
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -402,7 +424,7 @@ export default {
       rows,
       countUser,
       goUserFollow,
-      accountType
+      accountType,
     };
   },
 };
