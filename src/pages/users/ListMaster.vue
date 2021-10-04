@@ -41,9 +41,7 @@
       </template>
       <template v-slot:body-cell-action="props">
         <q-td :props="props">
-          <q-btn color="green" dense @click="follow(props.row)"
-            >FOLLOW</q-btn
-          >
+          <q-btn color="green" dense @click="follow(props.row)">FOLLOW</q-btn>
         </q-td>
       </template>
       <template v-slot:item="props">
@@ -143,23 +141,6 @@ export default {
       rowsPerPage: 10, // current rows per page being displayed
     });
     async function follow(row) {
-      if (!isActive.value) {
-        $q.dialog({
-          title: 'Thông báo',
-          message:
-            'Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích hoạt tài khoản.',
-        })
-          .onOk(() => {
-            // console.log('OK')
-          })
-          .onCancel(() => {
-            // console.log('Cancel')
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
-        return;
-      }
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -173,11 +154,28 @@ export default {
         let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        if (!isActive.value) {
+          $q.dialog({
+            title: 'Thông báo',
+            message:
+              'Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích hoạt tài khoản.',
+          })
+            .onOk(() => {
+              // console.log('OK')
+            })
+            .onCancel(() => {
+              // console.log('Cancel')
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
+            return;
+        }
         let isVaildSuccess = await onCheckValid();
         if (!isVaildSuccess) {
           return;
         }
-        await api.put('/users/folowing-master/' + row.id);
+        await api.put('/users/folowing-master/' + id);
         $q.loading.value = false;
         $router.push('/user/setting-follow');
       } catch (error) {
@@ -203,9 +201,13 @@ export default {
         $q.loading.hide();
       }
     }
-    function checkActive() {
-      let user = JSON.parse(localStorage.getItem('user'));
-      isActive.value = user.isActive;
+    async function checkActive() {
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let user = await api.get('/users/get-profile');
+      console.log(user);
+      isActive.value = user.data.isActive;
     }
     async function getListMaster() {
       let token = localStorage.getItem('jwt');
@@ -281,6 +283,31 @@ export default {
         }
         return false;
       }
+    }
+    async function checkIsActive(id) {
+      try {
+        let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        await api.get('/users/get-profile' + id);
+        return true;
+      } catch (error) {
+        $q.dialog({
+          title: 'Thông báo',
+          message:
+            'Tài khoản của bạn chưa được kích hoạt . Hãy liên hệ admin để được kích hoạt tài khoản.',
+        })
+          .onOk(() => {
+            // console.log('OK')
+          })
+          .onCancel(() => {
+            // console.log('Cancel')
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+      }
+      return false;
     }
     onBeforeMount(getListMaster);
     onMounted(checkActive);

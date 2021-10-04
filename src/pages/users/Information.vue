@@ -252,6 +252,7 @@ export default {
       // Nếu chưa follow ai thì sẽ chuyển sang màn follow
       if(user.masterId === null) {
           $router.push('/user/list-master');
+          return;
       }
       let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
