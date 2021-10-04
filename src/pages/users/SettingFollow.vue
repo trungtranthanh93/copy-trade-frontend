@@ -187,6 +187,18 @@ export default {
         $q.loading.value = false;
         autoClose();
       } catch (error) {
+        if (
+          error.response.status === 400 &&
+          error.response.data.message === 'notEnough.Amount'
+        ) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Không đủ vốn, folow thất bại. Quý khách vui lòng nâng vốn thối thiểu là 100 đô để tiến hành folow',
+            icon: 'report_problem',
+          });
+          return;
+        }
         $q.notify({
           color: 'negative',
           position: 'top',

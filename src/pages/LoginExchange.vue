@@ -181,7 +181,7 @@ export default {
       } catch (error) {
         if (
           error.response.status === 400 &&
-          response.data.d?.err_code === 'user.limit.exceed'
+          error.data.d?.err_code === 'user.limit.exceed'
         ) {
           $q.notify({
             color: 'negative',

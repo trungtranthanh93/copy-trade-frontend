@@ -338,7 +338,7 @@ export default {
       } catch (error) {
         if (
           error.response.status === 400 &&
-          response.data.d?.err_code === 'notEnough.betAmount'
+          error.data.d?.err_code === 'notEnough.betAmount'
         ) {
           $q.dialog({
             title: 'Thông báo',
