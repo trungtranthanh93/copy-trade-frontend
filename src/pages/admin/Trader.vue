@@ -338,30 +338,22 @@ export default {
       } catch (error) {
         if (
           error.response.status === 400 &&
-          error.data.d?.err_code === 'notEnough.betAmount'
+          error.response.data.message === 'notEnough.betAmount'
         ) {
-          $q.dialog({
-            title: 'Thông báo',
+          $q.notify({
+            color: 'negative',
+            position: 'top',
             message: 'Đặt lệnh thất bại, lệnh phải bằng tối thiểu 0.8% vốn',
-            persistent: true,
-          })
-            .onOk(() => {
-              return;
-            })
-            .onCancel(() => {
-              return;
-            })
-            .onDismiss(() => {
-              // console.log('I am triggered on both OK and Cancel')
-            });
-          return;
+            icon: 'report_problem',
+          });
+        } else {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Chưa đánh được lệnh. Hãy thử lại hoặc liên hệ admin',
+            icon: 'report_problem',
+          });
         }
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Chưa đánh được lệnh. Hãy thử lại hoặc liên hệ admin',
-          icon: 'report_problem',
-        });
       } finally {
         $q.loading.hide();
       }
