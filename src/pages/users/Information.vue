@@ -248,16 +248,16 @@ export default {
     }
     async function onCheckValid() {
       try {
-      let user = JSON.parse(localStorage.getItem('user'));
-      // Nếu chưa follow ai thì sẽ chuyển sang màn follow
-      if(user.masterId === null) {
-          $router.push('/user/list-master');
-          return;
-      }
+
       let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
+        let user = await api.get('/users/get-profile');
+        console.log(user)
+        if(!user.data.masterId) {
+            $router.push('/user/list-master');
+            return;
+        }
         await api.post('/users/valid-token');
         return true;
       } catch (error) {
