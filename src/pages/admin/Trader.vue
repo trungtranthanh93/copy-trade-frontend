@@ -184,7 +184,7 @@
                     label="Tăng"
                     icon-right="trending_up"
                     v-on:click="onSubmit(`UP`)"
-                    :disable="isDisable"
+                    :disable="isDisableUp"
                   />
                 </div>
                 <div class="col">
@@ -212,7 +212,7 @@
                     label="Giảm"
                     icon-right="trending_down"
                     v-on:click="onSubmit(`DOWN`)"
-                    :disable="isDisable"
+                    :disable="isDisableDown"
                   />
                 </div>
               </div>
@@ -275,7 +275,8 @@ export default {
     const accountType = ref('');
     const countUser = ref('');
     const rows = ref([]);
-    const isDisable = ref(false);
+    const isDisableUp = ref(false);
+    const isDisableDown = ref(false);
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
@@ -337,10 +338,17 @@ export default {
             message: 'Đánh lệnh thành công',
             position: 'top',
           });
-          // isDisable.value = true
-          // $q.loading.hide();
-          // await wait(30);
-          // isDisable.value = false
+          if(value === 'UP') {
+            isDisableUp.value = true
+            $q.loading.hide();
+            await wait(30);
+            isDisableUp.value = false
+          } else if (value === 'DOWN') {
+            isDisableDown.value = true
+            $q.loading.hide();
+            await wait(30);
+            isDisableDown.value = false
+          }
         }
       } catch (error) {
         if (
@@ -383,9 +391,9 @@ export default {
         $router.push('/admin/login-exchange');
       }
     }
-    // async function wait(timeout) {
-    //   return new Promise((resolve) => setTimeout(resolve,timeout*1000));
-    // }
+    async function wait(timeout) {
+      return new Promise((resolve) => setTimeout(resolve,timeout*1000));
+    }
     async function getStatistic() {
       let token = localStorage.getItem('jwt');
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -427,7 +435,8 @@ export default {
       countUser,
       goUserFollow,
       accountType,
-      isDisable
+      isDisableUp,
+      isDisableDown
     };
   },
 };

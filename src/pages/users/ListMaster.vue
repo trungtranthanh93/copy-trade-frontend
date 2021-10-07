@@ -89,7 +89,7 @@
 const columns = [
   {
     name: 'user_name',
-    label: 'Chuyên gia',
+    label: ' ID chuyên gia',
     field: 'user_name',
     sortable: true,
     align: 'center',
@@ -103,17 +103,31 @@ const columns = [
     align: 'center',
   },
   {
-    name: 'winOptionQuantity',
-    label: 'Số lệnh thắng',
-    field: 'winOptionQuantity',
+    name: 'totalIncomeOn7Days',
+    label: 'Lợi nhuận 7 ngày',
+    field: 'totalIncomeOn7Days',
     sortable: true,
     align: 'center',
     classes: 'text-green',
   },
   {
+    name: 'totalIncomePercentOn7Days',
+    label: '% Lợi nhuận hàng ngày ',
+    field: 'totalIncomePercentOn7Days',
+    sortable: true,
+    align: 'center',
+  },
+  {
     name: 'userFolowQuantity',
     label: 'Số người follow',
     field: 'userFolowQuantity',
+    sortable: true,
+    align: 'center',
+  },
+  {
+    name: 'is_token_valid',
+    label: 'Trạng thái',
+    field: 'is_token_valid',
     sortable: true,
     align: 'center',
   },
@@ -218,7 +232,16 @@ export default {
       if (responseContent.status !== 200 && responseContent.status !== 201) {
         throw new Error();
       }
-      rows.value = responseContent.data;
+      let data = responseContent.data;
+      rows.value = data.map((obj) => {
+
+        if (obj.is_token_valid === 1) {
+          obj.is_token_valid = 'ONLINE';
+        } else {
+          obj.is_token_valid = 'OFF';
+        }
+        return obj;
+      });
     }
     async function goLoginExchange() {
       try {
