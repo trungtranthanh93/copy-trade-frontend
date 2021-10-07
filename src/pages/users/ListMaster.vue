@@ -95,7 +95,7 @@
 const columns = [
   {
     name: 'user_name',
-    label: ' ID chuyên gia',
+    label: 'Chuyên gia',
     field: 'user_name',
     sortable: true,
     align: 'center',
@@ -110,7 +110,7 @@ const columns = [
   },
   {
     name: 'monthlyTotalIncome',
-    label: 'Tổng lợi nhuận trong tháng',
+    label: 'Lợi nhuận tháng',
     field: 'monthlyTotalIncome',
     sortable: true,
     align: 'center',
@@ -118,14 +118,14 @@ const columns = [
   },
   {
     name: 'monthlyIncomePercent',
-    label: 'Tổng % Lợi nhuận trong tháng ',
+    label: '% Lợi nhuận',
     field: 'monthlyIncomePercent',
     sortable: true,
     align: 'center',
   },
   {
     name: 'userFolowQuantity',
-    label: 'Số người follow',
+    label: 'Người Follow',
     field: 'userFolowQuantity',
     sortable: true,
     align: 'center',
