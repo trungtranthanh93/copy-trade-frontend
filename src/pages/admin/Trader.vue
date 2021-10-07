@@ -307,6 +307,9 @@ export default {
       let responseContent = await api.get('/users/count-user');
       countUser.value = responseContent.data.folowingUser;
     }
+    function logout() {
+      $router.push('/logout');
+    }
     async function onSubmit(value) {
       $q.loading.show({
         spinner: QSpinnerFacebook,
@@ -446,6 +449,7 @@ export default {
       accountType,
       isDisableUp,
       isDisableDown,
+      logout
     };
   },
 };
