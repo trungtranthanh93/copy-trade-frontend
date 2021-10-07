@@ -17,6 +17,15 @@
         <div>
           <img class="relative-top-left" src="logo.png" style="height: 80px" />
         </div>
+        <div class="row justify-right">
+          <q-btn
+            size="md"
+            class="bg-positive"
+            label="Đăng xuất"
+            @click="logout"
+          />
+        </div>
+        <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <template v-if="!$q.platform.is.mobile">
           <div class="row justify-center">
             <q-card
@@ -338,16 +347,16 @@ export default {
             message: 'Đánh lệnh thành công',
             position: 'top',
           });
-          if(value === 'UP') {
-            isDisableUp.value = true
+          if (value === 'UP') {
+            isDisableUp.value = true;
             $q.loading.hide();
             await wait(30);
-            isDisableUp.value = false
+            isDisableUp.value = false;
           } else if (value === 'DOWN') {
-            isDisableDown.value = true
+            isDisableDown.value = true;
             $q.loading.hide();
             await wait(30);
-            isDisableDown.value = false
+            isDisableDown.value = false;
           }
         }
       } catch (error) {
@@ -392,7 +401,7 @@ export default {
       }
     }
     async function wait(timeout) {
-      return new Promise((resolve) => setTimeout(resolve,timeout*1000));
+      return new Promise((resolve) => setTimeout(resolve, timeout * 1000));
     }
     async function getStatistic() {
       let token = localStorage.getItem('jwt');
@@ -436,7 +445,7 @@ export default {
       goUserFollow,
       accountType,
       isDisableUp,
-      isDisableDown
+      isDisableDown,
     };
   },
 };

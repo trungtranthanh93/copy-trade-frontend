@@ -7,6 +7,12 @@
         label="Đăng nhập sàn"
         @click="goLoginExchange"
       />
+      <q-btn
+        size="md"
+        class="bg-positive"
+        label="Đăng xuất"
+        @click="logout"
+      />
     </div>
     <q-separator color="black q-mb-md q-mt-md" inset />
     <template v-if="!isActive">
@@ -112,7 +118,7 @@ const columns = [
   },
   {
     name: 'totalIncomePercentOn7Days',
-    label: '% Lợi nhuận hàng ngày ',
+    label: '% Lợi nhuận 7 ngày ',
     field: 'totalIncomePercentOn7Days',
     sortable: true,
     align: 'center',
@@ -257,6 +263,9 @@ export default {
         $router.push('/user/login-exchange');
       }
     }
+    function logout() {
+      $router.push('/logout');
+    }
     async function onCheckValid() {
       try {
         let token = localStorage.getItem('jwt');
@@ -317,6 +326,7 @@ export default {
       goLoginExchange,
       isActive,
       pagination,
+      logout
     };
   },
 };
