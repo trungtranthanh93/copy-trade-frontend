@@ -3,42 +3,29 @@
   <q-layout class="justify-center">
     <q-page-container class="window-height">
       <div
-        class="
-          q-pa-md
-          fit
-          row
-          wrap
-          justify-center
-          items-end
-          content-center
-          rounded-borders
-          dark
-          fixed-center
-          relative-position
-        "
+        :class ="{'q-pa-md fit row wrap justify-center items-end rounded-borders dark absolute-center': true,
+          'content-center': !$q.platform.is.mobile
+        }"
         style="max-width: 428px"
       >
-        <div>
-          <img class="absolute-top-left" src="logo.png" style="height: 80px" />
-        </div>
-        <h5 class="text-weight-bolder">Màn hình cài đặt lệnh</h5>
-        <form class="q-gutter-x-xs q-gutter-y-lg">
+        <img class="fixed-top-left" src="logo.png" :style="{height: $q.platform.is.mobile ? '40px': '80px'}" />
+        <h5 class="text-weight-bolder q-mt-xl">Màn hình cài đặt lệnh</h5>
+        <form class="q-gutter-x-xs q-gutter-y-lg" style="max-width: 295px; width: 100%">
           <div>
             <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
             <q-select
               filled
               v-model="accountType"
               :options="optionAccount"
-              style="width: 295px"
             />
+            <DialogSwapMoney />
           </div>
           <div>
             <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
             <q-select
               filled
               v-model="minAmount"
-              :options="optionsAmount"
-              style="width: 295px"
+              :options="optionsMinAmount"
             />
           </div>
           <div>
@@ -46,8 +33,7 @@
             <q-select
               filled
               v-model="maxAmount"
-              :options="optionsAmount"
-              style="width: 295px"
+              :options="optionsMaxAmount"
             />
           </div>
           <div>
@@ -56,7 +42,6 @@
               filled
               v-model="takeProfit"
               :options="optionsProfit"
-              style="width: 295px"
             />
           </div>
           <div>
@@ -65,7 +50,6 @@
               filled
               v-model="stopLoss"
               :options="optionsLost"
-              style="width: 295px"
             />
           </div>
           <q-btn
@@ -85,8 +69,11 @@ import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-
+import DialogSwapMoney from 'layouts/DialogSwapMoney.vue'
 export default {
+  components: {
+    DialogSwapMoney
+  },
   setup() {
     const $router = useRouter();
     const $q = useQuasar();
@@ -194,7 +181,8 @@ export default {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message: 'Không đủ vốn, folow thất bại. Quý khách vui lòng nâng vốn thối thiểu là 100 đô để tiến hành folow',
+            message:
+              'Không đủ vốn, folow thất bại. Quý khách vui lòng nâng vốn thối thiểu là 100 đô để tiến hành folow',
             icon: 'report_problem',
           });
           return;
@@ -254,7 +242,7 @@ export default {
       takeProfit,
       onSetting,
       optionAccount,
-      optionsAmount: [
+      optionsMinAmount: [
         {
           label: '1%',
           value: 1,
@@ -294,6 +282,60 @@ export default {
         {
           label: '10%',
           value: 10,
+        }
+      ],
+      optionsMaxAmount: [
+        {
+          label: '1%',
+          value: 1,
+        },
+        {
+          label: '2%',
+          value: 2,
+        },
+        {
+          label: '3%',
+          value: 3,
+        },
+        {
+          label: '4%',
+          value: 4,
+        },
+        {
+          label: '5%',
+          value: 5,
+        },
+        {
+          label: '6%',
+          value: 6,
+        },
+        {
+          label: '7%',
+          value: 7,
+        },
+        {
+          label: '8%',
+          value: 8,
+        },
+        {
+          label: '9%',
+          value: 9,
+        },
+        {
+          label: '10%',
+          value: 10,
+        },
+        {
+          label: '15%',
+          value: 15,
+        },
+        {
+          label: '20%',
+          value: 20,
+        },
+        {
+          label: '25%',
+          value: 25,
         },
       ],
       optionsProfit: [
@@ -378,44 +420,68 @@ export default {
           value: 20,
         },
         {
-          label: '21%',
-          value: 21,
-        },
-        {
-          label: '22%',
-          value: 22,
-        },
-        {
-          label: '23%',
-          value: 23,
-        },
-        {
-          label: '24%',
-          value: 24,
-        },
-        {
           label: '25%',
           value: 25,
         },
         {
-          label: '26%',
-          value: 26,
-        },
-        {
-          label: '27%',
-          value: 27,
-        },
-        {
-          label: '28%',
-          value: 28,
-        },
-        {
-          label: '29%',
-          value: 29,
-        },
-        {
           label: '30%',
           value: 30,
+        },
+        {
+          label: '35%',
+          value: 35,
+        },
+        {
+          label: '40%',
+          value: 40,
+        },
+        {
+          label: '45%',
+          value: 45,
+        },
+        {
+          label: '50%',
+          value: 50,
+        },
+        {
+          label: '55%',
+          value: 55,
+        },
+        {
+          label: '60%',
+          value: 60,
+        },
+        {
+          label: '65%',
+          value: 65,
+        },
+        {
+          label: '70%',
+          value: 70,
+        },
+        {
+          label: '75%',
+          value: 75,
+        },
+        {
+          label: '80%',
+          value: 80,
+        },
+        {
+          label: '85%',
+          value: 85,
+        },
+        {
+          label: '90%',
+          value: 90,
+        },
+        {
+          label: '95%',
+          value: 95,
+        },
+        {
+          label: '100%',
+          value: 100,
         },
       ],
       optionsLost: [
