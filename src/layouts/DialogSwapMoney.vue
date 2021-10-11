@@ -95,7 +95,7 @@ export default {
           confirmed: true,
           type: firstWallet.value === 'USDT Wallet' ? 'USDT_BO' : 'BO_USDT',
         };
-        let response = await api.post('/users/spot-balance', data);
+        let response = await api.post('/trade/v1/move-usdt', data);
         if (response.status !== 201) {
           throw new Error();
         }
