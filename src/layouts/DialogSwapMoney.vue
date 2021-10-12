@@ -114,6 +114,7 @@ export default {
             message: 'Chuyển tiền thành công!',
             position: 'top',
           });
+          await getSportBalance();
         }
       } catch (error) {
         $q.notify({
