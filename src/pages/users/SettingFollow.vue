@@ -3,54 +3,42 @@
   <q-layout class="justify-center">
     <q-page-container class="window-height">
       <div
-        :class ="{'q-pa-md fit row wrap justify-center items-end rounded-borders dark absolute-center': true,
-          'content-center': !$q.platform.is.mobile
+        :class="{
+          'q-pa-md fit row wrap justify-center items-end rounded-borders dark absolute-center': true,
+          'content-center': !$q.platform.is.mobile,
         }"
         style="max-width: 428px"
       >
-        <img class="fixed-top-left" src="logo.png" :style="{height: $q.platform.is.mobile ? '40px': '80px'}" />
+        <img
+          class="fixed-top-left"
+          src="logo.png"
+          :style="{ height: $q.platform.is.mobile ? '40px' : '80px' }"
+        />
         <h5 class="text-weight-bolder q-mt-xl">Màn hình cài đặt lệnh</h5>
-        <form class="q-gutter-x-xs q-gutter-y-lg" style="max-width: 295px; width: 100%">
+        <form
+          class="q-gutter-x-xs q-gutter-y-lg"
+          style="max-width: 295px; width: 100%"
+        >
           <div>
             <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
-            <q-select
-              filled
-              v-model="accountType"
-              :options="optionAccount"
-            />
+            <q-select filled v-model="accountType" :options="optionAccount" />
             <DialogSwapMoney />
           </div>
           <div>
             <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
-            <q-select
-              filled
-              v-model="minAmount"
-              :options="optionsMinAmount"
-            />
+            <q-select filled v-model="minAmount" :options="optionsMinAmount" />
           </div>
           <div>
             <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
-            <q-select
-              filled
-              v-model="maxAmount"
-              :options="optionsMaxAmount"
-            />
+            <q-select filled v-model="maxAmount" :options="optionsMaxAmount" />
           </div>
           <div>
             <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
-            <q-select
-              filled
-              v-model="takeProfit"
-              :options="optionsProfit"
-            />
+            <q-select filled v-model="takeProfit" :options="optionsProfit" />
           </div>
           <div>
             <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
-            <q-select
-              filled
-              v-model="stopLoss"
-              :options="optionsLost"
-            />
+            <q-select filled v-model="stopLoss" :options="optionsLost" />
           </div>
           <q-btn
             class="full-width bg-positive"
@@ -69,10 +57,10 @@ import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-import DialogSwapMoney from 'layouts/DialogSwapMoney.vue'
+import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
 export default {
   components: {
-    DialogSwapMoney
+    DialogSwapMoney,
   },
   setup() {
     const $router = useRouter();
@@ -282,7 +270,7 @@ export default {
         {
           label: '10%',
           value: 10,
-        }
+        },
       ],
       optionsMaxAmount: [
         {
@@ -483,6 +471,18 @@ export default {
           label: '100%',
           value: 100,
         },
+        {
+          label: '200%',
+          value: 200,
+        },
+        {
+          label: '300%',
+          value: 300,
+        },
+        {
+          label: '500%',
+          value: 500,
+        },
       ],
       optionsLost: [
         {
@@ -604,6 +604,14 @@ export default {
         {
           label: '-30%',
           value: 30,
+        },
+        {
+          label: '-40%',
+          value: 40,
+        },
+        {
+          label: '-50%',
+          value: 50,
         },
       ],
     };
