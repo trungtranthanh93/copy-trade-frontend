@@ -46,7 +46,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
-import { useQuasar, QSpinnerFacebook} from 'quasar';
+import { useQuasar, QSpinnerFacebook } from 'quasar';
 export default {
   setup() {
     const $q = useQuasar();
@@ -117,12 +117,25 @@ export default {
           await getSportBalance();
         }
       } catch (error) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Chuyển tiền thất bại!',
-          icon: 'report_problem',
-        });
+        if (
+          error.response.status === 400 &&
+          error.response.data.message === 'user.isFolowing'
+        )
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message:
+              'Chuyển tiền thất bại. Hãy dừng folow để có thể chuyển tiền!',
+            icon: 'report_problem',
+          });
+        else {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Chuyển tiền thất bại!',
+            icon: 'report_problem',
+          });
+        }
       } finally {
         $q.loading.hide();
       }
