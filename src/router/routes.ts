@@ -48,7 +48,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('src/pages/LoginExchange.vue'),
   },
   {
-    path: '/user/setting-follow',
+    path: '/user/setting-follow/:masterId',
     name: 'setting-follow',
     meta: { requiresAuth: true, isAdmin: false },
     component: () => import('pages/users/SettingFollow.vue'),

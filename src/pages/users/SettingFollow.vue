@@ -155,7 +155,7 @@ export default {
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/user-setting', data);
+        let responseContent = await api.put('/user-setting/'+$router.currentRoute.value.params.masterId, data);
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }

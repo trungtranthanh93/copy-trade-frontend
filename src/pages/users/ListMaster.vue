@@ -197,7 +197,7 @@ export default {
         }
         await api.put('/users/folowing-master/' + row.id);
         $q.loading.value = false;
-        $router.push('/user/setting-follow');
+        $router.push('/user/setting-follow/' + row.id);
       } catch (error) {
         if (error.response.status === 404) {
           $q.dialog({
