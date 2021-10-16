@@ -248,15 +248,14 @@ export default {
     }
     async function onCheckValid() {
       try {
-
-      let token = localStorage.getItem('jwt');
+        let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         let user = await api.get('/users/get-profile');
-        console.log(user)
-        if(!user.data.masterId) {
-            $router.push('/user/list-master');
-            return;
+        console.log(user);
+        if (!user.data.masterId) {
+          $router.push('/user/list-master');
+          return;
         }
         await api.post('/users/valid-token');
         return true;
@@ -326,8 +325,12 @@ export default {
         });
       }
     }
-    function continueFollow() {
-      $router.push('/user/setting-follow');
+    async function continueFollow() {
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let user = await api.get('/users/get-profile');
+      $router.push('/user/setting-follow/'+ user.data.masterId);
     }
     async function getStatistic() {
       let token = localStorage.getItem('jwt');
@@ -362,7 +365,7 @@ export default {
       columns,
       rows,
       pagination,
-      accountType
+      accountType,
     };
   },
 };
