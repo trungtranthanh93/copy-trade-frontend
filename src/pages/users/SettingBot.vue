@@ -59,9 +59,8 @@
               multiple
               :options="optionBot"
               use-chips
-              max-values="3"
               stack-label
-              label="Chọn 3 phương pháp"
+              label="Chọn các phương pháp"
               :disable="!isEnalbeMultiple"
             />
           </div>
@@ -665,6 +664,18 @@ export default {
         {
           label: 'Bot 3',
           value: 3,
+        },
+        {
+          label: 'Bot 4',
+          value: 4,
+        },
+        {
+          label: 'Bot 5',
+          value: 5,
+        },
+        {
+          label: 'Bot 6',
+          value: 6,
         },
       ],
       modelSession,
