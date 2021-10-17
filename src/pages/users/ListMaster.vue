@@ -1,18 +1,7 @@
 <template>
   <div class="q-pa-md">
-    <div class="row justify-between">
-      <q-btn
-        size="md"
-        class="bg-positive"
-        label="Đăng nhập sàn"
-        @click="goLoginExchange"
-      />
-      <q-btn
-        size="md"
-        class="bg-positive"
-        label="Đăng xuất"
-        @click="logout"
-      />
+    <div v-if="!$q.platform.is.mobile">
+      <img class="relative-top-left" src="logo.png" style="height: 80px" />
     </div>
     <q-separator color="black q-mb-md q-mt-md" inset />
     <template v-if="!isActive">

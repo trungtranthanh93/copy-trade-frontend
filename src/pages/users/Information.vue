@@ -14,10 +14,8 @@
           relative-position
         "
       >
-        <div>
-          <img class="relative-top-left" src="logo.png" style="height: 80px" />
-        </div>
         <template v-if="!$q.platform.is.mobile">
+          <img class="relative-top-left" src="logo.png" style="height: 80px" />
           <div class="row justify-center">
             <q-card
               class="bg-blue-grey-14 q-ml-md"
@@ -330,7 +328,7 @@ export default {
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       let user = await api.get('/users/get-profile');
-      $router.push('/user/setting-follow/'+ user.data.masterId);
+      $router.push('/user/setting-follow/' + user.data.masterId);
     }
     async function getStatistic() {
       let token = localStorage.getItem('jwt');

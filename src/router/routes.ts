@@ -1,5 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import Login from 'pages/Login.vue';
+import Admin from 'pages/admin/Admin.vue';
+import User from 'pages/users/User.vue';
 import Logout from 'pages/Logout.vue';
 import Register from 'pages/users/Register.vue';
 import 'vue-router';
@@ -13,45 +15,55 @@ declare module 'vue-router' {
 const routes: RouteRecordRaw[] = [
   {
     path: '/admin/',
-    name: 'trader',
+    component: Admin,
+    name: 'admin',
     meta: { requiresAuth: true, isAdmin: true },
-    component: () => import('pages/admin/Trader.vue'),
-  },
-  {
-    path: '/admin/login-exchange',
-    name: 'admin-exchange',
-    meta: { requiresAuth: true, isAdmin: true },
-    component: () => import('src/pages/LoginExchange.vue'),
-  },
-  {
-    path: '/admin/user-follow',
-    name: 'user-follow',
-    meta: { requiresAuth: true, isAdmin: true },
-    component: () => import('pages/admin/UserFollow.vue'),
+    children: [
+      {
+        path: '',
+        name: 'trader',
+        meta: { requiresAuth: true, isAdmin: true },
+        component: () => import('pages/admin/Trader.vue'),
+      },
+      {
+        path: 'login-exchange',
+        component: () => import('src/pages/LoginExchange.vue'),
+      },
+      {
+        path: 'user-follow',
+        name: 'user-follow',
+        component: () => import('pages/admin/UserFollow.vue'),
+      }
+    ],
   },
   {
     path: '/user/',
-    name: 'infomation',
+    component: User,
+    name: 'user',
     meta: { requiresAuth: true, isAdmin: false },
-    component: () => import('pages/users/Information.vue'),
-  },
-  {
-    path: '/user/list-master',
-    name: 'list-master',
-    meta: { requiresAuth: true, isAdmin: false },
-    component: () => import('pages/users/ListMaster.vue'),
-  },
-  {
-    path: '/user/login-exchange',
-    name: 'user-exchange',
-    meta: { requiresAuth: true, isAdmin: false },
-    component: () => import('src/pages/LoginExchange.vue'),
-  },
-  {
-    path: '/user/setting-follow/:masterId',
-    name: 'setting-follow',
-    meta: { requiresAuth: true, isAdmin: false },
-    component: () => import('pages/users/SettingFollow.vue'),
+    children: [
+      {
+        path: '',
+        name: 'infomation',
+        component: () => import('pages/users/Information.vue'),
+      },
+      {
+        path: 'list-master',
+        component: () => import('pages/users/ListMaster.vue'),
+      },
+      {
+        path: 'login-exchange',
+        component: () => import('src/pages/LoginExchange.vue'),
+      },
+      {
+        path: 'setting-follow/:masterId',
+        component: () => import('pages/users/SettingFollow.vue'),
+      },
+      {
+        path: 'setting-bot',
+        component: () => import('pages/users/SettingBot.vue'),
+      },
+    ],
   },
   {
     path: '',

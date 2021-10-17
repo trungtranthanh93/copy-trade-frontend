@@ -4,15 +4,12 @@
     <q-page-container class="window-height">
       <div
         :class="{
-          'q-pa-md fit row wrap justify-center items-end rounded-borders dark fixed-center': true,
+          'q-pa-md fit row wrap justify-center items-end rounded-borders dark absolute-center': true,
           'content-center': !$q.platform.is.mobile,
         }"
         style="max-width: 428px"
       >
-        <div v-if="!$q.platform.is.mobile">
-          <img class="fixed-top-left" src="logo.png" style="height: 80px" />
-        </div>
-        <h5 class="text-weight-bolder q-mt-xl">Màn hình cài đặt lệnh</h5>
+        <h5 class="text-weight-bolder q-mt-xl">Cài đặt lệnh theo bot</h5>
         <form
           class="q-gutter-x-xs q-gutter-y-lg"
           style="max-width: 295px; width: 100%"
@@ -38,11 +35,47 @@
             <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
             <q-select filled v-model="stopLoss" :options="optionsLost" />
           </div>
+          <div>
+            <q-item-label class="q-mb-sm">Phương pháp</q-item-label>
+            <q-select
+              filled
+              v-model="stopLoss"
+              :options="optionBot"
+              :disable="isEnalbeMultiple"
+            />
+          </div>
+          <q-toggle
+            :false-value="false"
+            label="Chọn nhiều phương pháp"
+            :true-value="true"
+            color="positive"
+            v-model="isEnalbeMultiple"
+          />
+          <div>
+            <q-item-label class="q-mb-sm">Phương pháp nâng cao</q-item-label>
+            <q-select
+              filled
+              v-model="modelMultiple"
+              multiple
+              :options="optionBot"
+              use-chips
+              max-values="3"
+              stack-label
+              label="Chọn 3 phương pháp"
+              :disable="!isEnalbeMultiple"
+            />
+          </div>
+          <div><q-item-label class="q-mb-sm">Số phiên âm liên tiếp</q-item-label>
+            <q-select
+              filled
+              v-model="modelSession"
+              :options="optionSession"
+              :disable="!isEnalbeMultiple"
+            /></div>
           <q-btn
-            class="full-width bg-positive"
+            class="full-width bg-positive q-mb-md"
             @click="onSetting()"
             label="Cài đặt"
-            style=""
           />
         </form>
       </div>
@@ -68,6 +101,8 @@ export default {
     const stopLoss = ref(null);
     const takeProfit = ref(null);
     const accountType = ref(null);
+    const modelMultiple = ref(null);
+    const modelSession = ref(null);
     const optionAccount = ref([
       {
         label: 'Tài khoản demo',
@@ -78,6 +113,7 @@ export default {
         value: 'LIVE',
       },
     ]);
+    const isEnalbeMultiple = ref(false);
     async function onSetting() {
       if (!accountType.value) {
         $q.notify({
@@ -153,7 +189,10 @@ export default {
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/user-setting/'+$router.currentRoute.value.params.masterId, data);
+        let responseContent = await api.put(
+          '/user-setting/' + $router.currentRoute.value.params.masterId,
+          data
+        );
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }
@@ -610,6 +649,37 @@ export default {
         {
           label: '-50%',
           value: 50,
+        },
+      ],
+      modelMultiple,
+      isEnalbeMultiple,
+      optionBot: [
+        {
+          label: 'Bot 1',
+          value: 1,
+        },
+        {
+          label: 'Bot 2',
+          value: 2,
+        },
+        {
+          label: 'Bot 3',
+          value: 3,
+        },
+      ],
+      modelSession,
+      optionSession: [
+        {
+          label: '1',
+          value: 1,
+        },
+        {
+          label: '2',
+          value: 2,
+        },
+        {
+          label: '3',
+          value: 3,
         },
       ],
     };

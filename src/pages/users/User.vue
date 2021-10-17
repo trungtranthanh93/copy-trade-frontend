@@ -1,116 +1,90 @@
+
 <template>
-  <!-- <q-layout container style="height: 600px"> -->
-  <q-layout view="hHh Lpr fff" class="shadow-10 rounded-borders" style="">
+  <q-layout view="hhh lpR lff">
+
+    <q-header reveal elevated class="bg-dark">
+      <q-toolbar>
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <div v-if="!$q.platform.is.mobile">
+          <img class="absolute-top-right" src="logo.png" style="height: 60px" />
+        </div>
+      </q-toolbar>
+    </q-header>
+
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay elevated 
+      show-if-above
+      :width="250"
+      :breakpoint="500">
+      <!-- Calcule la place pour l'image du profil -->
+      <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
+        <div v-if="$q.platform.is.mobile">
+          <img class="top-left" src="logo.png" style="height: 40px" />
+        </div>
+        <q-list padding>
+          <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
+        </q-list>
+      </q-scroll-area>
+    </q-drawer>
+
     <q-page-container>
-      <!-- Effet de transition entre les pages du contenu 
-      <transition :name="transitionName">
-      -->
-      <transition
-        appear
-        enter-active-class="animated fadeOut"
-        leave-active-class="animated rotateOut"
-        :duration="300"
-      >
-        <router-view />
-      </transition>
+      <router-view />
     </q-page-container>
+
   </q-layout>
 </template>
+
 <script>
-import { api } from 'boot/axios';
-import { useRouter } from 'vue-router';
-import {ref, onMounted} from 'vue';
+import { ref } from 'vue'
+import MenuItem from 'components/MenuItem.vue';
 
 const linksData = [
   {
-    title: 'Kết quả',
-    caption: 'Số dư tài khoản',
+    title: 'Copy Trader',
+    caption: 'Đánh lệnh theo chuyên gia',
     icon: 'account_balance',
-    iconColor: 'black',
+    iconColor: 'orange',
     link: '/user',
     separator: true,
   },
   {
-    title: 'Chuyên gia',
-    caption: 'Danh sách các chuyên gia',
-    icon: 'format_list_numbered',
-    iconColor: 'black',
-    link: '/user/list-master',
-    separator: false,
-  },
-  {
-    title: 'Lịch sử',
-    caption: 'Lịch sử vào lệnh',
+    title: 'Auto Trader',
+    caption: 'Đánh lệnh theo Bot',
     icon: 'history',
     iconColor: 'orange',
-    link: '/user/history-trading',
+    link: '/user/auto-bot',
     separator: false,
   },
   {
-    title: 'Màn hình cài đặt lệnh',
-    caption: 'Cài đặt số tiền chốt lãi , số tiền chốt lỗ,..',
-    icon: 'settings',
-    iconColor: 'black',
-    link: '/user/setting-follow',
+    title: 'Đăng nhập sàn',
+    caption: 'Đăng nhập vào sàn để đồng bộ lệnh đánh',
+    icon: 'login',
+    iconColor: 'orange',
+    link: '/user/login-exchange',
     separator: false,
   },
   {
     title: 'Đăng xuất',
     caption: '',
     icon: 'logout',
-    iconColor: 'black',
+    iconColor: 'orange',
     link: '/logout',
     separator: false,
   },
 ];
-
 export default {
-  setup() {
-    const $router = useRouter();
-    const leftDrawerOpen = ref(false);
-    const  miniState = ref(false);
-    const  menuLinks = ref(linksData) // Structure du menu
-    const  transitionName =  ref('rotateOut'); // Effet de transition entre les pages du <q-page-container> : https://quasar.dev/options/transitions
-      // Suppose la dÃ©claration de la transition dans quasar.conf.js : https://quasar.dev/options/animations
-    const  message =  ref('');
-    
-    function drawerClick(e) {
-      // if in "mini" state and user click on drawer, we switch it to "normal" mode
-      if (this.miniState) {
-        this.miniState = false;
-        // notice we have registered an event with capture flag;
-        // we need to stop further propagation as this click is
-        // intended for switching drawer to "normal" mode only
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        e.stopPropagation();
-      }
-    }
-    async function checkLoginExchange() {
-      try {
-        let user = localStorage.getItem('user');
-        if(user.masterId === null) {
-          throw new Error();
-        }
-        await api.post('/users/valid-token');
-        //TODO follow theo chuyên gia
-      } catch (error) {
-        console.log(error)
-        $router.push('/user/list-master');
-      }
-    }
-    onMounted(checkLoginExchange)
+  setup () {
+    const leftDrawerOpen = ref(false)
+    const menuLinks = ref(linksData); // Structure du menu
     return {
       leftDrawerOpen,
-      miniState,
+      toggleLeftDrawer () {
+        leftDrawerOpen.value = !leftDrawerOpen.value
+      },
       menuLinks,
-      transitionName,
-      message,
-      drawerClick
     }
+  },
+  components: {
+    MenuItem,
   },
 }
 </script>
-<style lang="sass" scoped>
-.menu-list .q-item
-  border-radius: 0 32px 32px 0
-</style>
