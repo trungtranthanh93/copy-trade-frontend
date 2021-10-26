@@ -33,6 +33,10 @@ const routes: RouteRecordRaw[] = [
         path: 'user-follow',
         name: 'user-follow',
         component: () => import('pages/admin/UserFollow.vue'),
+      },
+      {
+        path: 'setting-bot',
+        component: () => import('src/pages/SettingBot.vue'),
       }
     ],
   },
@@ -61,7 +65,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'setting-bot',
-        component: () => import('pages/users/SettingBot.vue'),
+        component: () => import('src/pages/SettingBot.vue'),
       },
     ],
   },

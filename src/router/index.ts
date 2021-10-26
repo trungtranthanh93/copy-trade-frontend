@@ -1,4 +1,3 @@
-import { Dialog } from 'quasar';
 import { route } from 'quasar/wrappers';
 import {
   createMemoryHistory,
@@ -18,10 +17,12 @@ import routes from './routes';
  * with the Router instance.
  */
 
-export default route<StateInterface>(function ( /* { store, ssrContext } */) {
+export default route<StateInterface>(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
+    : process.env.VUE_ROUTER_MODE === 'history'
+    ? createWebHistory
+    : createWebHashHistory;
 
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
@@ -36,59 +37,42 @@ export default route<StateInterface>(function ( /* { store, ssrContext } */) {
   });
   Router.beforeEach((to, from, next) => {
     let user: any = localStorage.getItem('user');
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
       if (!user) {
         next({
           name: 'login',
-          query: { redirect: to.fullPath }
-        })
+          query: { redirect: to.fullPath },
+        });
       }
-      user = JSON.parse(user)
-      if(user.role === 0) {
-        if(to.matched.some(record => record.meta.isAdmin)) {
-          next({
-            name: 'infomation'
-          })
-        };
-        Dialog.create({
-          title: 'Thông báo',
-          message: 'Hệ thống sẽ chuyển sang đánh lệnh theo bot, đánh theo chuyên gia sẽ dừng lại. Bạn có chắc chắn không?',
-          html: true,
-        })
-          .onOk(() => {
-            return;
-          })
-          .onCancel(() => {
-            return;
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
-          // return;
-      }
-      if(to.matched.some(record => !record.meta.isAdmin) && user.role === 1) {
+      user = JSON.parse(user);
+      if (user.role === 0 && !to.meta?.isAdmin) {
         next({
-          name: 'trader'
-        }) 
+          name: 'infomation',
+        });
       }
-      next()
+      if (!to.meta?.isAdmin && user.role === 1) {
+        next({
+          name: 'trader',
+        });
+      }
+      next();
     }
     if (to.name === 'login') {
       if (user) {
         if (user.role === 0) {
           next({
-            name: 'user'
-          })
+            name: 'user',
+          });
         } else {
           next({
-            name: 'trader'
-          })
+            name: 'trader',
+          });
         }
       } else {
-        next()
+        next();
       }
     }
-    next()
-  })
+    next();
+  });
   return Router;
 });

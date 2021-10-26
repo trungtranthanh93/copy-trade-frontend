@@ -4,14 +4,14 @@
     <q-page-container class="window-height">
       <div
         :class="{
-          'q-pa-md fit row wrap justify-center items-end rounded-borders dark absolute-center': true,
-          'content-center': !$q.platform.is.mobile,
+          'q-pa-md row justify-center rounded-borders dark': true,
+          'content-center absolute-center relative-position': !$q.platform.is.mobile,
         }"
         style="max-width: 428px"
       >
-        <h5 class="text-weight-bolder q-mt-xl">Cài đặt lệnh theo bot</h5>
+        <h5 class="text-weight-bolder">Cài đặt lệnh theo bot</h5>
         <form
-          class="q-gutter-x-xs q-gutter-y-lg"
+          class="q-gutter-x-xs q-gutter-y-lg "
           style="max-width: 295px; width: 100%"
         >
           <div>
@@ -64,13 +64,15 @@
               :disable="!isEnalbeMultiple"
             />
           </div>
-          <div><q-item-label class="q-mb-sm">Số phiên âm liên tiếp</q-item-label>
+          <div>
+            <q-item-label class="q-mb-sm">Số phiên âm liên tiếp</q-item-label>
             <q-select
               filled
               v-model="modelSession"
               :options="optionSession"
               :disable="!isEnalbeMultiple"
-            /></div>
+            />
+          </div>
           <q-btn
             class="full-width bg-positive q-mb-md"
             @click="onSetting()"
@@ -110,7 +112,7 @@ export default {
       {
         label: 'Tài khoản demo',
         value: 'DEMO',
-      }
+      },
     ]);
     const isEnalbeMultiple = ref(false);
     async function onSetting() {
@@ -649,7 +651,7 @@ export default {
           label: '-50%',
           value: 50,
         },
-                {
+        {
           label: '-60%',
           value: 60,
         },

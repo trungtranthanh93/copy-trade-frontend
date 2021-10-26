@@ -60,7 +60,7 @@ const linksData = [
     caption: 'Đăng nhập vào sàn để đồng bộ lệnh đánh',
     icon: 'login',
     iconColor: 'orange',
-    link: '/user/login-exchange',
+    link: '/admin/login-exchange',
     separator: false,
   },
   {

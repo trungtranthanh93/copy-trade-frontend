@@ -16,7 +16,6 @@
       v-model="drawerLeft"
       :width="250"
       :breakpoint="500"
-      behavior="desktop"
     >
       <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
         <div v-if="$q.platform.is.mobile">
