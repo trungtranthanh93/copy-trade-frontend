@@ -1,18 +1,15 @@
 <template>
   <!-- <q-layout container style="height: 600px"> -->
-  <q-layout class="justify-center">
+  <q-layout class="">
     <q-page-container class="window-height">
       <div
         :class="{
-          'q-pa-md fit row wrap justify-center items-end rounded-borders dark fixed-center': true,
+          'q-pa-md fit row wrap justify-center items-end rounded-borders dark absolute-center': true,
           'content-center': !$q.platform.is.mobile,
         }"
         style="max-width: 428px"
       >
-        <div v-if="!$q.platform.is.mobile">
-          <img class="fixed-top-left" src="logo.png" style="height: 80px" />
-        </div>
-        <h5 class="text-weight-bolder q-mt-xl">Màn hình cài đặt lệnh</h5>
+        <h5 class="text-weight-bolder">Màn hình cài đặt lệnh</h5>
         <form
           class="q-gutter-x-xs q-gutter-y-lg"
           style="max-width: 295px; width: 100%"
@@ -70,12 +67,12 @@ export default {
     const accountType = ref(null);
     const optionAccount = ref([
       {
-        label: 'Tài khoản demo',
-        value: 'DEMO',
-      },
-      {
         label: 'Tài khoản thực',
         value: 'LIVE',
+      },
+      {
+        label: 'Tài khoản demo',
+        value: 'DEMO',
       },
     ]);
     async function onSetting() {
@@ -153,7 +150,10 @@ export default {
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/user-setting/'+$router.currentRoute.value.params.masterId, data);
+        let responseContent = await api.put(
+          '/user-setting/' + $router.currentRoute.value.params.masterId,
+          data
+        );
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }
@@ -610,6 +610,14 @@ export default {
         {
           label: '-50%',
           value: 50,
+        },
+        {
+          label: '-60%',
+          value: 60,
+        },
+        {
+          label: '-70%',
+          value: 70,
         },
       ],
     };

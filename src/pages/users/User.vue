@@ -1,21 +1,23 @@
 
 <template>
-  <q-layout view="hhh lpR lff">
-
+  <q-layout
+    view="hHh Lpr lFf"
+  >
     <q-header reveal elevated class="bg-dark">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
         <div v-if="!$q.platform.is.mobile">
           <img class="absolute-top-right" src="logo.png" style="height: 60px" />
         </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay elevated 
-      show-if-above
+    <q-drawer
+      v-model="drawerLeft"
       :width="250"
-      :breakpoint="500">
-      <!-- Calcule la place pour l'image du profil -->
+      :breakpoint="500"
+      behavior="desktop"
+    >
       <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
         <div v-if="$q.platform.is.mobile">
           <img class="top-left" src="logo.png" style="height: 40px" />
@@ -29,14 +31,13 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref } from 'vue';
 import MenuItem from 'components/MenuItem.vue';
-
+import { useQuasar } from 'quasar';
 const linksData = [
   {
     title: 'Copy Trader',
@@ -44,14 +45,14 @@ const linksData = [
     icon: 'account_balance',
     iconColor: 'orange',
     link: '/user',
-    separator: true,
+    separator: false,
   },
   {
     title: 'Auto Trader',
     caption: 'Đánh lệnh theo Bot',
-    icon: 'history',
+    icon: 'smart_toy',
     iconColor: 'orange',
-    link: '/user/auto-bot',
+    link: '/user/setting-bot',
     separator: false,
   },
   {
@@ -72,19 +73,21 @@ const linksData = [
   },
 ];
 export default {
-  setup () {
-    const leftDrawerOpen = ref(false)
+  setup() {
+    const $q = useQuasar();
+    const leftDrawerOpen = ref(false);
     const menuLinks = ref(linksData); // Structure du menu
     return {
       leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
       },
       menuLinks,
-    }
+      drawerLeft: ref($q.screen.width > 500),
+    };
   },
   components: {
     MenuItem,
   },
-}
+};
 </script>

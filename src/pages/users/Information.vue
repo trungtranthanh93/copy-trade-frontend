@@ -15,7 +15,6 @@
         "
       >
         <template v-if="!$q.platform.is.mobile">
-          <img class="relative-top-left" src="logo.png" style="height: 80px" />
           <div class="row justify-center">
             <q-card
               class="bg-blue-grey-14 q-ml-md"
@@ -126,7 +125,7 @@
           </div>
         </template>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
-        <div class="row items-center q-gutter-md justify-center">
+        <div v-if="true" class="row items-center q-gutter-md justify-center">
           <q-btn
             color="negative"
             icon-right="cancel"
@@ -142,6 +141,16 @@
             dense
             @click="continueFollow()"
             >Tiếp tục</q-btn
+          >
+        </div>
+        <div v-if="true" class="row items-center q-gutter-md justify-center">
+          <q-btn
+            color="negative"
+            icon-right="cancel"
+            style=""
+            dense
+            @click="unfollowBot()"
+            >Kết thúc</q-btn
           >
         </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
@@ -183,7 +192,7 @@ const columns = [
 
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-import { useQuasar, date } from 'quasar';
+import { useQuasar, date, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted } from 'vue';
 export default {
   setup() {
@@ -352,7 +361,15 @@ export default {
       });
     }
     onMounted(async () => {
+      $q.loading.show({
+        spinner: QSpinnerFacebook,
+        spinnerColor: 'yellow',
+        spinnerSize: 140,
+        backgroundColor: 'purple',
+        messageColor: 'black',
+      });
       await getSportBalance(), await getStatistic();
+      $q.loading.hide();
     });
     return {
       capital,

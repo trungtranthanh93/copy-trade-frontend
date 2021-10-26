@@ -104,13 +104,13 @@ export default {
     const modelSession = ref(null);
     const optionAccount = ref([
       {
-        label: 'Tài khoản demo',
-        value: 'DEMO',
-      },
-      {
         label: 'Tài khoản thực',
         value: 'LIVE',
       },
+      {
+        label: 'Tài khoản demo',
+        value: 'DEMO',
+      }
     ]);
     const isEnalbeMultiple = ref(false);
     async function onSetting() {
@@ -648,6 +648,14 @@ export default {
         {
           label: '-50%',
           value: 50,
+        },
+                {
+          label: '-60%',
+          value: 60,
+        },
+        {
+          label: '-70%',
+          value: 70,
         },
       ],
       modelMultiple,

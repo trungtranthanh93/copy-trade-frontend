@@ -1,9 +1,5 @@
 <template>
   <div class="q-pa-md">
-    <div v-if="!$q.platform.is.mobile">
-      <img class="relative-top-left" src="logo.png" style="height: 80px" />
-    </div>
-    <q-separator color="black q-mb-md q-mt-md" inset />
     <template v-if="!isActive">
       <div class="q-pa-md q-gutter-sm">
         <q-banner rounded class="bg-red text-white">

@@ -1,3 +1,4 @@
+import { Dialog } from 'quasar';
 import { route } from 'quasar/wrappers';
 import {
   createMemoryHistory,
@@ -34,12 +35,8 @@ export default route<StateInterface>(function ( /* { store, ssrContext } */) {
     ),
   });
   Router.beforeEach((to, from, next) => {
-    console.log(2)
     let user: any = localStorage.getItem('user');
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      // this route requires auth, check if logged in
-      // if not, redirect to login page.
-      
       if (!user) {
         next({
           name: 'login',
@@ -47,10 +44,27 @@ export default route<StateInterface>(function ( /* { store, ssrContext } */) {
         })
       }
       user = JSON.parse(user)
-      if(to.matched.some(record => record.meta.isAdmin) && user.role === 0) {
-        next({
-          name: 'infomation'
+      if(user.role === 0) {
+        if(to.matched.some(record => record.meta.isAdmin)) {
+          next({
+            name: 'infomation'
+          })
+        };
+        Dialog.create({
+          title: 'Thông báo',
+          message: 'Hệ thống sẽ chuyển sang đánh lệnh theo bot, đánh theo chuyên gia sẽ dừng lại. Bạn có chắc chắn không?',
+          html: true,
         })
+          .onOk(() => {
+            return;
+          })
+          .onCancel(() => {
+            return;
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+          // return;
       }
       if(to.matched.some(record => !record.meta.isAdmin) && user.role === 1) {
         next({
