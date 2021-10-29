@@ -5,13 +5,14 @@
       <div
         :class="{
           'q-pa-md row justify-center rounded-borders dark': true,
-          'content-center absolute-center relative-position': !$q.platform.is.mobile,
+          'content-center absolute-center relative-position':
+            !$q.platform.is.mobile,
         }"
         style="max-width: 428px"
       >
         <h5 class="text-weight-bolder">Cài đặt lệnh theo bot</h5>
         <form
-          class="q-gutter-x-xs q-gutter-y-lg "
+          class="q-gutter-x-xs q-gutter-y-lg"
           style="max-width: 295px; width: 100%"
         >
           <div>
@@ -37,12 +38,17 @@
           </div>
           <div>
             <q-item-label class="q-mb-sm">Phương pháp</q-item-label>
-            <q-select
+            <!-- <q-select
               filled
-              v-model="stopLoss"
+              v-model="bot"
               :options="optionBot"
               :disable="isEnalbeMultiple"
-            />
+            /> -->
+            <q-select
+              filled
+              v-model="bot"
+              :options="optionBot"
+            /> 
           </div>
           <q-toggle
             :false-value="false"
@@ -55,7 +61,7 @@
             <q-item-label class="q-mb-sm">Phương pháp nâng cao</q-item-label>
             <q-select
               filled
-              v-model="modelMultiple"
+              v-model="listBotId"
               multiple
               :options="optionBot"
               use-chips
@@ -90,6 +96,8 @@ import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
+import _ from 'lodash';
+
 export default {
   components: {
     DialogSwapMoney,
@@ -102,8 +110,11 @@ export default {
     const stopLoss = ref(null);
     const takeProfit = ref(null);
     const accountType = ref(null);
-    const modelMultiple = ref(null);
+    const listBotId = ref(null);
     const modelSession = ref(null);
+    const isEnalbeMultiple = ref(false);
+    const bot = ref(null);
+    const optionBot = ref([]);
     const optionAccount = ref([
       {
         label: 'Tài khoản thực',
@@ -114,7 +125,6 @@ export default {
         value: 'DEMO',
       },
     ]);
-    const isEnalbeMultiple = ref(false);
     async function onSetting() {
       if (!accountType.value) {
         $q.notify({
@@ -170,6 +180,34 @@ export default {
         });
         return;
       }
+      // Sau này phần nâng cao cập nhật sẽ sửa thành !isEnalbeMultiple.value && !listBotId.value
+      if (!bot.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn phương pháp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (isEnalbeMultiple.value && !listBotId.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn phương pháp nâng cao',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (isEnalbeMultiple.value && !modelSession.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn số phiên âm liên tiếp',
+          icon: 'report_problem',
+        });
+        return;
+      }
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -178,6 +216,7 @@ export default {
         message: 'Đang xử lý ....',
         messageColor: 'black',
       });
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
         let data = {
@@ -186,14 +225,20 @@ export default {
           minAmount: minAmount.value.value,
           stopLoss: stopLoss.value.value,
           takeProfit: takeProfit.value.value,
+          isSelectMutilBot: isEnalbeMultiple.value,
+          listBotId: isEnalbeMultiple.value
+            ? listBotId.value.map((obj) => obj.value)
+            : null,
+          botId: bot.value.value,
+          modelSession: isEnalbeMultiple.value
+            ? modelSession.value.value
+            : null,
         };
+        console.log(data);
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put(
-          '/user-setting/' + $router.currentRoute.value.params.masterId,
-          data
-        );
+        let responseContent = await api.put('/user-setting/bot', data);
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }
@@ -225,15 +270,24 @@ export default {
     }
     function autoClose() {
       let seconds = 3;
-
+      let path = $router.currentRoute.value.path;
+      let message = '';
+      let to = '';
+      if(path.includes('admin')) {
+        message = 'Đã follow bot thành công!';
+        to = '-1';
+      } else if (path.includes('user')) {
+        message = `Đã follow bot thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`;
+        to = '/user/';
+      }
       const dialog = $q
         .dialog({
           title: 'Thông báo',
-          message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+          message: message,
           html: true,
         })
         .onOk(() => {
-          $router.push('/user/');
+          $router.push(to);
         })
         .onCancel(() => {
           // console.log('Cancel')
@@ -248,17 +302,34 @@ export default {
 
         if (seconds > 0) {
           dialog.update({
-            message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+            message: message,
           });
         } else {
           clearInterval(timer);
-          $router.push('/user/');
+          $router.push(to);
           dialog.hide();
         }
       }, 1000);
     }
-    onMounted(() => {
+    async function getListBot() {
+      try {
+        let token = localStorage.getItem('jwt');
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        let data = await api.get('/bot/list');
+        optionBot.value = _.map(data.data, (obj) => {
+          return {
+            label : obj.botName,
+            value : obj.id
+          }
+        })
+      } catch (error) {
+        
+      }
+    }
+    onMounted(async () => {
       accountType.value = optionAccount.value[0];
+      await getListBot();
     });
     return {
       accountType,
@@ -268,6 +339,7 @@ export default {
       takeProfit,
       onSetting,
       optionAccount,
+      bot,
       optionsMinAmount: [
         {
           label: '1%',
@@ -660,34 +732,9 @@ export default {
           value: 70,
         },
       ],
-      modelMultiple,
+      listBotId,
       isEnalbeMultiple,
-      optionBot: [
-        {
-          label: 'Bot 1',
-          value: 1,
-        },
-        {
-          label: 'Bot 2',
-          value: 2,
-        },
-        {
-          label: 'Bot 3',
-          value: 3,
-        },
-        {
-          label: 'Bot 4',
-          value: 4,
-        },
-        {
-          label: 'Bot 5',
-          value: 5,
-        },
-        {
-          label: 'Bot 6',
-          value: 6,
-        },
-      ],
+      optionBot,
       modelSession,
       optionSession: [
         {
