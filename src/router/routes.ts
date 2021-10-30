@@ -22,7 +22,6 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'trader',
-        meta: { requiresAuth: true, isAdmin: true },
         component: () => import('pages/admin/Trader.vue'),
       },
       {
@@ -37,6 +36,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'setting-bot',
         component: () => import('src/pages/SettingBot.vue'),
+      },
+      {
+        path: 'information-bot',
+        component: () => import('pages/admin/Infomation.vue')
       }
     ],
   },
@@ -66,6 +69,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'setting-bot',
         component: () => import('src/pages/SettingBot.vue'),
+      },
+      {
+        path: 'information-bot',
+        component: () => import('pages/users/InformationBot.vue'),
       },
     ],
   },

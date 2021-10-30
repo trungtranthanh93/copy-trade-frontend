@@ -1,89 +1,106 @@
 <template>
   <!-- <q-layout container style="height: 600px"> -->
   <q-layout class="justify-center">
-    <q-page-container class="window-height">
+    <q-page-container class="window-height relative-position">
       <div
         :class="{
           'q-pa-md row justify-center rounded-borders dark': true,
-          'content-center absolute-center relative-position':
-            !$q.platform.is.mobile,
         }"
-        style="max-width: 428px"
+        style=""
       >
         <h5 class="text-weight-bolder">Cài đặt lệnh theo bot</h5>
-        <form
-          class="q-gutter-x-xs q-gutter-y-lg"
-          style="max-width: 295px; width: 100%"
-        >
-          <div>
-            <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
-            <q-select filled v-model="accountType" :options="optionAccount" />
-            <DialogSwapMoney />
+        <form class="q-gutter-x-xs q-gutter-y-lg" style="width: 100%;">
+          <div class="row justify-around items-center">
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
+              <q-select filled v-model="accountType" :options="optionAccount" />
+            </div>
+            <div style="width: 100%;max-width: 250px">
+              <DialogSwapMoney />
+            </div>
           </div>
-          <div>
-            <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
-            <q-select filled v-model="minAmount" :options="optionsMinAmount" />
+          <div class="row justify-around">
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
+              <q-select
+                filled
+                v-model="minAmount"
+                :options="optionsMinAmount"
+              />
+            </div>
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
+              <q-select
+                filled
+                v-model="maxAmount"
+                :options="optionsMaxAmount"
+              />
+            </div>
           </div>
-          <div>
-            <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
-            <q-select filled v-model="maxAmount" :options="optionsMaxAmount" />
+          <div class="row justify-around">
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
+              <q-select filled v-model="takeProfit" :options="optionsProfit" />
+            </div>
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
+              <q-select filled v-model="stopLoss" :options="optionsLost" />
+            </div>
           </div>
-          <div>
-            <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
-            <q-select filled v-model="takeProfit" :options="optionsProfit" />
-          </div>
-          <div>
-            <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
-            <q-select filled v-model="stopLoss" :options="optionsLost" />
-          </div>
-          <div>
-            <q-item-label class="q-mb-sm">Phương pháp</q-item-label>
-            <!-- <q-select
+          <div class="row justify-around">
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Phương pháp</q-item-label>
+              <!-- <q-select
               filled
               v-model="bot"
               :options="optionBot"
               :disable="isEnalbeMultiple"
             /> -->
-            <q-select
-              filled
-              v-model="bot"
-              :options="optionBot"
-            /> 
+              <q-select filled v-model="bot" :options="optionBot" />
+              <q-toggle
+                :false-value="false"
+                label="Chọn nhiều phương pháp"
+                :true-value="true"
+                color="positive"
+                v-model="isEnalbeMultiple"
+              />
+            </div>
+            <div style="width: 100%;max-width: 250px">
+              
+            </div>
           </div>
-          <q-toggle
-            :false-value="false"
-            label="Chọn nhiều phương pháp"
-            :true-value="true"
-            color="positive"
-            v-model="isEnalbeMultiple"
-          />
-          <div>
-            <q-item-label class="q-mb-sm">Phương pháp nâng cao</q-item-label>
-            <q-select
-              filled
-              v-model="listBotId"
-              multiple
-              :options="optionBot"
-              use-chips
-              stack-label
-              label="Chọn các phương pháp"
-              :disable="!isEnalbeMultiple"
-            />
+          <div class="row justify-around">
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Phương pháp nâng cao</q-item-label>
+              <q-select
+                filled
+                v-model="listBotId"
+                multiple
+                :options="optionBot"
+                use-chips
+                stack-label
+                :disable="!isEnalbeMultiple"
+              />
+            </div>
+            <div style="width: 100%;max-width: 250px">
+              <q-item-label class="q-mb-sm">Số phiên âm liên tiếp</q-item-label>
+              <q-select
+                filled
+                v-model="modelSession"
+                :options="optionSession"
+                :disable="!isEnalbeMultiple"
+              />
+            </div>
           </div>
-          <div>
-            <q-item-label class="q-mb-sm">Số phiên âm liên tiếp</q-item-label>
-            <q-select
-              filled
-              v-model="modelSession"
-              :options="optionSession"
-              :disable="!isEnalbeMultiple"
-            />
-          </div>
-          <q-btn
+          <div class="row justify-center">
+                      <q-btn
             class="full-width bg-positive q-mb-md"
             @click="onSetting()"
             label="Cài đặt"
+            style="width: 100%;max-width: 250px"
           />
+          </div>
+
         </form>
       </div>
       <router-view />
@@ -271,14 +288,12 @@ export default {
     function autoClose() {
       let seconds = 3;
       let path = $router.currentRoute.value.path;
-      let message = '';
+      let message = `Đã follow bot thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`;
       let to = '';
-      if(path.includes('admin')) {
-        message = 'Đã follow bot thành công!';
-        to = '-1';
+      if (path.includes('admin')) {
+        to = '/admin/information-bot';
       } else if (path.includes('user')) {
-        message = `Đã follow bot thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`;
-        to = '/user/';
+        to = '/user/information-bot';
       }
       const dialog = $q
         .dialog({
@@ -319,13 +334,11 @@ export default {
         let data = await api.get('/bot/list');
         optionBot.value = _.map(data.data, (obj) => {
           return {
-            label : obj.botName,
-            value : obj.id
-          }
-        })
-      } catch (error) {
-        
-      }
+            label: obj.botName,
+            value: obj.id,
+          };
+        });
+      } catch (error) {}
     }
     onMounted(async () => {
       accountType.value = optionAccount.value[0];

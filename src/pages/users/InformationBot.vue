@@ -14,7 +14,7 @@
           relative-position
         "
       >
-        <template v-if="true">
+        <template v-if="!$q.platform.is.mobile">
           <div class="row justify-center">
             <q-card
               class="bg-blue-grey-14 q-ml-md"
@@ -131,16 +131,8 @@
             icon-right="cancel"
             style=""
             dense
-            @click="unfollow()"
-            >Dừng follow</q-btn
-          >
-          <q-btn
-            color="green"
-            icon-right="cancel"
-            style=""
-            dense
-            @click="continueFollow()"
-            >Tiếp tục</q-btn
+            @click="unfollowBot()"
+            >Kết thúc</q-btn
           >
         </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
@@ -183,7 +175,7 @@ const columns = [
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 import { useQuasar, date, QSpinnerFacebook } from 'quasar';
-import { ref, onMounted,onBeforeMount  } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 export default {
   setup() {
     const $q = useQuasar();
@@ -193,7 +185,6 @@ export default {
     const incomeAmount = ref('');
     const accountType = ref('');
     const rows = ref([]);
-    const isCopyTradeScreen = ref(true);
     const pagination = ref({
       rowsPerPage: 10, // current rows per page being displayed
     });
@@ -293,30 +284,6 @@ export default {
         return false;
       }
     }
-    async function unfollow() {
-      try {
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        await api.put('users/unfolow');
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Đã dừng follow chuyên gia',
-          position: 'top',
-        });
-        $router.push('/user/list-master');
-      } catch (error) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
-          icon: 'report_problem',
-        });
-      }
-    }
     async function unfollowBot() {
       try {
         let token = localStorage.getItem('jwt');
@@ -340,13 +307,6 @@ export default {
           icon: 'report_problem',
         });
       }
-    }
-    async function continueFollow() {
-      let token = localStorage.getItem('jwt');
-      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      let user = await api.get('/users/get-profile');
-      $router.push('/user/setting-follow/' + user.data.masterId);
     }
     async function getStatistic() {
       let token = localStorage.getItem('jwt');
@@ -385,42 +345,39 @@ export default {
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       let user = await api.get('/users/get-profile');
-      if (user.data.masterId) {
+      if (user.data.botId) {
         return;
       }
-      if (user.data.botId) {
+      if(user.data.masterId){
         $q.dialog({
-          title: 'Thông báo',
-          message:
-            'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và follow theo chuyên gia?',
-          cancel: true,
-          persistent: true,
+        title: 'Thông báo',
+        message:
+          'Bạn đang follow theo chuyên gia. Bạn chắc chắn muốn dừng follow chuyên gia và follow theo bot?',
+        cancel: true,
+        persistent: true,
+      })
+        .onOk(() => {
+          $router.push('/user/setting-bot');
         })
-          .onOk(async () => {
-            await api.put('/user-setting/unfolow-bot');
-            $router.push('/user/list-master');
-          })
-          .onCancel(() => {
-            $router.push('/user/information-bot');
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
+        .onCancel(() => {
+          $router.push('/user/');
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        });
+      } else {
+        $router.push('/user/setting-bot');
       }
-      $router.push('/user/list-master');
     });
     return {
       capital,
       availableBalance,
       incomeAmount,
-      unfollow,
-      continueFollow,
       unfollowBot,
       columns,
       rows,
       pagination,
       accountType,
-      isCopyTradeScreen,
     };
   },
 };

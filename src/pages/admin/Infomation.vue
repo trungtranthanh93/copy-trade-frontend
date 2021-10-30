@@ -14,7 +14,18 @@
           relative-position
         "
       >
-        <template v-if="true">
+        <h5 class="text-weight-bolder">Màn hình kết quả follow theo bot</h5>
+
+        <div class="row justify-right">
+          <q-btn
+            size="md"
+            class="bg-positive"
+            label="Kết thúc"
+            @click="logout"
+          />
+        </div>
+        <q-separator color="dark" class="q-mt-md q-mb-md" inset />
+        <template v-if="!$q.platform.is.mobile">
           <div class="row justify-center">
             <q-card
               class="bg-blue-grey-14 q-ml-md"
@@ -30,6 +41,7 @@
                 {{ accountType }}
               </q-card-section>
             </q-card>
+
             <q-card
               class="bg-blue-grey-14 q-ml-md"
               style="
@@ -70,6 +82,22 @@
 
               <q-card-section :class="'q-pt-none'">
                 {{ incomeAmount }}
+              </q-card-section>
+            </q-card>
+            <q-card
+              class="q-ml-md"
+              style="
+                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
+              "
+            >
+              <q-card-section>
+                <div class="text-h5">Số người theo dõi</div>
+              </q-card-section>
+              <q-card-section :class="'q-pt-none'">
+                {{ countUser }} người
+                <q-btn class="bg-positive q-ml-lg" @click="goUserFollow"
+                  >Chi tiết</q-btn
+                >
               </q-card-section>
             </q-card>
           </div>
@@ -120,29 +148,25 @@
                     <q-item-label caption>{{ incomeAmount }}</q-item-label>
                   </q-item-section>
                 </q-item>
+                <q-item>
+                  <q-item-section avatar>
+                    <q-icon color="green" name="thumb_up_off_alt" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Người follow</q-item-label>
+                    <q-item-label caption
+                      >{{ countUser }} người
+                      <q-btn class="bg-positive q-ml-lg" @click="goUserFollow"
+                        >Chi tiết</q-btn
+                      ></q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
               </q-list>
             </q-card>
           </div>
         </template>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
-        <div class="row items-center q-gutter-md justify-center">
-          <q-btn
-            color="negative"
-            icon-right="cancel"
-            style=""
-            dense
-            @click="unfollow()"
-            >Dừng follow</q-btn
-          >
-          <q-btn
-            color="green"
-            icon-right="cancel"
-            style=""
-            dense
-            @click="continueFollow()"
-            >Tiếp tục</q-btn
-          >
-        </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <div class="q-pa-md">
           <q-table
@@ -180,173 +204,64 @@ const columns = [
   { name: 'winAmount', align: 'center', label: 'Kết quả', field: 'winAmount' },
 ];
 
+import { useQuasar, QSpinnerFacebook, date } from 'quasar';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-import { useQuasar, date, QSpinnerFacebook } from 'quasar';
-import { ref, onMounted,onBeforeMount  } from 'vue';
+
 export default {
   setup() {
     const $q = useQuasar();
     const $router = useRouter();
+    const putOptions = ref('UP');
+    const money = ref(null);
+    const loading = ref(false);
     const capital = ref('');
     const availableBalance = ref('');
     const incomeAmount = ref('');
     const accountType = ref('');
+    const countUser = ref('');
     const rows = ref([]);
-    const isCopyTradeScreen = ref(true);
-    const pagination = ref({
-      rowsPerPage: 10, // current rows per page being displayed
-    });
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        await onCheckValid();
         let responseContent = await api.get('/users/spot-balance');
         availableBalance.value = responseContent.data.balance;
         capital.value = `${responseContent.data.capital}$`;
         incomeAmount.value = `${responseContent.data.incomeAmount}$`;
         accountType.value = `${responseContent.data.userType}`;
-        if (responseContent.data.isTakeProfit) {
-          $q.dialog({
-            title: 'Thông báo',
-            message: `Lợi nhuận hiện tại: <span class="text-green">${incomeAmount.value}</span> đã đạt giới hạn [Chốt lãi:<span class="text-green">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
-            html: true,
-          })
-            .onOk(() => {
-              return;
-            })
-            .onCancel(() => {
-              return;
-            })
-            .onDismiss(() => {
-              // console.log('I am triggered on both OK and Cancel')
-            });
-          return;
-        } else if (responseContent.data.isStopLoss) {
-          $q.dialog({
-            title: 'Thông báo',
-            message: `Lợi nhuận hiện tại: <span class="text-red">${incomeAmount.value}</span> đã đạt giới hạn [Cắt lỗ: <span class="text-red">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
-            html: true,
-          })
-            .onOk(() => {
-              return;
-            })
-            .onCancel(() => {
-              return;
-            })
-            .onDismiss(() => {
-              // console.log('I am triggered on both OK and Cancel')
-            });
-        }
-        return;
       } catch (error) {
-        $router.push('/user/list-master');
+        capital.value = 'Chưa có thông tin';
+        availableBalance.value = 'Chưa có thông tin';
+        incomeAmount.value = 'Chưa có thông tin';
       }
+    }
+    async function getCountUser() {
+      let token = localStorage.getItem('jwt');
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let responseContent = await api.get('/users/count-user');
+      countUser.value = responseContent.data.folowingUser;
     }
     async function onCheckValid() {
       try {
         let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        await api.post('/users/valid-token');
-        return true;
-      } catch (error) {
-        if (
-          error.response.data.status === 404 &&
-          error.response.data.message === 'token.notFound'
-        ) {
-          $q.dialog({
-            title: 'Thông báo',
-            message:
-              'Hãy đăng nhập vào sàn trước khi follow theo chuyên gia.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
-            cancel: true,
-            persistent: true,
-          })
-            .onOk(() => {
-              $router.push('/user/login-exchange');
-            })
-            .onCancel(() => {
-              return;
-            })
-            .onDismiss(() => {
-              // console.log('I am triggered on both OK and Cancel')
-            });
-        } else {
-          $q.dialog({
-            title: 'Thông báo',
-            message:
-              'Bạn đã đăng nhập trên sàn chính nên bạn cần đăng nhập lại sàn ở đây.Nhấn OK để chuyển sang màn hình đăng nhập sàn',
-            cancel: true,
-            persistent: true,
-          })
-            .onOk(() => {
-              $router.push('/user/login-exchange');
-            })
-            .onCancel(() => {
-              return;
-            })
-            .onDismiss(() => {
-              // console.log('I am triggered on both OK and Cancel')
-            });
+        let user = await api.get('/users/get-profile');
+        if (!user.data.botId) {
+          $router.push('/admin/setting-bot');
         }
-        return false;
-      }
-    }
-    async function unfollow() {
-      try {
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        await api.put('users/unfolow');
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Đã dừng follow chuyên gia',
-          position: 'top',
-        });
-        $router.push('/user/list-master');
+        await api.post('/users/valid-token');
       } catch (error) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
+          message: 'Hãy đăng nhập vào sàn trước khi đánh lệnh',
           icon: 'report_problem',
         });
+        $router.push('/admin/login-exchange');
       }
-    }
-    async function unfollowBot() {
-      try {
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        await api.put('users/unfolowBot');
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Đã dừng follow chuyên gia',
-          position: 'top',
-        });
-        $router.push('/user/setting-bot');
-      } catch (error) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
-          icon: 'report_problem',
-        });
-      }
-    }
-    async function continueFollow() {
-      let token = localStorage.getItem('jwt');
-      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      let user = await api.get('/users/get-profile');
-      $router.push('/user/setting-follow/' + user.data.masterId);
     }
     async function getStatistic() {
       let token = localStorage.getItem('jwt');
@@ -369,64 +284,26 @@ export default {
         return obj;
       });
     }
+    function goUserFollow() {
+      $router.push('/admin/user-follow');
+    }
+    onBeforeMount(onCheckValid);
     onMounted(async () => {
-      $q.loading.show({
-        spinner: QSpinnerFacebook,
-        spinnerColor: 'yellow',
-        spinnerSize: 140,
-        backgroundColor: 'purple',
-        messageColor: 'black',
-      });
-      await getSportBalance(), await getStatistic();
-      $q.loading.hide();
-    });
-    onBeforeMount(async () => {
-      let token = localStorage.getItem('jwt');
-      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      let user = await api.get('/users/get-profile');
-      if (user.data.masterId) {
-        return;
-      }
-      if (user.data.botId) {
-        $q.dialog({
-          title: 'Thông báo',
-          message:
-            'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và follow theo chuyên gia?',
-          cancel: true,
-          persistent: true,
-        })
-          .onOk(async () => {
-            await api.put('/user-setting/unfolow-bot');
-            $router.push('/user/list-master');
-          })
-          .onCancel(() => {
-            $router.push('/user/information-bot');
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
-      }
-      $router.push('/user/list-master');
+      await getSportBalance(), await getCountUser(), await getStatistic();
     });
     return {
+      putOptions,
+      money,
+      loading,
       capital,
       availableBalance,
       incomeAmount,
-      unfollow,
-      continueFollow,
-      unfollowBot,
       columns,
       rows,
-      pagination,
+      countUser,
+      goUserFollow,
       accountType,
-      isCopyTradeScreen,
     };
   },
 };
 </script>
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 250px
-</style>

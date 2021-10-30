@@ -137,9 +137,18 @@ export default {
         api.defaults.headers.common['Authorization'] =
           'Bearer ' + response.data.access_token;
         if (user.role === 0) {
-          $router.push('/user');
+           if(user.botId){
+            $router.push('/user/information-bot');
+          } else {
+          $router.push('/user/');
+          }
         } else {
-          $router.push('/admin');
+          if(user.botId){
+            $router.push('/admin/information-bot');
+          } else {
+            $router.push('/admin');
+
+          }
         }
         $q.loading.value = false;
       } catch (error) {

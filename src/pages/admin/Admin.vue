@@ -52,7 +52,7 @@ const linksData = [
     caption: 'Đánh lệnh theo Bot',
     icon: 'smart_toy',
     iconColor: 'orange',
-    link: '/admin/setting-bot',
+    link: '/admin/information-bot',
     separator: false,
   },
   {

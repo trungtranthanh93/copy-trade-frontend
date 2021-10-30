@@ -14,17 +14,6 @@
           relative-position
         "
       >
-        <div>
-          <img class="relative-top-left" src="logo.png" style="height: 80px" />
-        </div>
-        <div class="row justify-right">
-          <q-btn
-            size="md"
-            class="bg-positive"
-            label="Đăng xuất"
-            @click="logout"
-          />
-        </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <template v-if="!$q.platform.is.mobile">
           <div class="row justify-center">
@@ -390,8 +379,24 @@ export default {
         let token = localStorage.getItem('jwt');
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
         await api.post('/users/valid-token');
+        let user = await api.get('/users/get-profile');
+        if (user.data.botId) {
+          $q
+            .dialog({
+              title: 'Thông báo',
+              message: 'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và tự đánh lệnh ?',
+              html: true,
+              cancel: true,
+              persistent: true,
+            })
+            .onOk(async () => {
+              await api.put('/user-setting/unfolow-bot');
+            })
+            .onCancel(() => {
+               $router.push('/admin/information-bot');
+            });
+        }
       } catch (error) {
         $q.notify({
           color: 'negative',
@@ -399,7 +404,6 @@ export default {
           message: 'Hãy đăng nhập vào sàn trước khi đánh lệnh',
           icon: 'report_problem',
         });
-        console.log(1);
         $router.push('/admin/login-exchange');
       }
     }
