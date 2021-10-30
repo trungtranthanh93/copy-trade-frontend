@@ -9,54 +9,43 @@
         style=""
       >
         <h5 class="text-weight-bolder">Cài đặt lệnh theo bot</h5>
-        <form class="q-gutter-x-xs q-gutter-y-lg" style="width: 100%;">
+        <form class="q-gutter-x-xs q-gutter-y-lg" style="width: 100%">
           <div class="row justify-around items-center">
-            <div style="width: 100%;max-width: 250px">
+            <div style="width: 100%; max-width: 250px">
               <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
               <q-select filled v-model="accountType" :options="optionAccount" />
             </div>
-            <div style="width: 100%;max-width: 250px">
+            <div style="width: 100%; max-width: 250px">
               <DialogSwapMoney />
             </div>
           </div>
           <div class="row justify-around">
-            <div style="width: 100%;max-width: 250px">
-              <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
-              <q-select
-                filled
-                v-model="minAmount"
-                :options="optionsMinAmount"
-              />
-            </div>
-            <div style="width: 100%;max-width: 250px">
-              <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
-              <q-select
-                filled
-                v-model="maxAmount"
-                :options="optionsMaxAmount"
-              />
-            </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%;max-width: 250px">
+            <div style="width: 100%; max-width: 250px">
               <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
               <q-select filled v-model="takeProfit" :options="optionsProfit" />
             </div>
-            <div style="width: 100%;max-width: 250px">
+            <div style="width: 100%; max-width: 250px">
               <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
               <q-select filled v-model="stopLoss" :options="optionsLost" />
             </div>
           </div>
           <div class="row justify-around">
-            <div style="width: 100%;max-width: 250px">
-              <q-item-label class="q-mb-sm">Phương pháp</q-item-label>
-              <!-- <q-select
-              filled
-              v-model="bot"
-              :options="optionBot"
-              :disable="isEnalbeMultiple"
-            /> -->
-              <q-select filled v-model="bot" :options="optionBot" />
+            <div style="width: 100%; max-width: 250px">
+              <q-item-label class="q-mb-sm">Hệ số*</q-item-label>
+              <q-select
+                filled
+                v-model="coefficient"
+                :options="optionsCoefficient"
+              />
+            </div>
+            <div style="width: 100%; max-width: 250px">
+              <q-item-label class="q-mb-sm">Phương pháp*</q-item-label>
+              <q-select
+                filled
+                v-model="botId"
+                :options="optionBot"
+                :disable="isEnalbeMultiple"
+              />
               <q-toggle
                 :false-value="false"
                 label="Chọn nhiều phương pháp"
@@ -65,13 +54,10 @@
                 v-model="isEnalbeMultiple"
               />
             </div>
-            <div style="width: 100%;max-width: 250px">
-              
-            </div>
           </div>
           <div class="row justify-around">
-            <div style="width: 100%;max-width: 250px">
-              <q-item-label class="q-mb-sm">Phương pháp nâng cao</q-item-label>
+            <div style="width: 100%; max-width: 250px">
+              <q-item-label class="q-mb-sm">Phương pháp nâng cao*</q-item-label>
               <q-select
                 filled
                 v-model="listBotId"
@@ -82,8 +68,8 @@
                 :disable="!isEnalbeMultiple"
               />
             </div>
-            <div style="width: 100%;max-width: 250px">
-              <q-item-label class="q-mb-sm">Số phiên âm liên tiếp</q-item-label>
+            <div style="width: 100%; max-width: 250px">
+              <q-item-label class="q-mb-sm">Số phiên âm liên tiếp*</q-item-label>
               <q-select
                 filled
                 v-model="modelSession"
@@ -93,14 +79,13 @@
             </div>
           </div>
           <div class="row justify-center">
-                      <q-btn
-            class="full-width bg-positive q-mb-md"
-            @click="onSetting()"
-            label="Cài đặt"
-            style="width: 100%;max-width: 250px"
-          />
+            <q-btn
+              class="full-width bg-positive q-mb-md"
+              @click="onSetting()"
+              label="Cài đặt"
+              style="width: 100%; max-width: 250px"
+            />
           </div>
-
         </form>
       </div>
       <router-view />
@@ -122,15 +107,14 @@ export default {
   setup() {
     const $router = useRouter();
     const $q = useQuasar();
-    const maxAmount = ref(null);
-    const minAmount = ref(null);
+    const coefficient = ref(null);
     const stopLoss = ref(null);
     const takeProfit = ref(null);
     const accountType = ref(null);
     const listBotId = ref(null);
     const modelSession = ref(null);
     const isEnalbeMultiple = ref(false);
-    const bot = ref(null);
+    const botId = ref(null);
     const optionBot = ref([]);
     const optionAccount = ref([
       {
@@ -148,24 +132,6 @@ export default {
           color: 'negative',
           position: 'top',
           message: 'Hãy chọn Loại tài khoản!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!minAmount.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn Lệnh tối thiểu!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!maxAmount.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn Lệnh tối đa!',
           icon: 'report_problem',
         });
         return;
@@ -188,17 +154,16 @@ export default {
         });
         return;
       }
-      if (maxAmount.value.value < minAmount.value.value) {
+      if (!coefficient.value) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Lệnh tối đa phải lớn hơn lệnh tối thiểu!!',
+          message: 'Hãy chọn Hệ số!',
           icon: 'report_problem',
         });
         return;
       }
-      // Sau này phần nâng cao cập nhật sẽ sửa thành !isEnalbeMultiple.value && !listBotId.value
-      if (!bot.value) {
+      if (!isEnalbeMultiple.value && !botId.value) {
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -238,15 +203,14 @@ export default {
       try {
         let data = {
           accountType: accountType.value.value,
-          maxAmount: maxAmount.value.value,
-          minAmount: minAmount.value.value,
+          coefficient: coefficient.value.value,
           stopLoss: stopLoss.value.value,
           takeProfit: takeProfit.value.value,
           isSelectMutilBot: isEnalbeMultiple.value,
           listBotId: isEnalbeMultiple.value
             ? listBotId.value.map((obj) => obj.value)
             : null,
-          botId: bot.value.value,
+          botId: !isEnalbeMultiple.value? botId.value.value : null,
           modelSession: isEnalbeMultiple.value
             ? modelSession.value.value
             : null,
@@ -346,108 +310,33 @@ export default {
     });
     return {
       accountType,
-      maxAmount,
-      minAmount,
       stopLoss,
       takeProfit,
       onSetting,
+      coefficient,
       optionAccount,
-      bot,
-      optionsMinAmount: [
+      botId,
+      optionsCoefficient: [
         {
-          label: '1%',
+          label: '1',
           value: 1,
         },
         {
-          label: '2%',
+          label: '2',
           value: 2,
         },
         {
-          label: '3%',
+          label: '3',
           value: 3,
         },
         {
-          label: '4%',
+          label: '4',
           value: 4,
         },
         {
-          label: '5%',
+          label: '5',
           value: 5,
-        },
-        {
-          label: '6%',
-          value: 6,
-        },
-        {
-          label: '7%',
-          value: 7,
-        },
-        {
-          label: '8%',
-          value: 8,
-        },
-        {
-          label: '9%',
-          value: 9,
-        },
-        {
-          label: '10%',
-          value: 10,
-        },
-      ],
-      optionsMaxAmount: [
-        {
-          label: '1%',
-          value: 1,
-        },
-        {
-          label: '2%',
-          value: 2,
-        },
-        {
-          label: '3%',
-          value: 3,
-        },
-        {
-          label: '4%',
-          value: 4,
-        },
-        {
-          label: '5%',
-          value: 5,
-        },
-        {
-          label: '6%',
-          value: 6,
-        },
-        {
-          label: '7%',
-          value: 7,
-        },
-        {
-          label: '8%',
-          value: 8,
-        },
-        {
-          label: '9%',
-          value: 9,
-        },
-        {
-          label: '10%',
-          value: 10,
-        },
-        {
-          label: '15%',
-          value: 15,
-        },
-        {
-          label: '20%',
-          value: 20,
-        },
-        {
-          label: '25%',
-          value: 25,
-        },
+        }
       ],
       optionsProfit: [
         {
@@ -751,16 +640,24 @@ export default {
       modelSession,
       optionSession: [
         {
-          label: '1',
-          value: 1,
+          label: '10',
+          value: 10,
         },
         {
-          label: '2',
-          value: 2,
+          label: '20',
+          value: 20,
         },
         {
-          label: '3',
-          value: 3,
+          label: '30',
+          value: 30,
+        },
+        {
+          label: '40',
+          value: 40,
+        },
+        {
+          label: '50',
+          value: 50,
         },
       ],
     };
