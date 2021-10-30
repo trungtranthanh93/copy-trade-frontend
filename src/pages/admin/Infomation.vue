@@ -204,7 +204,7 @@ const columns = [
   { name: 'winAmount', align: 'center', label: 'Kết quả', field: 'winAmount' },
 ];
 
-import { useQuasar, QSpinnerFacebook, date } from 'quasar';
+import { useQuasar, date } from 'quasar';
 import { ref, onBeforeMount, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
