@@ -14,7 +14,7 @@
           relative-position
         "
       >
-        <template v-if="true">
+        <template v-if="!$q.platform.is.mobile">
           <div class="row justify-center">
             <q-card
               class="bg-blue-grey-14 q-ml-md"
