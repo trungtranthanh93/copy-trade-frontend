@@ -317,30 +317,7 @@ export default {
         });
       }
     }
-    async function unfollowBot() {
-      try {
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        await api.put('users/unfolowBot');
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Đã dừng follow chuyên gia',
-          position: 'top',
-        });
-        $router.push('/user/setting-bot');
-      } catch (error) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
-          icon: 'report_problem',
-        });
-      }
-    }
     async function continueFollow() {
       let token = localStorage.getItem('jwt');
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -415,7 +392,6 @@ export default {
       incomeAmount,
       unfollow,
       continueFollow,
-      unfollowBot,
       columns,
       rows,
       pagination,

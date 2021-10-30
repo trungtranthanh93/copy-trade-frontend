@@ -21,7 +21,7 @@
             size="md"
             class="bg-positive"
             label="Kết thúc"
-            @click="logout"
+            @click="unfollowBot"
           />
         </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
@@ -291,6 +291,30 @@ export default {
     onMounted(async () => {
       await getSportBalance(), await getCountUser(), await getStatistic();
     });
+    async function unfollowBot() {
+      try {
+        let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        await api.put('user-setting/unfolow-bot');
+        $q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Đã dừng follow bot',
+          position: 'top',
+        });
+        $router.push('/admin/setting-bot');
+      } catch (error) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
+          icon: 'report_problem',
+        });
+      }
+    }
     return {
       putOptions,
       money,
@@ -303,6 +327,7 @@ export default {
       countUser,
       goUserFollow,
       accountType,
+      unfollowBot,
     };
   },
 };

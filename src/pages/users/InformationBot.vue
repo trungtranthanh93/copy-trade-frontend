@@ -290,7 +290,7 @@ export default {
         // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        await api.put('users/unfolowBot');
+        await api.put('user-setting/unfolow-bot');
         $q.notify({
           color: 'green-4',
           textColor: 'white',
