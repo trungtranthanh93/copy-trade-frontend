@@ -62,6 +62,7 @@
                 filled
                 v-model="listBotId"
                 multiple
+                max-values="3"
                 :options="optionBot"
                 use-chips
                 stack-label
