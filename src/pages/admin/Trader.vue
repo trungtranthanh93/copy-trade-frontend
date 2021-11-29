@@ -198,7 +198,7 @@
                     :rules="[
                       (val) =>
                         (val !== null && val !== '') || 'Hãy điền số % vốn đánh',
-                      (val) => (val >=1 && val <= 100) || 'Hãy điền số % vốn từ 1 đến 100',
+                      (val) => (val >=1 && val <= 30) || 'Hãy điền số % vốn từ 1 đến 30',
                     ]"
                   >
                   </q-input>
