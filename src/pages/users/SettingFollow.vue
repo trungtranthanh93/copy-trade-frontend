@@ -35,6 +35,14 @@
             <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
             <q-select filled v-model="stopLoss" :options="optionsLost" />
           </div>
+          <div>
+            <q-item-label class="q-mb-sm">Hệ số*</q-item-label>
+            <q-select
+              filled
+              v-model="coefficient"
+              :options="optionsCoefficient"
+            />
+          </div>
           <q-btn
             class="full-width bg-positive"
             @click="onSetting()"
@@ -65,6 +73,7 @@ export default {
     const stopLoss = ref(null);
     const takeProfit = ref(null);
     const accountType = ref(null);
+    const coefficient  = ref(null);
     const optionAccount = ref([
       {
         label: 'Tài khoản thực',
@@ -121,6 +130,15 @@ export default {
         });
         return;
       }
+      if (!coefficient.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Hệ số!',
+          icon: 'report_problem',
+        });
+        return;
+      }
       if (maxAmount.value.value < minAmount.value.value) {
         $q.notify({
           color: 'negative',
@@ -146,6 +164,7 @@ export default {
           minAmount: minAmount.value.value,
           stopLoss: stopLoss.value.value,
           takeProfit: takeProfit.value.value,
+          coefficient: coefficient.value.value
         };
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -228,6 +247,7 @@ export default {
       takeProfit,
       onSetting,
       optionAccount,
+      coefficient,
       optionsMinAmount: [
         {
           label: '1%',
@@ -618,6 +638,28 @@ export default {
         {
           label: '-70%',
           value: 70,
+        },
+      ],
+      optionsCoefficient: [
+        {
+          label: '1',
+          value: 1,
+        },
+        {
+          label: '2',
+          value: 2,
+        },
+        {
+          label: '3',
+          value: 3,
+        },
+        {
+          label: '4',
+          value: 4,
+        },
+        {
+          label: '5',
+          value: 5,
         },
       ],
     };
