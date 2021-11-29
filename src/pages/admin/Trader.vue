@@ -191,14 +191,14 @@
                     input-class="text-right"
                     type="number"
                     v-model="money"
-                    label="Nhập số tiền đánh"
+                    label="Nhập số % vốn đánh"
                     lazy-rules
                     style="width: 160px"
                     suffix="$"
                     :rules="[
                       (val) =>
-                        (val !== null && val !== '') || 'Hãy điền số tiền đánh',
-                      (val) => val > 0 || 'Hãy điền số lớn hơn 0',
+                        (val !== null && val !== '') || 'Hãy điền số % vốn đánh',
+                      (val) => (val >=1 && val <= 100) || 'Hãy điền số % vốn từ 1 đến 100',
                     ]"
                   >
                   </q-input>
