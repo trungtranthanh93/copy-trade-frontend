@@ -194,7 +194,7 @@
                     label="Nhập số % vốn đánh"
                     lazy-rules
                     style="width: 160px"
-                    suffix="$"
+                    suffix="%"
                     :rules="[
                       (val) =>
                         (val !== null && val !== '') || 'Hãy điền số % vốn đánh',
