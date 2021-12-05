@@ -365,8 +365,6 @@ export default {
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         });
-      } else {
-        $router.push('/user/setting-bot');
       }
     });
     return {
