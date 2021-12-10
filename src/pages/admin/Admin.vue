@@ -1,8 +1,6 @@
 
 <template>
-  <q-layout
-    view="hHh Lpr lFf"
-  >
+  <q-layout view="hHh Lpr lFf">
     <q-header reveal elevated class="bg-dark">
       <q-toolbar>
         <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
@@ -23,6 +21,15 @@
           <img class="top-left" src="logo.png" style="height: 40px" />
         </div>
         <q-list padding>
+          <q-expansion-item :content-inset-level="0.5">
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="groups" color="orange" />
+              </q-item-section>
+              <q-item-section>Copy Trader</q-item-section>
+            </template>
+            <MenuItem v-for="link in groupLinks" :key="link.title" v-bind="link" />
+          </q-expansion-item>
           <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
         </q-list>
       </q-scroll-area>
@@ -35,18 +42,12 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import MenuItem from 'components/MenuItem.vue';
+import { api } from 'boot/axios';
 import { useQuasar } from 'quasar';
+import _ from 'lodash';
 const linksData = [
-  {
-    title: 'Copy Trader',
-    caption: 'Đánh lệnh theo chuyên gia',
-    icon: 'account_balance',
-    iconColor: 'orange',
-    link: '/admin',
-    separator: true,
-  },
   {
     title: 'Auto Trader',
     caption: 'Đánh lệnh theo Bot',
@@ -77,15 +78,46 @@ export default {
     const $q = useQuasar();
     const leftDrawerOpen = ref(false);
     const menuLinks = ref(linksData); // Structure du menu
+    const groupLinks = ref(null);
+    async function getListGroup() {
+      let token = localStorage.getItem('jwt');
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let responseContent = await api.get('/group/all');
+      let data = responseContent.data;
+      let links = [
+        {
+          title: 'Copy Trader',
+          caption: 'Đánh lệnh theo chuyên gia',
+          icon: 'person',
+          iconColor: 'orange',
+          link: '/admin/solo',
+          separator: true,
+        },
+      ];
+      _.each(data, (obj) => {
+        links.push({
+          title: obj.groupName,
+          link: 'group/' + obj.id,
+          icon: 'group',
+          iconColor: 'orange',
+          separator: true,
+        });
+      });
+      groupLinks.value = links;
+    }
+    onBeforeMount(getListGroup);
+
     return {
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
       menuLinks,
+      groupLinks,
       drawerLeft: ref($q.screen.width > 700),
     };
   },
+
   components: {
     MenuItem,
   },

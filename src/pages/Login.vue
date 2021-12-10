@@ -138,9 +138,9 @@ export default {
           'Bearer ' + response.data.access_token;
         if (user.role === 0) {
            if(user.botId){
-            $router.push('/user/information-bot');
+            $router.push({name: 'information-bot'});
           } else {
-          $router.push('/user/');
+          $router.push({name: 'infomation-copy-trader'});
           }
         } else {
           if(user.botId){

@@ -37,7 +37,6 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
   });
   Router.beforeEach((to, from, next) => {
     let user: any = localStorage.getItem('user');
-    console.log(1)
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       if (!user) {
         next({
@@ -48,12 +47,12 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
       user = JSON.parse(user);
       if (user.role === 0 && to.meta?.isAdmin) {
         next({
-          name: 'infomation',
+          name: 'infomation-copy-trader',
         });
       }
       if (!to.meta?.isAdmin && user.role === 1) {
         next({
-          name: 'trader',
+          name: 'trader-solo',
         });
       }
       next();
@@ -66,7 +65,7 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
           });
         } else {
           next({
-            name: 'trader',
+            name: 'trader-solo',
           });
         }
       } else {

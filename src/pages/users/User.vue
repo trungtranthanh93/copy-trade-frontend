@@ -1,8 +1,6 @@
 
 <template>
-  <q-layout
-    view="hHh Lpr lFf"
-  >
+  <q-layout view="hHh Lpr lFf">
     <q-header reveal elevated class="bg-dark">
       <q-toolbar>
         <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
@@ -12,17 +10,28 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="drawerLeft"
-      :width="250"
-      :breakpoint="500"
-    >
+    <q-drawer v-model="drawerLeft" :width="250" :breakpoint="500">
       <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
         <div v-if="$q.platform.is.mobile">
           <img class="top-left" src="logo.png" style="height: 40px" />
         </div>
         <q-list padding>
-          <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
+          <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
+          <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
+          <MenuItem :key="menuLinks[2].title" v-bind="menuLinks[2]" />
+          <q-expansion-item :content-inset-level="0.5">
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="star" color="orange" />
+              </q-item-section>
+              <q-item-section>Bot Vip</q-item-section>
+            </template>
+            <MenuItem :key="menuLinks[5].title" v-bind="menuLinks[5]"/>
+            <MenuItem :key="menuLinks[6].title" v-bind="menuLinks[6]" />
+            <MenuItem :key="menuLinks[7].title" v-bind="menuLinks[7]" />
+          </q-expansion-item>
+          <MenuItem :key="menuLinks[3].title" v-bind="menuLinks[3]" />
+          <MenuItem :key="menuLinks[4].title" v-bind="menuLinks[4]" />
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -43,7 +52,15 @@ const linksData = [
     caption: 'Đánh lệnh theo chuyên gia',
     icon: 'account_balance',
     iconColor: 'orange',
-    link: '/user',
+    link: '/user/infomation-copy-trader',
+    separator: false,
+  },
+  {
+    title: 'Group Trader',
+    caption: 'Đánh lệnh theo nhóm chuyên gia',
+    icon: 'groups',
+    iconColor: 'orange',
+    link: '/user/group-bot',
     separator: false,
   },
   {
@@ -68,6 +85,30 @@ const linksData = [
     icon: 'logout',
     iconColor: 'orange',
     link: '/logout',
+    separator: false,
+  },
+  {
+    title: 'Bot Vip 30',
+    caption: 'Đánh lệnh theo bot.Tài khoản tối thiểu 30$',
+    icon: 'stars',
+    iconColor: 'orange',
+    link: '/bot-vip-30',
+    separator: false,
+  },
+  {
+    title: 'Bot Vip 50',
+    caption: 'Đánh lệnh theo bot.Tài khoản tối thiểu 50$',
+    icon: 'stars',
+    iconColor: 'orange',
+    link: '/bot-vip-50',
+    separator: false,
+  },
+  {
+    title: 'Bot Vip 60', 
+    caption: 'Đánh lệnh theo bot.Tài khoản tối thiểu 60$',
+    icon: 'stars',
+    iconColor: 'orange',
+    link: '/bot-vip-60',
     separator: false,
   },
 ];

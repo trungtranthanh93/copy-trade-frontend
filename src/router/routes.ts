@@ -20,8 +20,13 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, isAdmin: true },
     children: [
       {
-        path: '',
-        name: 'trader',
+        path: 'solo',
+        name: 'trader-solo',
+        component: () => import('pages/admin/Trader.vue'),
+      },
+      {
+        path: 'group/:id',
+        name: 'trader-group',
         component: () => import('pages/admin/Trader.vue'),
       },
       {
@@ -50,8 +55,8 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, isAdmin: false },
     children: [
       {
-        path: '',
-        name: 'infomation',
+        path: 'infomation-copy-trader',
+        name: 'infomation-copy-trader',
         component: () => import('pages/users/Information.vue'),
       },
       {
@@ -72,6 +77,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'information-bot',
+        name: 'information-bot',
         component: () => import('pages/users/InformationBot.vue'),
       },
     ],

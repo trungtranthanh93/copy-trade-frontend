@@ -198,6 +198,7 @@ export default {
         capital.value = `${responseContent.data.capital}$`;
         incomeAmount.value = `${responseContent.data.incomeAmount}$`;
         accountType.value = `${responseContent.data.userType}`;
+        console.log(responseContent)
         if (responseContent.data.isTakeProfit) {
           $q.dialog({
             title: 'Thông báo',

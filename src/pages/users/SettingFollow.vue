@@ -212,7 +212,7 @@ export default {
           html: true,
         })
         .onOk(() => {
-          $router.push('/user/');
+          $router.push({name: 'infomation-copy-trader'});
         })
         .onCancel(() => {
           // console.log('Cancel')
@@ -231,7 +231,7 @@ export default {
           });
         } else {
           clearInterval(timer);
-          $router.push('/user/');
+          $router.push({name: 'infomation-copy-trader'});
           dialog.hide();
         }
       }, 1000);
