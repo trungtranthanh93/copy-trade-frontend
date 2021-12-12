@@ -97,7 +97,7 @@ export default {
       _.each(data, (obj) => {
         links.push({
           title: obj.groupName,
-          link: 'group/' + obj.id,
+          link: '/admin/group/' + obj.id,
           icon: 'group',
           iconColor: 'orange',
           separator: true,

@@ -139,8 +139,10 @@ export default {
         if (user.role === 0) {
            if(user.botId){
             $router.push({name: 'information-bot'});
+          } else if(user.groupId){
+            $router.push({name: 'infomation-copy-group'});
           } else {
-          $router.push({name: 'infomation-copy-trader'});
+            $router.push({name: 'infomation-copy-trader'});
           }
         } else {
           if(user.botId){

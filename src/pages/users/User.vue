@@ -60,7 +60,7 @@ const linksData = [
     caption: 'Đánh lệnh theo nhóm chuyên gia',
     icon: 'groups',
     iconColor: 'orange',
-    link: '/user/group-bot',
+    link: '/user/list-group',
     separator: false,
   },
   {

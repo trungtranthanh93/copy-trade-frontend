@@ -60,8 +60,21 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/users/Information.vue'),
       },
       {
+        path: 'infomation-copy-group',
+        name: 'infomation-copy-group',
+        component: () => import('pages/users/InformationGroup.vue'),
+      },
+      {
         path: 'list-master',
         component: () => import('pages/users/ListMaster.vue'),
+      },
+      {
+        path: 'list-group',
+        component: () => import('pages/users/ListGroup.vue'),
+      },
+      {
+        path: 'setting-group/:groupId',
+        component: () => import('pages/users/SettingGroup.vue'),
       },
       {
         path: 'login-exchange',

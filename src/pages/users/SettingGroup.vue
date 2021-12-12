@@ -21,6 +21,24 @@
           </div>
           <div class="row justify-around">
             <div style="width: 100%; max-width: 250px">
+              <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
+              <q-select
+                filled
+                v-model="minAmount"
+                :options="optionsMinAmount"
+              />
+            </div>
+            <div style="width: 100%; max-width: 250px">
+              <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
+              <q-select
+                filled
+                v-model="maxAmount"
+                :options="optionsMaxAmount"
+              />
+            </div>
+          </div>
+          <div class="row justify-around">
+            <div style="width: 100%; max-width: 250px">
               <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
               <q-select filled v-model="takeProfit" :options="optionsProfit" />
             </div>
@@ -39,43 +57,15 @@
               />
             </div>
             <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Phương pháp*</q-item-label>
+              <q-item-label class="q-mb-sm">Chọn các chuyên gia*</q-item-label>
               <q-select
                 filled
-                v-model="botId"
-                :options="optionBot"
-                :disable="isEnalbeMultiple"
-              />
-              <q-toggle
-                :false-value="false"
-                label="Chọn nhiều phương pháp"
-                :true-value="true"
-                color="positive"
-                v-model="isEnalbeMultiple"
-              />
-            </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Phương pháp nâng cao*</q-item-label>
-              <q-select
-                filled
-                v-model="listBotId"
+                v-model="listMasterId"
                 multiple
                 max-values="3"
-                :options="optionBot"
+                :options="optionMaster"
                 use-chips
                 stack-label
-                :disable="!isEnalbeMultiple"
-              />
-            </div>
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Số phiên âm liên tiếp*</q-item-label>
-              <q-select
-                filled
-                v-model="modelSession"
-                :options="optionSession"
-                :disable="!isEnalbeMultiple"
               />
             </div>
           </div>
@@ -109,14 +99,13 @@ export default {
     const $router = useRouter();
     const $q = useQuasar();
     const coefficient = ref(null);
+    const maxAmount = ref(null);
+    const minAmount = ref(null);
     const stopLoss = ref(null);
     const takeProfit = ref(null);
     const accountType = ref(null);
-    const listBotId = ref(null);
-    const modelSession = ref(null);
-    const isEnalbeMultiple = ref(false);
-    const botId = ref(null);
-    const optionBot = ref([]);
+    const listMasterId = ref(null);
+    const optionMaster = ref([]);
     const optionAccount = ref([
       {
         label: 'Tài khoản thực',
@@ -133,6 +122,24 @@ export default {
           color: 'negative',
           position: 'top',
           message: 'Hãy chọn Loại tài khoản!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!minAmount.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Lệnh tối thiểu!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!maxAmount.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Lệnh tối đa!',
           icon: 'report_problem',
         });
         return;
@@ -164,29 +171,11 @@ export default {
         });
         return;
       }
-      if (!isEnalbeMultiple.value && !botId.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn phương pháp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (isEnalbeMultiple.value && !listBotId.value) {
+      if (!listMasterId.value) {
         $q.notify({
           color: 'negative',
           position: 'top',
           message: 'Hãy chọn phương pháp nâng cao',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (isEnalbeMultiple.value && !modelSession.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn số phiên âm liên tiếp',
           icon: 'report_problem',
         });
         return;
@@ -203,23 +192,18 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
         let data = {
+          maxAmount: maxAmount.value.value,
+          minAmount: minAmount.value.value,
           accountType: accountType.value.value,
           coefficient: coefficient.value.value,
           stopLoss: stopLoss.value.value,
           takeProfit: takeProfit.value.value,
-          isSelectMutilBot: isEnalbeMultiple.value,
-          listBotId: isEnalbeMultiple.value
-            ? listBotId.value.map((obj) => obj.value)
-            : null,
-          botId: !isEnalbeMultiple.value? botId.value.value : null,
-          modelSession: isEnalbeMultiple.value
-            ? modelSession.value.value
-            : null,
+          masterIds: listMasterId.value.map((obj) => obj.value),
         };
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/user-setting/bot', data);
+        let responseContent = await api.put('/user-setting/group/'+$router.currentRoute.value.params.groupId, data);
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }
@@ -251,22 +235,15 @@ export default {
     }
     function autoClose() {
       let seconds = 3;
-      let path = $router.currentRoute.value.path;
-      let message = `Đã follow bot thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`;
-      let to = '';
-      if (path.includes('admin')) {
-        to = '/admin/information-bot';
-      } else if (path.includes('user')) {
-        to = '/user/information-bot';
-      }
+
       const dialog = $q
         .dialog({
           title: 'Thông báo',
-          message: message,
+          message: `Đã follow theo nhóm chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
           html: true,
         })
         .onOk(() => {
-          $router.push(to);
+          $router.push({name: 'infomation-copy-group'});
         })
         .onCancel(() => {
           // console.log('Cancel')
@@ -281,24 +258,24 @@ export default {
 
         if (seconds > 0) {
           dialog.update({
-            message: message,
+            message: `Đã follow theo nhóm chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
           });
         } else {
           clearInterval(timer);
-          $router.push(to);
+          $router.push({name: 'infomation-copy-group'});
           dialog.hide();
         }
       }, 1000);
     }
-    async function getListBot() {
+    async function getListMaster() {
       try {
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let data = await api.get('/bot/list');
-        optionBot.value = _.map(data.data, (obj) => {
+        let data = await api.get('/group/'+ $router.currentRoute.value.params.groupId+'/users');
+        optionMaster.value = _.map(data.data, (obj) => {
           return {
-            label: obj.botName,
+            label: obj.username,
             value: obj.id,
           };
         });
@@ -306,7 +283,7 @@ export default {
     }
     onMounted(async () => {
       accountType.value = optionAccount.value[0];
-      await getListBot();
+      await getListMaster();
     });
     return {
       accountType,
@@ -315,7 +292,108 @@ export default {
       onSetting,
       coefficient,
       optionAccount,
-      botId,
+      minAmount,
+      maxAmount,
+      optionsMinAmount: [
+        {
+          label: '0.5%',
+          value: 0.5,
+        },
+        {
+          label: '1%',
+          value: 1,
+        },
+        {
+          label: '2%',
+          value: 2,
+        },
+        {
+          label: '3%',
+          value: 3,
+        },
+        {
+          label: '4%',
+          value: 4,
+        },
+        {
+          label: '5%',
+          value: 5,
+        },
+        {
+          label: '6%',
+          value: 6,
+        },
+        {
+          label: '7%',
+          value: 7,
+        },
+        {
+          label: '8%',
+          value: 8,
+        },
+        {
+          label: '9%',
+          value: 9,
+        },
+        {
+          label: '10%',
+          value: 10,
+        },
+      ],
+      optionsMaxAmount: [
+        {
+          label: '1%',
+          value: 1,
+        },
+        {
+          label: '2%',
+          value: 2,
+        },
+        {
+          label: '3%',
+          value: 3,
+        },
+        {
+          label: '4%',
+          value: 4,
+        },
+        {
+          label: '5%',
+          value: 5,
+        },
+        {
+          label: '6%',
+          value: 6,
+        },
+        {
+          label: '7%',
+          value: 7,
+        },
+        {
+          label: '8%',
+          value: 8,
+        },
+        {
+          label: '9%',
+          value: 9,
+        },
+        {
+          label: '10%',
+          value: 10,
+        },
+        {
+          label: '15%',
+          value: 15,
+        },
+        {
+          label: '20%',
+          value: 20,
+        },
+        {
+          label: '25%',
+          value: 25,
+        },
+      ],
       optionsCoefficient: [
         {
           label: '1',
@@ -336,7 +414,7 @@ export default {
         {
           label: '5',
           value: 5,
-        }
+        },
       ],
       optionsProfit: [
         {
@@ -634,32 +712,8 @@ export default {
           value: 70,
         },
       ],
-      listBotId,
-      isEnalbeMultiple,
-      optionBot,
-      modelSession,
-      optionSession: [
-        {
-          label: '10',
-          value: 10,
-        },
-        {
-          label: '20',
-          value: 20,
-        },
-        {
-          label: '30',
-          value: 30,
-        },
-        {
-          label: '40',
-          value: 40,
-        },
-        {
-          label: '50',
-          value: 50,
-        },
-      ],
+      optionMaster,
+      listMasterId,
     };
   },
 };
