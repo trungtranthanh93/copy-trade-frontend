@@ -19,7 +19,7 @@
           <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
           <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
           <MenuItem :key="menuLinks[2].title" v-bind="menuLinks[2]" />
-          <q-expansion-item :content-inset-level="0.5">
+          <!-- <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
                 <q-icon name="star" color="orange" />
@@ -29,7 +29,7 @@
             <MenuItem :key="menuLinks[5].title" v-bind="menuLinks[5]"/>
             <MenuItem :key="menuLinks[6].title" v-bind="menuLinks[6]" />
             <MenuItem :key="menuLinks[7].title" v-bind="menuLinks[7]" />
-          </q-expansion-item>
+          </q-expansion-item> -->
           <MenuItem :key="menuLinks[3].title" v-bind="menuLinks[3]" />
           <MenuItem :key="menuLinks[4].title" v-bind="menuLinks[4]" />
         </q-list>
@@ -60,7 +60,7 @@ const linksData = [
     caption: 'Đánh lệnh theo nhóm chuyên gia',
     icon: 'groups',
     iconColor: 'orange',
-    link: '/user/list-group',
+    link: '/user/infomation-copy-group',
     separator: false,
   },
   {

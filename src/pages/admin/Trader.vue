@@ -313,7 +313,12 @@ export default {
           betType: value,
           betAmount: Number(money.value),
         };
-        let response = await api.post('/trade/v1/bet', data);
+        let response;
+        if($router.currentRoute.value.name ==='trader-group'){
+          response = await api.post(`/trade/v1/group/${$router.currentRoute.value.params.id}/bet`, data);
+        } else {
+          response = await api.post('/trade/v1/bet', data);
+        }
         if (response.data.ok === false) {
           if (response.data.d?.err_code === 'betsession_is_invalid') {
             $q.notify({

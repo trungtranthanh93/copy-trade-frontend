@@ -304,7 +304,7 @@ export default {
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Đã dừng follow chuyên gia',
+          message: 'Đã dừng follow nhóm chuyên gia',
           position: 'top',
         });
         $router.push('/user/list-group');
@@ -369,7 +369,7 @@ export default {
         $q.dialog({
           title: 'Thông báo',
           message:
-            'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và follow theo chuyên gia?',
+            'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và follow theo Group?',
           cancel: true,
           persistent: true,
         })
@@ -379,6 +379,25 @@ export default {
           })
           .onCancel(() => {
             $router.push('/user/information-bot');
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+      }
+      if (user.data.masterId) {
+        $q.dialog({
+          title: 'Thông báo',
+          message:
+            'Bạn đang follow theo Chuyên gia. Bạn chắc chắn muốn dừng follow chuyên gia và follow theo Group?',
+          cancel: true,
+          persistent: true,
+        })
+          .onOk(async () => {
+            await api.put('/user-setting/unfolow');
+            $router.push('/user/list-group');
+          })
+          .onCancel(() => {
+            $router.push('/user/infomation-copy-trader');
           })
           .onDismiss(() => {
             // console.log('I am triggered on both OK and Cancel')

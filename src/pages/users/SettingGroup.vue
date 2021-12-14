@@ -62,7 +62,6 @@
                 filled
                 v-model="listMasterId"
                 multiple
-                max-values="3"
                 :options="optionMaster"
                 use-chips
                 stack-label
@@ -239,7 +238,7 @@ export default {
       const dialog = $q
         .dialog({
           title: 'Thông báo',
-          message: `Đã follow theo nhóm chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+          message: `Đã follow theo group thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
           html: true,
         })
         .onOk(() => {
