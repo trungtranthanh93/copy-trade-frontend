@@ -45,7 +45,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'information-bot',
         component: () => import('pages/admin/Infomation.vue')
-      }
+      },
+      {
+        path: 'montly-export',
+        name: 'admin-montly-export',
+        component: () => import('pages/MontlyExport.vue'),
+      },
     ],
   },
   {
@@ -92,6 +97,11 @@ const routes: RouteRecordRaw[] = [
         path: 'information-bot',
         name: 'information-bot',
         component: () => import('pages/users/InformationBot.vue'),
+      },
+      {
+        path: 'montly-export',
+        name: 'montly-export',
+        component: () => import('pages/MontlyExport.vue'),
       },
     ],
   },

@@ -19,19 +19,20 @@
           <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
           <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
           <MenuItem :key="menuLinks[2].title" v-bind="menuLinks[2]" />
-          <q-expansion-item :content-inset-level="0.5">
+          <!-- <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
                 <q-icon name="star" color="orange" />
               </q-item-section>
               <q-item-section>Bot Vip</q-item-section>
             </template>
-            <MenuItem :key="menuLinks[5].title" v-bind="menuLinks[5]"/>
-            <MenuItem :key="menuLinks[6].title" v-bind="menuLinks[6]" />
+            <MenuItem :key="menuLinks[6].title" v-bind="menuLinks[6]"/>
             <MenuItem :key="menuLinks[7].title" v-bind="menuLinks[7]" />
-          </q-expansion-item>
-          <MenuItem :key="menuLinks[3].title" v-bind="menuLinks[3]" />
+            <MenuItem :key="menuLinks[8].title" v-bind="menuLinks[8]" />
+          </q-expansion-item> -->
           <MenuItem :key="menuLinks[4].title" v-bind="menuLinks[4]" />
+          <MenuItem :key="menuLinks[3].title" v-bind="menuLinks[3]" />
+          <MenuItem :key="menuLinks[5].title" v-bind="menuLinks[5]" />
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -77,6 +78,14 @@ const linksData = [
     icon: 'login',
     iconColor: 'orange',
     link: '/user/login-exchange',
+    separator: false,
+  },
+  {
+    title: 'Thống kê', 
+    caption: 'Thống kê lãi từng ngày trong tháng',
+    icon: 'analytics',
+    iconColor: 'orange',
+    link: '/user/montly-export',
     separator: false,
   },
   {

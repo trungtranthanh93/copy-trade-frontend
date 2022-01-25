@@ -57,6 +57,14 @@ const linksData = [
     separator: false,
   },
   {
+    title: 'Thống kê', 
+    caption: 'Thống kê lãi từng ngày trong tháng',
+    icon: 'analytics',
+    iconColor: 'orange',
+    link: '/admin/montly-export',
+    separator: false,
+  },
+  {
     title: 'Đăng nhập sàn',
     caption: 'Đăng nhập vào sàn để đồng bộ lệnh đánh',
     icon: 'login',
