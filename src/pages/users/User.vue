@@ -61,7 +61,7 @@ const linksData = [
     caption: 'Đánh lệnh theo nhóm chuyên gia',
     icon: 'groups',
     iconColor: 'orange',
-    link: '/user/list-group',
+    link: '/user/infomation-copy-group',
     separator: false,
   },
   {

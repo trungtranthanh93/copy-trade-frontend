@@ -296,7 +296,7 @@ export default {
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Đã dừng follow chuyên gia',
+          message: 'Đã dừng follow bot',
           position: 'top',
         });
         $router.push('/user/setting-bot');
@@ -361,11 +361,29 @@ export default {
           $router.push('/user/setting-bot');
         })
         .onCancel(() => {
-          $router.push('/user/');
+            $router.push('/user/infomation-copy-trade');
         })
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         });
+      }
+      if(user.data.groupId) {
+                $q.dialog({
+          title: 'Thông báo',
+          message:
+            'Bạn đang follow theo nhóm chuyên gia. Bạn chắc chắn muốn dừng follow nhóm chuyên gia và follow theo bot?',
+          cancel: true,
+          persistent: true,
+        })
+          .onOk(() => {
+            $router.push('/user/setting-bot');
+          })
+          .onCancel(() => {
+            $router.push('/user/infomation-copy-group');
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
       }
     });
     return {

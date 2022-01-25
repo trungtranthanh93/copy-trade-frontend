@@ -384,6 +384,25 @@ export default {
             // console.log('I am triggered on both OK and Cancel')
           });
       }
+      if(user.data.groupId) {
+                $q.dialog({
+          title: 'Thông báo',
+          message:
+            'Bạn đang follow theo nhóm chuyên gia. Bạn chắc chắn muốn dừng follow nhóm chuyên gia và follow theo chuyên gia?',
+          cancel: true,
+          persistent: true,
+        })
+          .onOk(async () => {
+            await api.put('/user-setting/unfolow');
+            $router.push('/user/list-master');
+          })
+          .onCancel(() => {
+            $router.push('/user/infomation-copy-group');
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+      }
       $router.push('/user/list-master');
     });
     return {
