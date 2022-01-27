@@ -116,7 +116,7 @@ export default {
     onBeforeMount(getListGroup);
 
     return {
-      leftDrawerOpen,
+      leftDrawerOpen : ref(false),
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },

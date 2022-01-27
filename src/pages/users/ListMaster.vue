@@ -30,6 +30,20 @@
           </template>
         </q-input>
       </template>
+      <template v-slot:body-cell-user_name="props">
+        <q-td :props="props">
+          <q-item-label
+            >{{ props.row.user_name }}
+            <q-btn
+              flat
+              round
+              color="green"
+              icon="info"
+              @click="showInfo(props.row)"
+            ></q-btn
+          ></q-item-label>
+        </q-td>
+      </template>
       <template v-slot:body-cell-action="props">
         <q-td :props="props">
           <q-btn color="green" dense @click="follow(props.row)">FOLLOW</q-btn>
@@ -49,8 +63,19 @@
             <q-list dense>
               <q-item v-for="col in props.cols" :key="col.name">
                 <q-item-section v-if="col.name !== 'action'">
-                  <q-item-label>{{ col.label }}</q-item-label>
+                  <q-item-label
+                    >{{ col.label }}
+                    <q-btn
+                      v-if="col.name === 'user_name'"
+                      flat
+                      round
+                      color="green"
+                      icon="info"
+                      @click="showInfo(props.row)"
+                    ></q-btn
+                  ></q-item-label>
                 </q-item-section>
+
                 <q-item-section side class="justify-center">
                   <q-btn
                     v-if="col.name === 'action'"
@@ -75,6 +100,96 @@
       </template>
     </q-table>
   </div>
+  <q-dialog v-model="card">
+    <q-card class="my-card">
+      <q-list>
+        <q-item>
+          <q-item-section avatar>
+            <q-avatar>
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+            </q-avatar>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label> {{ masterInfo.username }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-separator />
+        <q-item clickable>
+          <q-item-section avatar>
+            <q-icon color="orange" name="phone" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Số điện thoại</q-item-label>
+            <q-item-label caption>{{
+              masterInfo.tel ? masterInfo.tel : 'Đang cập nhật'
+            }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable>
+          <q-item-section avatar>
+            <q-icon color="orange" name="facebook" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Facebook</q-item-label>
+            <q-item-label caption>{{
+              masterInfo.facebook ? masterInfo.facebook : 'Đang cập nhật'
+            }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable>
+          <q-item-section avatar>
+            <q-icon color="orange" name="email" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Email</q-item-label>
+            <q-item-label caption>{{
+              masterInfo.email ? masterInfo.email : 'Đang cập nhật'
+            }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable>
+          <q-item-section avatar>
+            <q-icon color="orange" name="local_movies" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Target ngày (Lãi)</q-item-label>
+            <q-item-label caption
+              >{{
+                masterInfo.takeProfitTaget
+                  ? masterInfo.takeProfitTaget
+                  : 'Đang cập nhật'
+              }}</q-item-label
+            >
+          </q-item-section>
+        </q-item>
+        <q-item clickable>
+          <q-item-section avatar>
+            <q-icon color="orange" name="local_movies" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Target ngày (Lỗ)</q-item-label>
+            <q-item-label caption
+              >{{
+                masterInfo.stopLossTarget
+                  ? masterInfo.stopLossTarget
+                  : 'Đang cập nhật'
+              }}</q-item-label
+            >
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-card>
+  </q-dialog>
 </template>
 <script>
 const columns = [
@@ -142,9 +257,44 @@ export default {
     const rows = ref([]);
     const filter = ref('');
     const isActive = ref(false);
+    const card = ref(false);
+    const masterInfo = ref(null);
     const pagination = ref({
       rowsPerPage: 10, // current rows per page being displayed
     });
+    async function showInfo(row) {
+      try {
+        let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        let data = await api.get('/users/' + row.id);
+        masterInfo.value = data.data;
+        card.value = true;
+        $q.loading.value = false;
+      } catch (error) {
+        if (error.response.status === 404) {
+          $q.dialog({
+            title: 'Thông báo',
+            message:
+              'Hãy cài đặt thông tin đánh lệnh trước khi follow theo chuyên gia. Nhấn OK để chuyển sang màn hình cài đặt chuyên gia',
+            cancel: true,
+            persistent: true,
+          })
+            .onOk(() => {
+              $router.push('/user/setting-follow');
+            })
+            .onCancel(() => {
+              return;
+            })
+            .onDismiss(() => {
+              // console.log('I am triggered on both OK and Cancel')
+            });
+        }
+      } finally {
+        $q.loading.hide();
+      }
+    }
     async function follow(row) {
       $q.loading.show({
         spinner: QSpinnerFacebook,
@@ -174,7 +324,7 @@ export default {
             .onDismiss(() => {
               // console.log('I am triggered on both OK and Cancel')
             });
-            return;
+          return;
         }
         let isVaildSuccess = await onCheckValid();
         if (!isVaildSuccess) {
@@ -225,7 +375,6 @@ export default {
       }
       let data = responseContent.data;
       rows.value = data.map((obj) => {
-
         if (obj.is_token_valid === 1) {
           obj.is_token_valid = 'ONLINE';
         } else {
@@ -307,11 +456,14 @@ export default {
       columns,
       rows,
       follow,
+      showInfo,
       filter,
       goLoginExchange,
       isActive,
       pagination,
-      logout
+      logout,
+      card,
+      masterInfo,
     };
   },
 };

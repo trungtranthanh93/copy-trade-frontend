@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import Login from 'pages/Login.vue';
 import Admin from 'pages/admin/Admin.vue';
+import ListMaster from 'pages/superadmin/ListMaster.vue';
 import User from 'pages/users/User.vue';
 import Logout from 'pages/Logout.vue';
 import Register from 'pages/users/Register.vue';
@@ -10,14 +11,22 @@ declare module 'vue-router' {
     isAdmin: boolean;
     // must be declared by every route
     requiresAuth: boolean;
+
+    isSuperAdmin: boolean;
   }
 }
 const routes: RouteRecordRaw[] = [
   {
+    path: '/superadmin/',
+    component: ListMaster,
+    name: 'superadmin',
+    meta: { requiresAuth: true, isAdmin: false, isSuperAdmin: true },
+  },
+  {
     path: '/admin/',
     component: Admin,
     name: 'admin',
-    meta: { requiresAuth: true, isAdmin: true },
+    meta: { requiresAuth: true, isAdmin: true, isSuperAdmin: false },
     children: [
       {
         path: 'solo',
@@ -57,7 +66,7 @@ const routes: RouteRecordRaw[] = [
     path: '/user/',
     component: User,
     name: 'user',
-    meta: { requiresAuth: true, isAdmin: false },
+    meta: { requiresAuth: true, isAdmin: false, isSuperAdmin: false },
     children: [
       {
         path: 'infomation-copy-trader',

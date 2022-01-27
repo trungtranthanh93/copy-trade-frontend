@@ -144,13 +144,17 @@ export default {
           } else {
             $router.push({name: 'infomation-copy-trader'});
           }
-        } else {
+        } else if(user.role === 1){
           if(user.botId){
             $router.push('/admin/information-bot');
           } else {
             $router.push('/admin');
 
           }
+        } else if (user.role === 3){
+          $router.push('/superadmin/');
+        } else {
+
         }
         $q.loading.value = false;
       } catch (error) {
