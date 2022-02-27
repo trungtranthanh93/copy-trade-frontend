@@ -1,7 +1,7 @@
 <template>
   <div class="subcontent">
-    <h6 class="row justify-center">Thống kê lãi tháng {{ monthly + 1 }}</h6>
-    <h6 class="row justify-center">TỔNG THÁNG : {{ totalMonth }}%</h6>
+    <div class="row justify-center">Thống kê lãi tháng {{ monthly + 1 }}</div>
+    <div class="row justify-center">TỔNG THÁNG : {{ totalMonth }}%</div>
     <navigation-bar @today="onToday" @prev="onPrev" @next="onNext" />
 
     <div class="row justify-center">

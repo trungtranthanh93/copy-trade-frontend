@@ -1,4 +1,3 @@
-
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header reveal elevated class="bg-dark">
@@ -26,7 +25,7 @@
               </q-item-section>
               <q-item-section>Bot Vip</q-item-section>
             </template>
-            <MenuItem :key="menuLinks[6].title" v-bind="menuLinks[6]"/>
+            <MenuItem :key="menuLinks[6].title" v-bind="menuLinks[6]" />
             <MenuItem :key="menuLinks[7].title" v-bind="menuLinks[7]" />
             <MenuItem :key="menuLinks[8].title" v-bind="menuLinks[8]" />
           </q-expansion-item> -->
@@ -81,7 +80,7 @@ const linksData = [
     separator: false,
   },
   {
-    title: 'Thống kê', 
+    title: 'Thống kê',
     caption: 'Thống kê lãi từng ngày trong tháng',
     icon: 'analytics',
     iconColor: 'orange',
@@ -113,7 +112,7 @@ const linksData = [
     separator: false,
   },
   {
-    title: 'Bot Vip 60', 
+    title: 'Bot Vip 60',
     caption: 'Đánh lệnh theo bot.Tài khoản tối thiểu 60$',
     icon: 'stars',
     iconColor: 'orange',

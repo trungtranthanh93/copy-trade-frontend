@@ -1,4 +1,3 @@
-
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header reveal elevated class="bg-dark">
@@ -14,7 +13,6 @@
       v-model="drawerLeft"
       :width="250"
       :breakpoint="500"
-      behavior="desktop"
     >
       <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
         <div v-if="$q.platform.is.mobile">
@@ -28,7 +26,11 @@
               </q-item-section>
               <q-item-section>Copy Trader</q-item-section>
             </template>
-            <MenuItem v-for="link in groupLinks" :key="link.title" v-bind="link" />
+            <MenuItem
+              v-for="link in groupLinks"
+              :key="link.title"
+              v-bind="link"
+            />
           </q-expansion-item>
           <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
         </q-list>
@@ -57,7 +59,7 @@ const linksData = [
     separator: false,
   },
   {
-    title: 'Thống kê', 
+    title: 'Thống kê',
     caption: 'Thống kê lãi từng ngày trong tháng',
     icon: 'analytics',
     iconColor: 'orange',
@@ -116,13 +118,13 @@ export default {
     onBeforeMount(getListGroup);
 
     return {
-      leftDrawerOpen : ref(false),
+      leftDrawerOpen: ref(false),
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
       menuLinks,
       groupLinks,
-      drawerLeft: ref($q.screen.width > 700),
+      drawerLeft: ref($q.screen.width > 500),
     };
   },
 

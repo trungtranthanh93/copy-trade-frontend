@@ -156,7 +156,7 @@
               <q-item-section>
                 <q-item-label>Số điện thoại</q-item-label>
                 <q-item-label caption>{{
-                  masterInfo.tel ? masterInfo.tel : 'Đang cập nhật'
+                  masterInfo.phoneNumber ? masterInfo.phoneNumber : 'Đang cập nhật'
                 }}</q-item-label>
               </q-item-section>
             </q-item>
@@ -169,7 +169,7 @@
               <q-item-section>
                 <q-item-label>Facebook</q-item-label>
                 <q-item-label caption>{{
-                  masterInfo.facebook ? masterInfo.facebook : 'Đang cập nhật'
+                  masterInfo.facebookLink ? masterInfo.facebookLink : 'Đang cập nhật'
                 }}</q-item-label>
               </q-item-section>
             </q-item>

@@ -174,7 +174,7 @@ export default {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Hãy chọn phương pháp nâng cao',
+          message: 'Hãy chọn các chuyên gia',
           icon: 'report_problem',
         });
         return;
