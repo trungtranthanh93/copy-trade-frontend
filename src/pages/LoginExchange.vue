@@ -101,7 +101,7 @@
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted, onBeforeMount } from 'vue';
-import { api } from 'boot/axios';
+import { api } from 'src/boot/axios-connect-bo';
 import { useRouter } from 'vue-router';
 
 export default {
