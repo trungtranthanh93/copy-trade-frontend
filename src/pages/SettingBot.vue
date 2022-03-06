@@ -76,11 +76,11 @@
                         </div>
                     </div>
 
-                    <div class="q-pa-md">
+                    <!-- <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Phương pháp nâng cao (*)</q-item-label>
                       <q-select filled v-model="listBotId" multiple max-values="3" :options="optionBot" use-chips stack-label
                         :disable="!isEnalbeMultiple" />
-                    </div>
+                    </div> -->
                   </q-card>
               </div>
             </div>
