@@ -32,7 +32,7 @@
       </template>
       <template v-slot:body-cell-action="props">
         <q-td :props="props">
-          <q-btn color="green" dense @click="follow(props.row)">FOLLOW</q-btn>
+          <q-btn color="green" icon="sensors" dense @click="follow(props.row)"> FOLLOW</q-btn>
         </q-td>
       </template>
       <template v-slot:item="props">

@@ -1,5 +1,5 @@
 <template>
-  <q-btn label="Chuyển tiền" color="primary" @click="card = true" />
+  <q-btn label="Chuyển tiền" icon="monetization_on" color="primary" @click="card = true" />
 
   <q-dialog v-model="card">
     <q-card class="my-card">
@@ -28,7 +28,7 @@
       <q-card-section class="q-pt-none q-mt-md">
         <q-input outlined placeholder="Nhập số tiền" v-model="moneySwap">
           <template v-slot:append>
-            <q-btn label="Tất cả" @click="selectAllWalletValue"></q-btn>
+            <q-btn class="bg-positive" label="Tất cả" @click="selectAllWalletValue"></q-btn>
           </template>
         </q-input>
       </q-card-section>

@@ -1,48 +1,53 @@
 <template>
-  <div class="subcontent">
-    <h6  class="row justify-center">Thống kê lãi tháng {{monthly + 1}}</h6>
-    <h6 class="row justify-center">TỔNG THÁNG : {{totalMonth}}%</h6>
-    <navigation-bar
-      @today="onToday"
-      @prev="onPrev"
-      @next="onNext"
-    />
+  <div class="col-8 q-pa-md">
+      <q-card class="q-pa-md">
+          <q-label class="text-h6">Thống kê lãi tháng {{monthly + 1}}</q-label>
+          <q-separator class="q-mt-md" />
+         <div class="text-center q-pa-md">
+            <q-chip color="primary" text-color="white" size="md" icon="attach_money">Tổng lợi nhuận tháng: {{totalMonth}}%</q-chip>
+         </div>
 
-    <div class="row justify-center">
-      <div style="display: flex; max-width: 1400px; width: 100%;">
-        <q-calendar-month
-          ref="calendar"
-          locale="vi-vn"
-          v-model="selectedDate"
-          date-align="right"
-          month-label-size="xs"
-          animated
-          bordered
-          focusable
-          hoverable
-          no-active-date
-          :day-min-height="60"
-          :day-height="0"
-        >
-          <template #day="{ scope: { timestamp } }">
-            <template
-              v-for="event in eventsMap[timestamp.date]"
-              :key="event.id"
-            >
-              <div
-                :class="badgeClasses(event, 'day')"
-                :style="badgeStyles(event, 'day')"
-                class="my-event"
+          <div class="row justify-center">
+            <div style="display: flex; max-width: 1400px; width: 90%;">
+              <q-calendar-month
+                ref="calendar"
+                locale="vi-vn"
+                v-model="selectedDate"
+                date-align="right"
+                month-label-size="xs"
+                animated
+                bordered
+                focusable
+                hoverable
+                no-active-date
+                :day-min-height="60"
+                :day-height="0"
               >
-                <div class="title q-calendar__ellipsis">
-                  {{ event.title}}%
-                </div>
-              </div>
-            </template>
-          </template>
-        </q-calendar-month>
-      </div>
-    </div>
+                <template #day="{ scope: { timestamp } }">
+                  <template
+                    v-for="event in eventsMap[timestamp.date]"
+                    :key="event.id"
+                  >
+                    <div
+                      :class="badgeClasses(event, 'day')"
+                      :style="badgeStyles(event, 'day')"
+                      class="my-event"
+                    >
+                      <div class="title q-calendar__ellipsis">
+                        {{ event.title}}%
+                      </div>
+                    </div>
+                  </template>
+                </template>
+              </q-calendar-month>
+            </div>
+          </div>
+          <navigation-bar
+            @today="onToday"
+            @prev="onPrev"
+            @next="onNext"
+          />
+      </q-card>
   </div>
 </template>
 <script>
@@ -85,7 +90,7 @@ export default defineComponent({
       selectedDate: today(),
       monthly: new Date(today()).getMonth() + 1 ,
       events: [
-        
+
       ],
       totalMonth: 0,
     }

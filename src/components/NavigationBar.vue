@@ -7,7 +7,7 @@
         style="margin: 2px;"
         @click="$emit('today')"
       >
-        Hôm nay
+        <q-icon name="event" /> Hôm nay
       </q-btn>
       <q-btn
         no-caps
@@ -15,7 +15,7 @@
         style="margin: 2px;"
         @click="$emit('prev')"
       >
-        &lt; Tháng Trước
+        <q-icon name="skip_previous" /> Tháng Trước
       </q-btn>
       <q-btn
         no-caps
@@ -23,7 +23,7 @@
         style="margin: 2px;"
         @click="$emit('next')"
       >
-        Tháng Sau &gt;
+        Tháng Sau <q-icon name="skip_next" />
       </q-btn>
     </div>
   </div>

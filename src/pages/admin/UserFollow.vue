@@ -20,7 +20,7 @@
         <div class="row items-center q-gutter-md justify-left">
           <q-btn
             color="positive"
-            icon="arrow_back_ios"
+            icon="arrow_back"
             style=""
             dense
             @click="backTraderPages()"
@@ -53,7 +53,7 @@
       </template>
       <template v-slot:body-cell-action="props">
         <q-td :props="props">
-          <q-btn color="red" dense @click="deleteUserFollow(props.row)"
+          <q-btn color="red" icon="delete" dense @click="deleteUserFollow(props.row)"
             >Xóa</q-btn
           >
         </q-td>
@@ -146,7 +146,7 @@ export default {
       rowsPerPage: 10, // current rows per page being displayed
     });
     function backTraderPages() {
-      $router.push('/admin/');
+      $router.push('/admin/solo');
     }
     async function getFollowingUserList() {
       let token = localStorage.getItem('jwt');

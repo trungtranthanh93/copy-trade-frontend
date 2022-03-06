@@ -1,99 +1,94 @@
 <template>
   <!-- <q-layout container style="height: 600px"> -->
   <q-layout class="justify-center">
-    <q-page-container class="window-height">
-      <div
-        class="
-          q-pa-md
-          fit
-          row
-          wrap
-          justify-center
-          items-end
-          content-center
-          rounded-borders
-          dark
-          fixed-center
-          relative-position
-        "
-        style="max-width: 428px"
-      >
-        <div>
-          <img class="absolute-top-left" src="logo.png" style="height: 80px" />
+    <q-page-container class="window-height relative-position">
+        <div class="row justify-center">
+            <div
+            class="col-6 q-ma-md"
+          >
+              <q-card class="q-pa-md">
+                  <q-label class="text-h5">Kết nối vào sàn</q-label>
+                  <q-separator class="q-mt-md"/>
+                  <div class="text-center">
+                      <img src="logo.png" style="height: 80px" />
+                    </div>
+                    <q-banner
+                      inline-actions
+                      rounded
+                      class="bg-positive text-white q-mb-md text-center"
+                    >
+                      Tài khoản của Quý Khách đã dừng Copytrade. Quý Khách vui lòng đăng
+                      nhập lại.
+                    </q-banner>
+                    <template v-if="!isShowAuthenticator">
+                      <form class="q-gutter-x-xs q-gutter-y-lg q-ma-md">
+                        <div>
+                          <q-item-label class="q-mb-sm">Địa chỉ email (*)</q-item-label>
+                          <q-input
+                            dark
+                            outlined
+                            v-model="email"
+                            readonly
+                            style="width: 100%"
+                            placeholder="Điền email"
+                          >
+                          </q-input>
+                        </div>
+                        <div>
+                          <q-item-label class="q-mb-sm">Mật khẩu (*)</q-item-label>
+                          <q-input
+                            dark
+                            outlined
+                            v-model="password"
+                            style="width: 100%"
+                            :type="isPwd ? 'password' : 'text'"
+                            placeholder="Điền mật khẩu"
+                          >
+                            <template v-slot:append>
+                              <q-icon
+                                :name="isPwd ? 'visibility_off' : 'visibility'"
+                                class="cursor-pointer"
+                                @click="isPwd = !isPwd"
+                              />
+                            </template>
+                          </q-input>
+                        </div>
+                        <div class="text-center">
+                            <q-btn
+                            class="bg-positive"
+                            @click="onLogin()"
+                            label="Kết nối sàn"
+                            style=""
+                          />
+                        </div>
+                      </form>
+                    </template>
+                    <template v-else>
+                             <form class="q-gutter-x-xs q-gutter-y-lg">
+                        <div>
+                          <q-item-label class="q-mb-sm">Mã Google Authentication (*)</q-item-label>
+                          <q-input
+                            dark
+                            outlined
+                            v-model="authenticatorCode"
+                            style="width: 100%"
+                            placeholder="Điền mã Google Authentication"
+                          >
+                          </q-input>
+                        </div>
+                        <div class="text-center">
+                        <q-btn
+                          class="bg-positive"
+                          @click="onAuthenticator()"
+                          label="Kết nối sàn"
+                          style=""
+                        />
+                      </div>
+                      </form>
+                    </template>
+              </q-card>
+            </div>
         </div>
-        <h5 class="text-weight-bolder">Đăng nhập vào sàn</h5>
-        <q-banner
-          inline-actions
-          rounded
-          class="bg-positive text-white q-mb-md"
-          style="width: 295px"
-        >
-          Tài khoản của Quý Khách đã dừng Copytrade. Quý Khách vui lòng đăng
-          nhập lại.
-        </q-banner>
-        <template v-if="!isShowAuthenticator">
-          <form class="q-gutter-x-xs q-gutter-y-lg">
-            <div>
-              <q-item-label class="q-mb-sm">Địa chỉ email*</q-item-label>
-              <q-input
-                dark
-                outlined
-                v-model="email"
-                readonly
-                style="width: 295px"
-                placeholder="Điền email"
-              >
-              </q-input>
-            </div>
-            <div>
-              <q-item-label class="q-mb-sm">Mật khẩu*</q-item-label>
-              <q-input
-                dark
-                outlined
-                v-model="password"
-                style="width: 295px"
-                :type="isPwd ? 'password' : 'text'"
-                placeholder="Điền mật khẩu"
-              >
-                <template v-slot:append>
-                  <q-icon
-                    :name="isPwd ? 'visibility_off' : 'visibility'"
-                    class="cursor-pointer"
-                    @click="isPwd = !isPwd"
-                  />
-                </template>
-              </q-input>
-            </div>
-            <q-btn
-              class="full-width bg-positive"
-              @click="onLogin()"
-              label="Đăng nhập sàn"
-              style=""
-            />
-          </form>
-        </template>
-        <template v-else>
-                 <form class="q-gutter-x-xs q-gutter-y-lg">
-            <div>
-              <q-item-label class="q-mb-sm">Mã Google Authentication*</q-item-label>
-              <q-input
-                dark
-                outlined
-                v-model="authenticatorCode"
-                style="width: 295px"
-                placeholder="Điền mã Google Authentication"
-              >
-              </q-input>
-            </div>
-            <q-btn
-              class="full-width bg-positive"
-              @click="onAuthenticator()"
-              label="Đăng nhập sàn"
-              style=""
-            />
-          </form>  
-        </template>
-      </div>
       <router-view />
     </q-page-container>
   </q-layout>

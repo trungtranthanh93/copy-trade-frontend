@@ -8,85 +8,90 @@
         }"
         style=""
       >
-        <h5 class="text-weight-bolder">Cài đặt lệnh theo bot</h5>
         <form class="q-gutter-x-xs q-gutter-y-lg" style="width: 100%">
-          <div class="row justify-around items-center">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
-              <q-select filled v-model="accountType" :options="optionAccount" />
+            <div class="row">
+                <div :class="`${$q.screen.width > 768 ? 'col-6 q-pa-md' : 'col-12'}`">
+                  <q-card class="q-pa-md">
+                    <div class="row q-mb-md">
+                      <div class="col">
+                          <q-label class="text-h5">Cấu hình quản lý vốn </q-label>
+                      </div>
+                      <div class="col text-right">
+                          <DialogSwapMoney />
+                      </div>
+                    </div>
+                    <q-separator />
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Loại tài khoản (*)</q-item-label>
+                      <q-select filled v-model="accountType" :options="optionAccount" />
+                    </div>
+                    <div class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Mức chốt lãi (*)</q-item-label>
+                        <q-select filled v-model="takeProfit" :options="optionsProfit" />
+                    </div>
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Mức cắt lỗ (*)</q-item-label>
+                      <q-select filled v-model="stopLoss" :options="optionsLost" />
+                    </div>
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Hệ số (*)</q-item-label>
+                      <q-select filled v-model="coefficient" :options="optionsCoefficient" />
+                    </div>
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Quản lý vốn (*)</q-item-label>
+                      <q-select filled v-model="capitalMan" :options="optionCapital" />
+                    </div>
+                  </q-card>
+                </div>
+                <div :class="`${$q.screen.width > 768 ? 'col-6 q-pa-md' : 'col-12 q-mt-md'}`">
+                  <q-card class="q-pa-md">
+                    <q-label class="text-h5">Cấu hình phương pháp</q-label>
+                    <q-separator class="q-mt-md" />
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Tính năng sử dụng (*)</q-item-label>
+                      <q-select filled v-model="optionId" :options="optionBotV2" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple" />
+                      <!--<q-toggle :false-value="false" label="Chọn nhiều phương pháp" :true-value="true" color="positive"
+                        v-model="isEnalbeMultiple" />-->
+                    </div>
+                    <div v-if="optionId == 1" class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Chọn phương pháp (*)</q-item-label>
+                      <q-select filled v-model="botId" :options="optionBot" :disable="isEnalbeMultiple" />
+                    </div>
+                    <div v-if="optionId == 2" class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Các phương pháp muốn MIX (*)</q-item-label>
+                      <q-select filled v-model="botId" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                    </div>
+                    <div v-if="optionId == 3 || optionId == 4" class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Các phương pháp sử dụng (*)</q-item-label>
+                        <q-select filled v-model="botId" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                    </div>
+                    <div v-if="optionId == 3 || optionId == 4">
+                        <div class="q-pa-md">
+                            <q-item-label class="q-mb-sm">Số lệnh dương liên tiếp</q-item-label>
+                            <q-select filled v-model="win" :options="optionSelect3"/>
+                        </div>
+                        <div class="q-pa-md">
+                            <q-item-label class="q-mb-sm">Số lệnh âm liên tiếp</q-item-label>
+                            <q-select filled v-model="lose" :options="optionSelect3"/>
+                        </div>
+                    </div>
+
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Phương pháp nâng cao (*)</q-item-label>
+                      <q-select filled v-model="listBotId" multiple max-values="3" :options="optionBot" use-chips stack-label
+                        :disable="!isEnalbeMultiple" />
+                    </div>
+                  </q-card>
+              </div>
             </div>
-            <div style="width: 100%; max-width: 250px">
-              <DialogSwapMoney />
-            </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
-              <q-select filled v-model="takeProfit" :options="optionsProfit" />
-            </div>
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
-              <q-select filled v-model="stopLoss" :options="optionsLost" />
-            </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Hệ số*</q-item-label>
-              <q-select
-                filled
-                v-model="coefficient"
-                :options="optionsCoefficient"
-              />
-            </div>
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Phương pháp*</q-item-label>
-              <q-select
-                filled
-                v-model="botId"
-                :options="optionBot"
-                :disable="isEnalbeMultiple"
-              />
-              <q-toggle
-                :false-value="false"
-                label="Chọn nhiều phương pháp"
-                :true-value="true"
-                color="positive"
-                v-model="isEnalbeMultiple"
-              />
-            </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Phương pháp nâng cao*</q-item-label>
-              <q-select
-                filled
-                v-model="listBotId"
-                multiple
-                max-values="3"
-                :options="optionBot"
-                use-chips
-                stack-label
-                :disable="!isEnalbeMultiple"
-              />
-            </div>
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Số phiên âm liên tiếp*</q-item-label>
-              <q-select
-                filled
-                v-model="modelSession"
-                :options="optionSession"
-                :disable="!isEnalbeMultiple"
-              />
-            </div>
-          </div>
           <div class="row justify-center">
-            <q-btn
-              class="full-width bg-positive q-mb-md"
-              @click="onSetting()"
-              label="Cài đặt"
-              style="width: 100%; max-width: 250px"
-            />
-          </div>
+              <q-btn
+                class="full-width bg-positive q-mb-md"
+                @click="onSetting()"
+                label="Cài đặt"
+                style="width: 100%; max-width: 200px"
+              />
+            </div>
         </form>
       </div>
       <router-view />
@@ -117,6 +122,10 @@ export default {
     const isEnalbeMultiple = ref(false);
     const botId = ref(null);
     const optionBot = ref([]);
+    const capitalMan = ref(null);
+    const optionId = ref(null);
+    const win = ref(null);
+    const lose = ref(null);
     const optionAccount = ref([
       {
         label: 'Tài khoản thực',
@@ -191,6 +200,36 @@ export default {
         });
         return;
       }
+      if (this.optionId == 2 && this.botId.length > 5) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Vui lòng chọn tối đa 5 phương phápp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+
+      if (this.optionId == 3 && this.botId.length > 2) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Vui lòng chọn tối đa 2 phương phápp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+
+      if (this.optionId == 4 && this.botId.length > 3) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Vui lòng chọn tối đa 3 phương phápp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+
       $q.loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'yellow',
@@ -303,6 +342,11 @@ export default {
           };
         });
       } catch (error) {}
+    }
+
+    function Changeoption(val) {
+      console.log(val.value)
+      this.optionId = val.value
     }
     onMounted(async () => {
       accountType.value = optionAccount.value[0];
@@ -660,6 +704,89 @@ export default {
           value: 50,
         },
       ],
+      optionCapital: [
+        {
+          label: 'Đều lệnh',
+          value: 1,
+        },
+        {
+          label: 'Gấp thếp (1-2-4-8)',
+          value: 2,
+        },
+        {
+          label: 'Fibo (1-2-3-5-8)',
+          value: 3,
+        },
+      ],
+      optionBotV2: [
+        {
+          label: 'Phương pháp thủ công',
+          value: 1,
+        },
+        {
+          label: 'Mix phương pháp',
+          value: 2,
+        },
+        {
+          label: 'Tự động đổi phương pháp',
+          value: 3,
+        },
+        {
+          label: 'Wait Signal (Đợi Win, Lose,...)',
+          value: 4,
+        },
+      ],
+      Changeoption,
+      capitalMan,
+      optionId,
+      win,
+      lose,
+      optionSelect3: [
+        {
+          label: '0',
+          value: 0,
+        },
+        {
+          label: '1',
+          value: 1,
+        },
+        {
+          label: '2',
+          value: 2,
+        },
+        {
+          label: '3',
+          value: 3,
+        },
+        {
+          label: '4',
+          value: 4,
+        },
+        {
+          label: '5',
+          value: 5,
+        },
+        {
+          label: '6',
+          value: 6,
+        },
+        {
+          label: '7',
+          value: 7,
+        },
+        {
+          label: '8',
+          value: 8,
+        },
+        {
+          label: '9',
+          value: 9,
+        },
+        {
+          label: '10',
+          value: 10,
+        },
+      ]
     };
   },
 };

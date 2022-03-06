@@ -60,6 +60,11 @@ const routes: RouteRecordRaw[] = [
         name: 'admin-montly-export',
         component: () => import('pages/MontlyExport.vue'),
       },
+      {
+        path: 'telegram-bot',
+        name: 'admin-telegram-bot',
+        component: () => import('pages/ListTelegramBot.vue'),
+      }
     ],
   },
   {
@@ -112,6 +117,11 @@ const routes: RouteRecordRaw[] = [
         name: 'montly-export',
         component: () => import('pages/MontlyExport.vue'),
       },
+      {
+        path: 'telegram-bot',
+        name: 'telegram-bot',
+        component: () => import('pages/ListTelegramBot.vue'),
+      }
     ],
   },
   {

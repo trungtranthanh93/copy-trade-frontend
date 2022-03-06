@@ -14,116 +14,72 @@
           relative-position
         "
       >
-        <template v-if="!$q.platform.is.mobile">
-          <div class="row justify-center">
+        <div class="row">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12'}`">
             <q-card
-              class="bg-blue-grey-14 q-ml-md"
-              style="
-                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
-              "
-            >
-              <q-card-section>
-                <div class="text-h5">Loại tài khoản</div>
-              </q-card-section>
+            class="bg-blue-grey-14 q-ml-md"
+            style="
+              background: linear-gradient(to right, #5c258d, #4389a2);
+            "
+          >
+            <q-card-section>
+              <div class="text-h5"><q-icon name="account_circle" color="white" size="3rem" /> Loại tài khoản</div>
+            </q-card-section>
 
-              <q-card-section :class="'q-pt-none'">
-                {{ accountType }}
-              </q-card-section>
-            </q-card>
+            <q-card-section :class="'q-pt-none txt-18'">
+                Tài khoản <q-badge color="info" text-color="black" :label="accountType" />
+            </q-card-section>
+          </q-card>
+        </div>
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
-              class="bg-blue-grey-14 q-ml-md"
-              style="
-                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
-              "
-            >
-              <q-card-section>
-                <div class="text-h5">Số dư ban đầu</div>
-              </q-card-section>
+            class="bg-blue-grey-14 q-ml-md"
+            style="
+              background: linear-gradient(to right, #134e5e, #71b280);
+            "
+          >
+            <q-card-section>
+              <div class="text-h5"><q-icon name="account_balance_wallet" color="white" size="3rem" /> Số dư ban đầu</div>
+            </q-card-section>
 
-              <q-card-section :class="'q-pt-none'">
-                {{ capital }}
-              </q-card-section>
-            </q-card>
+            <q-card-section :class="'q-pt-none txt-18'">
+              {{ capital }}
+            </q-card-section>
+          </q-card>
+        </div>
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
-              class="q-ml-md"
-              style="
-                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
-              "
-            >
-              <q-card-section>
-                <div class="text-h5">Số dư hiện tại</div>
-              </q-card-section>
+            class="q-ml-md"
+            style="
+              background: linear-gradient(to right, #2bc0e4, #eaecc6);
+            "
+          >
+            <q-card-section>
+              <div class="text-h5"><q-icon name="account_balance" color="white" size="3rem"/> Số dư hiện tại</div>
+            </q-card-section>
 
-              <q-card-section :class="'q-pt-none'">
-                {{ availableBalance }}
-              </q-card-section>
-            </q-card>
+            <q-card-section :class="'q-pt-none txt-18'">
+              {{ availableBalance }}
+            </q-card-section>
+          </q-card>
+        </div>
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
-              class="q-ml-md"
-              style="
-                background-image: url(https://moonata.net/img/livebanner.bc9b94b0.png);
-              "
-            >
-              <q-card-section>
-                <div class="text-h5">Lợi nhuận</div>
-              </q-card-section>
+            class="q-ml-md"
+            style="
+              background: linear-gradient(to right, #4776e6, #8e54e9);
+            "
+          >
+            <q-card-section>
+              <div class="text-h5"><q-icon name="paid" color="white" size="3rem"/> Lợi nhuận</div>
+            </q-card-section>
 
-              <q-card-section :class="'q-pt-none'">
-                {{ incomeAmount }}
-              </q-card-section>
-            </q-card>
-          </div>
-        </template>
-        <template v-else>
-          <div class="q-pa-md row items-start q-gutter-md">
-            <q-card class="my-card">
-              <q-list>
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="orange" name="payment" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Loại tài khoản</q-item-label>
-                    <q-item-label caption>{{ accountType }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="primary" name="local_atm" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Số dư ban đầu</q-item-label>
-                    <q-item-label caption>{{ capital }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="red" name="price_check" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Số dư hiện tại</q-item-label>
-                    <q-item-label caption>{{ availableBalance }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="amber" name="price_change" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Lợi nhuận</q-item-label>
-                    <q-item-label caption>{{ incomeAmount }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card>
-          </div>
-        </template>
+            <q-card-section :class="'q-pt-none txt-18'">
+              {{ incomeAmount }}
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <div class="row items-center q-gutter-md justify-center">
           <q-btn

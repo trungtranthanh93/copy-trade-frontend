@@ -8,75 +8,84 @@
         }"
         style=""
       >
-        <h5 class="text-weight-bolder">Cài đặt lệnh theo bot</h5>
-        <form class="q-gutter-x-xs q-gutter-y-lg" style="width: 100%">
-          <div class="row justify-around items-center">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
-              <q-select filled v-model="accountType" :options="optionAccount" />
+          <form class="q-gutter-x-xs" style="width: 100%">
+            <div class="row">
+              <div class="col">
+                  <q-label class="text-h5">Cài đặt lệnh</q-label>
+              </div>
+              <div class="col text-right">
+                  <DialogSwapMoney />
+              </div>
             </div>
-            <div style="width: 100%; max-width: 250px">
-              <DialogSwapMoney />
+
+            <q-separator class="q-mt-md" />
+            <div class="row q-ma-md justify-center">
+              <div :class="`${$q.screen.width > 768 ? 'col-5' : 'col-12'}`">
+                <q-card class="q-pa-md">
+                    <div class="q-ma-md">
+                        <q-item-label class="q-mb-sm">Loại tài khoản (*)</q-item-label>
+                        <q-select filled v-model="accountType" :options="optionAccount" />
+                      </div>
+                      <div class="q-ma-md">
+                          <q-item-label class="q-mb-sm">Lệnh tối thiểu (*)</q-item-label>
+                          <q-select
+                            filled
+                            v-model="minAmount"
+                            :options="optionsMinAmount"
+                          />
+                        </div>
+                        <div class="q-ma-md">
+                            <q-item-label class="q-mb-sm">Mức chốt lãi (*)</q-item-label>
+                            <q-select filled v-model="takeProfit" :options="optionsProfit" />
+                          </div>
+                          <div class="q-ma-md">
+                              <q-item-label class="q-mb-sm">Hệ số (*)</q-item-label>
+                              <q-select
+                                filled
+                                v-model="coefficient"
+                                :options="optionsCoefficient"
+                              />
+                            </div>
+                </q-card>
+              </div>
+              <div v-bind:class="`${$q.screen.width > 768 ? 'col-5 q-ml-md' : 'col-12 q-mt-md'}`">
+                <q-card class="q-pa-md">
+                    <div class="q-ma-md">
+                        <q-item-label class="q-mb-sm">Chọn các chuyên gia (*)</q-item-label>
+                        <q-select
+                          filled
+                          v-model="listMasterId"
+                          multiple
+                          :options="optionMaster"
+                          use-chips
+                          stack-label
+                        />
+                      </div>
+                      <div class="q-ma-md">
+                          <q-item-label class="q-mb-sm">Lệnh tối đa (*)</q-item-label>
+                          <q-select
+                            filled
+                            v-model="maxAmount"
+                            :options="optionsMaxAmount"
+                          />
+                        </div>
+                        <div class="q-ma-md">
+                            <q-item-label class="q-mb-sm">Mức cắt lỗ (*)</q-item-label>
+                            <q-select filled v-model="stopLoss" :options="optionsLost" />
+                          </div>
+                </q-card>
+              </div>
             </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
-              <q-select
-                filled
-                v-model="minAmount"
-                :options="optionsMinAmount"
-              />
-            </div>
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
-              <q-select
-                filled
-                v-model="maxAmount"
-                :options="optionsMaxAmount"
-              />
-            </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
-              <q-select filled v-model="takeProfit" :options="optionsProfit" />
-            </div>
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
-              <q-select filled v-model="stopLoss" :options="optionsLost" />
-            </div>
-          </div>
-          <div class="row justify-around">
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Hệ số*</q-item-label>
-              <q-select
-                filled
-                v-model="coefficient"
-                :options="optionsCoefficient"
-              />
-            </div>
-            <div style="width: 100%; max-width: 250px">
-              <q-item-label class="q-mb-sm">Chọn các chuyên gia*</q-item-label>
-              <q-select
-                filled
-                v-model="listMasterId"
-                multiple
-                :options="optionMaster"
-                use-chips
-                stack-label
-              />
-            </div>
-          </div>
-          <div class="row justify-center">
-            <q-btn
-              class="full-width bg-positive q-mb-md"
-              @click="onSetting()"
-              label="Cài đặt"
-              style="width: 100%; max-width: 250px"
-            />
-          </div>
-        </form>
+            <div class="row justify-center">
+                <q-btn
+                  class="full-width bg-positive q-ma-md"
+                  @click="onSetting()"
+                  label="Cài đặt"
+                  style="width: 100%; max-width: 250px"
+                />
+              </div>
+          </form>
+
       </div>
       <router-view />
     </q-page-container>

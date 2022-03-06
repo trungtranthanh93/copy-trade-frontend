@@ -2,55 +2,66 @@
   <!-- <q-layout container style="height: 600px"> -->
   <q-layout class="">
     <q-page-container class="window-height">
-      <div
-        :class="{
-          'q-pa-md fit row wrap justify-center items-end rounded-borders dark absolute-center': true,
-          'content-center': !$q.platform.is.mobile,
-        }"
-        style="max-width: 428px"
-      >
-        <h5 class="text-weight-bolder">Màn hình cài đặt lệnh</h5>
-        <form
-          class="q-gutter-x-xs q-gutter-y-lg"
-          style="max-width: 295px; width: 100%"
+      <q-card class="absolute-center q-pa-md" :style="{width: $q.screen.width > 768 ? '60%' : '95%'}">
+          <div class="row q-mb-md">
+              <div class="col">
+                  <q-label class="text-h5">Cài đặt lệnh</q-label>
+              </div>
+              <div class="col text-right">
+                  <DialogSwapMoney />
+              </div>
+            </div>
+          <q-separator class="q-mt-md" />
+          <div
+          :class="{
+            'q-pa-md fit row wrap justify-center items-end rounded-borders dark': true,
+            'content-center': !$q.platform.is.mobile,
+          }"
+          style=""
         >
-          <div>
-            <q-item-label class="q-mb-sm">Loại tài khoản*</q-item-label>
-            <q-select filled v-model="accountType" :options="optionAccount" />
-            <DialogSwapMoney />
-          </div>
-          <div>
-            <q-item-label class="q-mb-sm">Lệnh tối thiểu*</q-item-label>
-            <q-select filled v-model="minAmount" :options="optionsMinAmount" />
-          </div>
-          <div>
-            <q-item-label class="q-mb-sm">Lệnh tối đa*</q-item-label>
-            <q-select filled v-model="maxAmount" :options="optionsMaxAmount" />
-          </div>
-          <div>
-            <q-item-label class="q-mb-sm">Mức chốt lãi*</q-item-label>
-            <q-select filled v-model="takeProfit" :options="optionsProfit" />
-          </div>
-          <div>
-            <q-item-label class="q-mb-sm">Mức cắt lỗ*</q-item-label>
-            <q-select filled v-model="stopLoss" :options="optionsLost" />
-          </div>
-          <div>
-            <q-item-label class="q-mb-sm">Hệ số*</q-item-label>
-            <q-select
-              filled
-              v-model="coefficient"
-              :options="optionsCoefficient"
-            />
-          </div>
-          <q-btn
-            class="full-width bg-positive"
-            @click="onSetting()"
-            label="Cài đặt"
-            style=""
-          />
-        </form>
-      </div>
+          <form
+            class="q-gutter-x-xs q-gutter-y-lg"
+            style="width: 100%"
+          >
+            <div>
+              <q-item-label class="q-mb-sm">Loại tài khoản (*)</q-item-label>
+              <q-select filled v-model="accountType" :options="optionAccount" />
+            </div>
+            <div>
+              <q-item-label class="q-mb-sm">Lệnh tối thiểu (*)</q-item-label>
+              <q-select filled v-model="minAmount" :options="optionsMinAmount" />
+            </div>
+            <div>
+              <q-item-label class="q-mb-sm">Lệnh tối đa (*)</q-item-label>
+              <q-select filled v-model="maxAmount" :options="optionsMaxAmount" />
+            </div>
+            <div>
+              <q-item-label class="q-mb-sm">Mức chốt lãi (*)</q-item-label>
+              <q-select filled v-model="takeProfit" :options="optionsProfit" />
+            </div>
+            <div>
+              <q-item-label class="q-mb-sm">Mức cắt lỗ (*)</q-item-label>
+              <q-select filled v-model="stopLoss" :options="optionsLost" />
+            </div>
+            <div>
+              <q-item-label class="q-mb-sm">Hệ số (*)</q-item-label>
+              <q-select
+                filled
+                v-model="coefficient"
+                :options="optionsCoefficient"
+              />
+            </div>
+            <div class="text-center">
+                <q-btn
+                class="bg-positive"
+                @click="onSetting()"
+                label="Cài đặt"
+                style="width: 200px"
+              />
+            </div>
+          </form>
+        </div>
+      </q-card>
       <router-view />
     </q-page-container>
   </q-layout>

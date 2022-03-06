@@ -17,7 +17,45 @@
         <q-list padding>
           <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
           <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
-          <MenuItem :key="menuLinks[2].title" v-bind="menuLinks[2]" />
+          <q-expansion-item :content-inset-level="0.5">
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="smart_toy" color="orange" />
+              </q-item-section>
+              <q-item-section>Auto Trade</q-item-section>
+            </template>
+            <MenuItem
+              title= 'Bot có sẵn'
+              caption= ''
+              icon= 'auto_fix_high'
+              iconColor= 'orange'
+              link= '/user/setting-bot'
+            />
+            <q-expansion-item :content-inset-level="0.5">
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="telegram" color="orange" />
+              </q-item-section>
+              <q-item-section>Bot Telegram</q-item-section>
+            </template>
+            <MenuItem
+              title= 'Tham gia nhóm'
+              caption= ''
+              icon= 'add_box'
+              iconColor= 'orange'
+              link= '/user/telegram-bot'
+            />
+            <MenuItem
+              title= 'Cài đặt'
+              caption= ''
+              icon= 'settings_suggest'
+              iconColor= 'orange'
+              link= '/user/setting-bot'
+            />
+            </q-expansion-item>
+
+          </q-expansion-item>
+          <q-separator/>
           <!-- <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
@@ -48,36 +86,36 @@ import MenuItem from 'components/MenuItem.vue';
 import { useQuasar } from 'quasar';
 const linksData = [
   {
-    title: 'Copy Trader',
+    title: 'Copy Trade',
     caption: 'Đánh lệnh theo chuyên gia',
     icon: 'account_balance',
     iconColor: 'orange',
     link: '/user/infomation-copy-trader',
-    separator: false,
+    separator: true,
   },
   {
-    title: 'Group Trader',
+    title: 'Group Trade',
     caption: 'Đánh lệnh theo nhóm chuyên gia',
     icon: 'groups',
     iconColor: 'orange',
     link: '/user/infomation-copy-group',
-    separator: false,
+    separator: true,
   },
   {
-    title: 'Auto Trader',
+    title: 'Auto Trade',
     caption: 'Đánh lệnh theo Bot',
     icon: 'smart_toy',
     iconColor: 'orange',
     link: '/user/information-bot',
-    separator: false,
+    separator: true,
   },
   {
-    title: 'Đăng nhập sàn',
+    title: 'Kết nối sàn',
     caption: 'Đăng nhập vào sàn để đồng bộ lệnh đánh',
     icon: 'login',
     iconColor: 'orange',
     link: '/user/login-exchange',
-    separator: false,
+    separator: true,
   },
   {
     title: 'Thống kê',
@@ -85,7 +123,7 @@ const linksData = [
     icon: 'analytics',
     iconColor: 'orange',
     link: '/user/montly-export',
-    separator: false,
+    separator: true,
   },
   {
     title: 'Đăng xuất',
@@ -93,7 +131,7 @@ const linksData = [
     icon: 'logout',
     iconColor: 'orange',
     link: '/logout',
-    separator: false,
+    separator: true,
   },
   {
     title: 'Bot Vip 30',
@@ -109,7 +147,7 @@ const linksData = [
     icon: 'stars',
     iconColor: 'orange',
     link: '/bot-vip-50',
-    separator: false,
+    separator: true,
   },
   {
     title: 'Bot Vip 60',
@@ -117,7 +155,7 @@ const linksData = [
     icon: 'stars',
     iconColor: 'orange',
     link: '/bot-vip-60',
-    separator: false,
+    separator: true,
   },
 ];
 export default {

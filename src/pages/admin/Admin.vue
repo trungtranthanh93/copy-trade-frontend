@@ -24,13 +24,51 @@
               <q-item-section avatar>
                 <q-icon name="groups" color="orange" />
               </q-item-section>
-              <q-item-section>Copy Trader</q-item-section>
+              <q-item-section>Copy Trade</q-item-section>
             </template>
             <MenuItem
               v-for="link in groupLinks"
               :key="link.title"
               v-bind="link"
             />
+          </q-expansion-item>
+          <q-expansion-item :content-inset-level="0.5">
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="smart_toy" color="orange" />
+              </q-item-section>
+              <q-item-section>Auto Trade</q-item-section>
+            </template>
+            <MenuItem
+              title= 'Bot có sẵn'
+              caption= ''
+              icon= 'auto_fix_high'
+              iconColor= 'orange'
+              link= '/admin/setting-bot'
+            />
+            <q-expansion-item :content-inset-level="0.5">
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="telegram" color="orange" />
+              </q-item-section>
+              <q-item-section>Bot Telegram</q-item-section>
+            </template>
+            <MenuItem
+              title= 'Tham gia nhóm'
+              caption= ''
+              icon= 'add_box'
+              iconColor= 'orange'
+              link= '/admin/telegram-bot'
+            />
+            <MenuItem
+              title= 'Cài đặt'
+              caption= ''
+              icon= 'settings_suggest'
+              iconColor= 'orange'
+              link= '/admin/setting-bot'
+            />
+            </q-expansion-item>
+
           </q-expansion-item>
           <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
         </q-list>
@@ -50,14 +88,14 @@ import { api } from 'boot/axios';
 import { useQuasar } from 'quasar';
 import _ from 'lodash';
 const linksData = [
-  {
-    title: 'Auto Trader',
-    caption: 'Đánh lệnh theo Bot',
-    icon: 'smart_toy',
-    iconColor: 'orange',
-    link: '/admin/information-bot',
-    separator: false,
-  },
+  // {
+  //   title: 'Ví',
+  //   caption: '',
+  //   icon: 'account_balance_wallet',
+  //   iconColor: 'orange',
+  //   link: '/admin/information-bot',
+  //   separator: false,
+  // },
   {
     title: 'Thống kê',
     caption: 'Thống kê lãi từng ngày trong tháng',
@@ -67,8 +105,8 @@ const linksData = [
     separator: false,
   },
   {
-    title: 'Đăng nhập sàn',
-    caption: 'Đăng nhập vào sàn để đồng bộ lệnh đánh',
+    title: 'Kết nối sàn',
+    caption: 'Kết nối vào sàn để đồng bộ lệnh đánh',
     icon: 'login',
     iconColor: 'orange',
     link: '/admin/login-exchange',
@@ -83,6 +121,7 @@ const linksData = [
     separator: false,
   },
 ];
+
 export default {
   setup() {
     const $q = useQuasar();
@@ -96,7 +135,7 @@ export default {
       let data = responseContent.data;
       let links = [
         {
-          title: 'Copy Trader',
+          title: 'Solo',
           caption: 'Đánh lệnh theo chuyên gia',
           icon: 'person',
           iconColor: 'orange',
@@ -117,6 +156,25 @@ export default {
     }
     onBeforeMount(getListGroup);
 
+    let autoTradeLinks =  [
+      {
+        title: 'Bot có sẵn',
+        caption: '',
+        icon: 'settings',
+        iconColor: 'orange',
+        link: '/',
+        separator: false
+      },
+      {
+        title: 'Bot Telegram',
+        caption: '',
+        icon: 'telegram',
+        iconColor: 'orange',
+        link: '/',
+        separator: false
+      }
+    ];
+
     return {
       leftDrawerOpen: ref(false),
       toggleLeftDrawer() {
@@ -124,7 +182,9 @@ export default {
       },
       menuLinks,
       groupLinks,
+      autoTradeLinks,
       drawerLeft: ref($q.screen.width > 500),
+
     };
   },
 

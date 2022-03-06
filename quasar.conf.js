@@ -94,20 +94,20 @@ module.exports = configure(function(ctx) {
                     /* look at QuasarConfOptions from the API card */
                 },
                 brand: {
-                    primary: '#6200EE',
+                    primary: '#DD7D39',
                     primaryVariant: '#3700B3',
                     secondary:'#03DAC6',
                     secondaryVariant: '#018786',
                     accent:'#BB86FC',
                     // accent: '#9C27B0',
 
-                    dark: '#011022',
-                    // màu button 
+                    dark: '#162b4d',
+                    // màu button
                     positive: '#D86908',
                     negative1: '#21BA45',
                     negative:'#C10015',
                     info: '#31CCEC',
-                    
+
                 },
                 dark: true
             },

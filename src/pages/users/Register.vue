@@ -1,46 +1,30 @@
 <template>
   <!-- <q-layout container style="height: 600px"> -->
   <q-layout class="justify-center">
-    <q-page-container class="window-height">
-      <div
-        class="
-          q-pa-md
-          fit
-          row
-          wrap
-          justify-center
-          items-end
-          content-center
-          rounded-borders
-          dark
-          fixed-center
-          relative-position
-        "
-        style="max-width: 428px"
-      >
-        <div>
-          <img class="absolute-top-left" src="logo.png" style="height: 80px" />
-        </div>
-        <h5 class="text-weight-bolder">Tạo tài khoản BossGroup</h5>
+    <q-page-container class="window-height relative-position">
+      <div class="row justify-center">
+        <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-10 q-ma-md'}`" :style="$q.screen.width > 768 ? 'margin-top: 10%' : 'margin-top: 50%'">
+            <div class="text-center">
+                <img src="logo.png" style="height: 80px" />
+              </div>
+          <q-card class="q-pa-md">
         <form class="q-gutter-x-xs q-gutter-y-lg">
           <div>
-            <q-item-label class="q-mb-sm">Địa chỉ email*</q-item-label>
+            <q-item-label class="q-mb-sm">Địa chỉ email (*)</q-item-label>
             <q-input
               dark
               outlined
               v-model="email"
-              style="width: 295px"
               placeholder="Điền email"
             >
             </q-input>
           </div>
           <div>
-            <q-item-label class="q-mb-sm">Mật khẩu*</q-item-label>
+            <q-item-label class="q-mb-sm">Mật khẩu (*)</q-item-label>
             <q-input
               dark
               outlined
               v-model="password"
-              style="width: 295px"
               :type="isPwd ? 'password' : 'text'"
               placeholder="Điền mật khẩu"
             >
@@ -66,6 +50,8 @@
             >
           </div>
         </form>
+        </q-card>
+      </div>
       </div>
       <router-view />
     </q-page-container>
