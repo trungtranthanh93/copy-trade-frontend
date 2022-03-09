@@ -4,12 +4,12 @@
     <q-page-container class="window-height relative-position">
         <div class="row justify-center">
             <div
-            class="col-6 q-ma-md"
+            :class="`${$q.screen.width > 768 ? 'col-6 q-ma-md' : 'col-12 q-pa-md '}`"
           >
               <q-card class="q-pa-md">
                   <q-label class="text-h5">Kết nối vào sàn</q-label>
                   <q-separator class="q-mt-md"/>
-                  <div class="text-center">
+                  <div class="text-center q-ma-md">
                       <img src="logo.png" style="height: 80px" />
                     </div>
                     <q-banner

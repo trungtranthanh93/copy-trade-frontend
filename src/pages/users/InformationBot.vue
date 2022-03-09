@@ -15,7 +15,7 @@
         "
       >
       <div class="row">
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12'}`">
             <q-card
             class="bg-blue-grey-14 q-ml-md"
             style="
@@ -31,7 +31,7 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
             class="bg-blue-grey-14 q-ml-md"
             style="
@@ -47,7 +47,7 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
             class="q-ml-md"
             style="
@@ -59,11 +59,11 @@
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
-              {{ availableBalance }}
+              {{ availableBalance }}$
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
             class="q-ml-md"
             style="
@@ -80,65 +80,7 @@
           </q-card>
         </div>
       </div>
-<!--
-        <template v-if="!$q.platform.is.mobile">
-          <div class="row">
 
-
-
-
-          </div>
-        </template>
-        <template v-else>
-          <div class="q-pa-md row items-start q-gutter-md">
-            <q-card class="my-card">
-              <q-list>
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="orange" name="payment" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Loại tài khoản</q-item-label>
-                    <q-item-label caption>{{ accountType }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="primary" name="local_atm" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Số dư ban đầu</q-item-label>
-                    <q-item-label caption>{{ capital }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="red" name="price_check" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Số dư hiện tại</q-item-label>
-                    <q-item-label caption>{{ availableBalance }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable>
-                  <q-item-section avatar>
-                    <q-icon color="amber" name="price_change" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label>Lợi nhuận</q-item-label>
-                    <q-item-label caption>{{ incomeAmount }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card>
-          </div>
-        </template> -->
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <div class="row items-center q-gutter-md justify-center">
           <q-btn

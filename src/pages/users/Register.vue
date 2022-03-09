@@ -4,7 +4,7 @@
     <q-page-container class="window-height relative-position">
       <div class="row justify-center">
         <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-10 q-ma-md'}`" :style="$q.screen.width > 768 ? 'margin-top: 10%' : 'margin-top: 50%'">
-            <div class="text-center">
+            <div class="text-center q-ma-md">
                 <img src="logo.png" style="height: 80px" />
               </div>
           <q-card class="q-pa-md">
