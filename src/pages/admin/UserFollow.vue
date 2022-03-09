@@ -15,7 +15,7 @@
         "
       >
         <div>
-          <img class="relative-top-left" src="logo.png" style="height: 80px" />
+          <!-- <img class="relative-top-left" src="logo.png" style="height: 80px" /> -->
         </div>
         <div class="row items-center q-gutter-md justify-left">
           <q-btn

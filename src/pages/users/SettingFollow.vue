@@ -2,8 +2,8 @@
   <!-- <q-layout container style="height: 600px"> -->
   <q-layout class="">
     <q-page-container class="window-height">
-      <q-card class="absolute-center q-pa-md" :style="{width: $q.screen.width > 768 ? '60%' : '95%'}">
-          <div class="row q-mb-md">
+      <q-card class="q-pa-md mr-auto" :style="{width: $q.screen.width > 768 ? '60%' : '97%'}">
+          <div class="row q-mt-md">
               <div class="col">
                   <q-label class="text-h5">Cài đặt lệnh</q-label>
               </div>
@@ -685,4 +685,8 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.mr-auto {
+  margin: 3% auto;
+}
+</style>

@@ -3,8 +3,8 @@
     <q-header reveal elevated class="bg-dark">
       <q-toolbar>
         <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
-        <div v-if="!$q.platform.is.mobile">
-          <img class="absolute-top-right" src="logo.png" style="height: 60px" />
+        <div>
+          <img class="absolute-top-right logo" src="logo.png" :style="`${$q.screen.width > 768 ? 'height: 60px; margin-right: 1%' : 'height: 60px; margin-right: 3%'}`" />
         </div>
       </q-toolbar>
     </q-header>
@@ -15,9 +15,9 @@
       :breakpoint="500"
     >
       <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
-        <div v-if="$q.platform.is.mobile">
-          <img class="top-left" src="logo.png" style="height: 40px" />
-        </div>
+        <!-- <div v-if="$q.platform.is.mobile">
+          <img class="top-left" src="logo.png" style="height: 40px; margin-right: 2%;" />
+        </div> -->
         <q-list padding>
           <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>

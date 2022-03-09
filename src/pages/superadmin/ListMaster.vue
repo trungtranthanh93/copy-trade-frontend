@@ -4,17 +4,17 @@
     <q-header reveal elevated class="bg-dark">
       <q-toolbar>
         <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
-        <div v-if="!$q.platform.is.mobile">
-          <img class="absolute-top-right" src="logo.png" style="height: 60px" />
+        <div>
+          <img class="absolute-top-right" src="logo.png" :style="`${$q.screen.width > 768 ? 'height: 60px; margin-right: 1%' : 'height: 60px; margin-right: 3%'}`" />
         </div>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="drawerLeft" :width="250" :breakpoint="500">
       <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
-        <div v-if="$q.platform.is.mobile">
+        <!-- <div v-if="$q.platform.is.mobile">
           <img class="top-left" src="logo.png" style="height: 40px" />
-        </div>
+        </div> -->
         <q-list padding>
           <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
         </q-list>

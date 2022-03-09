@@ -15,7 +15,7 @@
         "
       >
         <div class="row">
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
             class="bg-blue-grey-14 q-ml-md"
             style="
@@ -31,7 +31,7 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
             class="bg-blue-grey-14 q-ml-md"
             style="
@@ -47,7 +47,7 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
             class="q-ml-md"
             style="
@@ -63,7 +63,7 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-3">
+        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
             <q-card
             class="q-ml-md"
             style="

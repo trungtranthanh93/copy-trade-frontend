@@ -98,8 +98,7 @@
                             <q-separator class="q-mt-md" />
                 <q-card-section>
                       <div class="col">
-                          <q-input outlined input-class="text-right" type="text" v-model="money" label="Nhập số % vốn vào lệnh" lazy-rules
-                            style="width: 280px;" suffix="%" :rules="[
+                          <q-input outlined input-class="text-right" type="text" v-model="money" label="Nhập số % vốn vào lệnh" lazy-rules suffix="%" :rules="[
                                           (val) =>
                                             (val !== null && val !== '') || 'Hãy điền số % vốn đánh',
                                           (val) => (val >=1 && val <= 30) || 'Hãy điền số % vốn từ 1 đến 30',
