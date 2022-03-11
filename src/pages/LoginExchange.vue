@@ -96,7 +96,7 @@
 <script>
 import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted, onBeforeMount } from 'vue';
-import { api } from 'src/boot/axios-connect-bo';
+import { api } from 'src/boot/axios';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -114,6 +114,90 @@ export default {
       return emailPattern.test(email.value) || 'Hãy nhập đúng định dạng email';
     }
 
+    // async function onLogin() {
+    //   if(!email.value) {
+    //     $q.notify({
+    //       color: 'negative',
+    //       position: 'top',
+    //       message: 'Hãy điền email!',
+    //       icon: 'report_problem',
+    //     });
+    //     return;
+    //   }
+    //   if(!isValidEmail()){
+    //     $q.notify({
+    //       color: 'negative',
+    //       position: 'top',
+    //       message: 'Email không đúng định dạng!',
+    //       icon: 'report_problem',
+    //     });
+    //     return;
+    //   }
+    //   if(!password.value){
+    //     $q.notify({
+    //       color: 'negative',
+    //       position: 'top',
+    //       message: 'Hãy điền password!',
+    //       icon: 'report_problem',
+    //     });
+    //     return;
+    //   }
+    //   $q.loading.show({
+    //     spinner: QSpinnerFacebook,
+    //     spinnerColor: 'yellow',
+    //     spinnerSize: 140,
+    //     backgroundColor: 'purple',
+    //     message: 'Đang xử lý ....',
+    //     messageColor: 'black',
+    //   });
+    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    //   try {
+    //     let data = {
+    //       email: email.value,
+    //       password: password.value,
+    //     };
+    //     let token = localStorage.getItem('jwt');
+    //     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    //     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    //     let responseContent = await api.post('/users/login-pocinex', data);
+    //     if (responseContent.status !== 200 && responseContent.status !== 201) {
+    //       throw new Error();
+    //     }
+    //     $q.notify({
+    //       color: 'green-4',
+    //       textColor: 'white',
+    //       icon: 'cloud_done',
+    //       message: 'Hãy điền tiếp mã Authenticator ',
+    //       position: 'top',
+    //     });
+    //     isShowAuthenticator.value = true;
+    //     authenticatorCode.value='';
+    //     $q.loading.value = false;
+    //   } catch (error) {
+    //     if (
+    //       error.response.status === 400 &&
+    //       error.data.d?.err_code === 'user.limit.exceed'
+    //     ) {
+    //       $q.notify({
+    //         color: 'negative',
+    //         position: 'top',
+    //         message:
+    //           'Đang có hơn 1000 người vào hệ thống . Vui lòng đăng nhập lại sau vài phút',
+    //         icon: 'report_problem',
+    //       });
+    //       $router.push('/user/setting-follow');
+    //     }
+    //     $q.notify({
+    //       color: 'negative',
+    //       position: 'top',
+    //       message: 'Đăng nhập thất bại ! Vui lòng đăng nhập lại',
+    //       icon: 'report_problem',
+    //     });
+    //     isShowAuthenticator.value = false;
+    //   } finally {
+    //     $q.loading.hide();
+    //   }
+    // }
     async function onLogin() {
       if(!email.value) {
         $q.notify({
@@ -170,29 +254,50 @@ export default {
           message: 'Hãy điền tiếp mã Authenticator ',
           position: 'top',
         });
+        localStorage.setItem('d_t', responseContent.data.d.t);
         isShowAuthenticator.value = true;
         authenticatorCode.value='';
         $q.loading.value = false;
       } catch (error) {
         if (
           error.response.status === 400 &&
-          error.data.d?.err_code === 'user.limit.exceed'
+          error.response.data.message === 'user.inactiveOrNotExist'
         ) {
           $q.notify({
             color: 'negative',
             position: 'top',
             message:
-              'Đang có hơn 1000 người vào hệ thống . Vui lòng đăng nhập lại sau vài phút',
+              'Tài khoản không có trong hệ thống',
             icon: 'report_problem',
           });
-          $router.push('/user/setting-follow');
+        } else if (
+          error.response.status === 400 &&
+          error.response.data.message === 'passwordEmail.Incorrect'
+        ) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Email hoặc mật khẩu không đúng!',
+            icon: 'report_problem',
+          });
+        } else if (
+          error.response.status === 400 &&
+          error.response.data.message === '2fa.notSetting'
+        ) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Mã 2FA chưa được setting!',
+            icon: 'report_problem',
+          });
+        } else {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Lỗi hệ thống! Vui lòng liên hệ admin.',
+            icon: 'report_problem',
+          });
         }
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Đăng nhập thất bại ! Vui lòng đăng nhập lại',
-          icon: 'report_problem',
-        });
         isShowAuthenticator.value = false;
       } finally {
         $q.loading.hide();
@@ -228,7 +333,8 @@ export default {
       try {
         let dataAuthenticatorCode = {
           email: email.value,
-          authentication: authenticatorCode.value,
+          code: authenticatorCode.value,
+          token: localStorage.getItem('d_t')
         };
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -247,26 +353,27 @@ export default {
           message: 'Đăng nhập sàn thành công!',
           position: 'top',
         });
+        localStorage.removeItem('d_t')
         $q.loading.value = false;
         // tslint:disable-next-line:no-floating-promises
         $router.back();
       } catch (error) {
         if(error.response.data.message === 'Invalid.2faCode') {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message:
-            'Mã Authenticator không đúng định dạng! Vui lòng nhập mã gồm 6 kí tự',
-          icon: 'report_problem',
-        });
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message:
+              'Mã Authenticator không đúng định dạng! Vui lòng nhập mã gồm 6 kí tự',
+            icon: 'report_problem',
+          });
         } else {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message:
-            'Mã Authenticator bị sai! Vui lòng nhập lại mã Authenticator',
-          icon: 'report_problem',
-        });
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message:
+              'Mã Authenticator bị sai! Vui lòng nhập lại mã Authenticator',
+            icon: 'report_problem',
+          });
         }
       } finally {
         $q.loading.hide();
