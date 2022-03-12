@@ -49,7 +49,7 @@
             <MenuItem :key="menuLinks[7].title" v-bind="menuLinks[7]" />
             <MenuItem :key="menuLinks[8].title" v-bind="menuLinks[8]" />
           </q-expansion-item> -->
-          <MenuItem title='Ví tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/user/wallet' />
+          <MenuItem title='Chuyển tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/user/wallet' />
           <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
@@ -111,14 +111,14 @@
       link: '/user/login-exchange',
       separator: true,
     },
-    {
-      title: 'Thống kê',
-      caption: 'Thống kê lãi từng ngày trong tháng',
-      icon: 'analytics',
-      iconColor: 'orange',
-      link: '/user/montly-export',
-      separator: true,
-    },
+    // {
+    //   title: 'Thống kê',
+    //   caption: 'Thống kê lãi từng ngày trong tháng',
+    //   icon: 'analytics',
+    //   iconColor: 'orange',
+    //   link: '/user/montly-export',
+    //   separator: true,
+    // },
     {
       title: 'Đăng xuất',
       caption: '',

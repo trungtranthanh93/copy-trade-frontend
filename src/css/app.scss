@@ -1,6 +1,8 @@
 // app global css in SCSS form
 body.body--dark {
-    background: #011022
+    background: #011022;
+    font-family: Source Sans Pro,sans-serif!important;
+    font-weight: 400;
 }
 body.body--dark .q-header {
     height: 62px;

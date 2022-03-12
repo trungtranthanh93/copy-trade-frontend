@@ -26,7 +26,7 @@
 
 import { api } from 'boot/axios';
 // import { useRouter } from 'vue-router';
-// import { useQuasar, QSpinnerFacebook } from 'quasar';
+// import { useQuasar, QSpinnerIos } from 'quasar';
 import { ref, onMounted } from 'vue';
 export default {
   setup() {

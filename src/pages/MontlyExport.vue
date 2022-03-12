@@ -1,5 +1,5 @@
 <template>
-  <div class="col-8 q-pa-md">
+  <div class="col-8">
       <q-card class="q-pa-md">
           <q-label class="text-h6">Thống kê lãi tháng {{monthly + 1}}</q-label>
           <q-separator class="q-mt-md" />
@@ -8,7 +8,7 @@
          </div>
 
           <div class="row justify-center">
-            <div style="display: flex; max-width: 1400px; width: 90%;">
+            <div style="display: flex; max-width: 1400px; width: 100%;">
               <q-calendar-month
                 ref="calendar"
                 locale="vi-vn"

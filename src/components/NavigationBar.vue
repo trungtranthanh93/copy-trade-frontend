@@ -5,17 +5,17 @@
         no-caps
         class="button bg-positive"
         style="margin: 2px;"
-        @click="$emit('today')"
+        @click="$emit('prev')"
       >
-        <q-icon name="event" /> Hôm nay
+        <q-icon name="skip_previous" /> Tháng Trước
       </q-btn>
       <q-btn
         no-caps
         class="button bg-positive"
         style="margin: 2px;"
-        @click="$emit('prev')"
+        @click="$emit('today')"
       >
-        <q-icon name="skip_previous" /> Tháng Trước
+        <q-icon name="event" /> Hôm nay
       </q-btn>
       <q-btn
         no-caps

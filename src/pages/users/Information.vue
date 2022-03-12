@@ -15,7 +15,21 @@
         "
       >
         <div class="row">
-          <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12'}`">
+            <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
+                <q-card class="q-ml-md" style="
+                          background: linear-gradient(to right, #dd5e89, #f7bb97);
+                        ">
+                  <q-card-section>
+                    <div class="text-h5">
+                      <q-icon name="paid" color="white" size="3rem" /> Biệt danh</div>
+                  </q-card-section>
+
+                  <q-card-section :class="'q-pt-none txt-18'">
+                    {{ nickName ? nickName : '' }}
+                  </q-card-section>
+                </q-card>
+              </div>
+          <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
             <q-card class="q-ml-md" style="
                       background: linear-gradient(to right, #5c258d, #4389a2);
                     ">
@@ -44,7 +58,7 @@
               </q-card-section>
             </q-card>
           </div>
-          <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
+          <div :class="`${$q.screen.width > 768 ? 'col-4  q-mt-md' : 'col-12 q-mt-md'}`">
             <q-card class="q-ml-md" style="
                       background: linear-gradient(to right, #2bc0e4, #eaecc6);
                     ">
@@ -54,7 +68,7 @@
               </q-card-section>
 
               <q-card-section :class="'q-pt-none txt-18'">
-                {{ availableBalance }}
+                {{ availableBalance }}$
               </q-card-section>
             </q-card>
           </div>
@@ -74,25 +88,11 @@
           </div>
           <div :class="`${$q.screen.width > 768 ? 'col-4 q-mt-md' : 'col-12 q-mt-md'}`">
             <q-card class="q-ml-md" style="
-                      background: linear-gradient(to right, #dd5e89, #f7bb97);
-                    ">
-              <q-card-section>
-                <div class="text-h5">
-                  <q-icon name="paid" color="white" size="3rem" /> Nickname</div>
-              </q-card-section>
-
-              <q-card-section :class="'q-pt-none txt-18'">
-                {{ nickName ? nickName : '' }}
-              </q-card-section>
-            </q-card>
-          </div>
-          <div :class="`${$q.screen.width > 768 ? 'col-4 q-mt-md' : 'col-12 q-mt-md'}`">
-            <q-card class="q-ml-md" style="
                       background: linear-gradient(to right, #2980b9, #2c3e50);
                     ">
               <q-card-section>
                 <div class="text-h5">
-                  <q-icon name="paid" color="white" size="3rem" /> Lệnh thắng thua</div>
+                  <q-icon name="flag" color="white" size="3rem" /> Lệnh thắng thua</div>
               </q-card-section>
 
               <q-card-section :class="'q-pt-none txt-18'">
@@ -159,7 +159,7 @@ const columns = [
 
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-import { useQuasar, date, QSpinnerFacebook } from 'quasar';
+import { useQuasar, date, QSpinnerIos } from 'quasar';
 import { ref, onMounted,onBeforeMount  } from 'vue';
 export default {
   setup() {
@@ -327,7 +327,7 @@ export default {
     }
     onMounted(async () => {
       $q.loading.show({
-        spinner: QSpinnerFacebook,
+        spinner: QSpinnerIos,
         spinnerColor: 'yellow',
         spinnerSize: 140,
         backgroundColor: 'purple',
@@ -401,8 +401,9 @@ export default {
   },
 };
 </script>
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 250px
+<style scoped>
+    .txt-18 {
+      font-size: 18px;
+      font-weight: 500
+    }
 </style>

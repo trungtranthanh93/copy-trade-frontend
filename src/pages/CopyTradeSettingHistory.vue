@@ -21,10 +21,10 @@ const columns = [
 const rows = [
 ]
 
-import { useQuasar, QSpinnerFacebook, date } from 'quasar';
-import { ref, onBeforeMount, onMounted } from 'vue';
-import { api } from 'boot/axios';
-import { useRouter } from 'vue-router';
+// import { useQuasar, QSpinnerIos, date } from 'quasar';
+// import { ref, onBeforeMount, onMounted } from 'vue';
+// import { api } from 'boot/axios';
+// import { useRouter } from 'vue-router';
 
 export default {
     setup () {

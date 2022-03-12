@@ -52,7 +52,7 @@
 <script>
     import { ref, onMounted } from 'vue';
     import { api } from 'boot/axios';
-    import { useQuasar, QSpinnerFacebook } from 'quasar';
+    import { useQuasar, QSpinnerIos } from 'quasar';
     // import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
     export default {
         setup() {
@@ -87,7 +87,7 @@
             }
             async function moveUsdt() {
                 $q.loading.show({
-                    spinner: QSpinnerFacebook,
+                    spinner: QSpinnerIos,
                     spinnerColor: 'yellow',
                     spinnerSize: 140,
                     backgroundColor: 'purple',

@@ -94,7 +94,7 @@
   </q-layout>
 </template>
 <script>
-import { useQuasar, QSpinnerFacebook } from 'quasar';
+import { useQuasar, QSpinnerIos } from 'quasar';
 import { ref, onMounted, onBeforeMount } from 'vue';
 import { api } from 'src/boot/axios';
 import { useRouter } from 'vue-router';
@@ -143,7 +143,7 @@ export default {
     //     return;
     //   }
     //   $q.loading.show({
-    //     spinner: QSpinnerFacebook,
+    //     spinner: QSpinnerIos,
     //     spinnerColor: 'yellow',
     //     spinnerSize: 140,
     //     backgroundColor: 'purple',
@@ -227,7 +227,7 @@ export default {
         return;
       }
       $q.loading.show({
-        spinner: QSpinnerFacebook,
+        spinner: QSpinnerIos,
         spinnerColor: 'yellow',
         spinnerSize: 140,
         backgroundColor: 'purple',
@@ -323,7 +323,7 @@ export default {
         return;
       }
       $q.loading.show({
-        spinner: QSpinnerFacebook,
+        spinner: QSpinnerIos,
         spinnerColor: 'yellow',
         spinnerSize: 140,
         backgroundColor: 'purple',

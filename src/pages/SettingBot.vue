@@ -49,37 +49,45 @@
                     <q-separator class="q-mt-md" />
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Tính năng sử dụng (*)</q-item-label>
-                      <q-select filled v-model="optionId" :options="optionBotV2" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple" />
+                      <q-select filled v-model="optionId" label="Chọn tính năng sử dụng" :options="optionBotV2" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple" />
                       <!--<q-toggle :false-value="false" label="Chọn nhiều phương pháp" :true-value="true" color="positive"
                         v-model="isEnalbeMultiple" />-->
                     </div>
                     <div v-if="optionId == 1" class="q-pa-md">
                       <q-item-label class="q-mb-sm">Chọn phương pháp (*)</q-item-label>
-                      <q-select filled v-model="botId" :options="optionBot" :disable="isEnalbeMultiple" />
+                      <q-select filled v-model="botId" label="Chọn phương pháp" :options="optionBot" :disable="isEnalbeMultiple" />
                     </div>
                     <div v-if="optionId == 2" class="q-pa-md">
                       <q-item-label class="q-mb-sm">Các phương pháp muốn MIX (*)</q-item-label>
-                      <q-select filled v-model="botId" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                      <q-select filled v-model="botId" label="Chọn phương pháp muốn MIX" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
                     </div>
-                    <div v-if="optionId == 3 || optionId == 4" class="q-pa-md">
+                    <div v-if="optionId == 3" class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Chọn phương pháp (*)</q-item-label>
+                        <q-select filled v-model="botId" label="Chọn phương pháp" :options="optionBot" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple" />
+                    </div>
+                    <div v-if="optionId == 3" class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Chọn phương pháp muốn đổi (*)</q-item-label>
+                        <q-select filled v-model="botIdChange" label="Chọn phương pháp muốn đổi" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                    </div>
+                    <div v-if="optionId == 4" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Các phương pháp sử dụng (*)</q-item-label>
-                        <q-select filled v-model="botId" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                        <q-select filled v-model="botId" label="Chọn phương pháp sử dụng" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
                     </div>
                     <div v-if="optionId == 3 || optionId == 4">
                         <div class="q-pa-md">
-                            <q-item-label class="q-mb-sm">Số lệnh dương liên tiếp</q-item-label>
+                            <q-item-label class="q-mb-sm">Số Lệnh Dương Liên Tiếp Muốn Đổi</q-item-label>
                             <q-select filled v-model="win" :options="optionSelect3"/>
                         </div>
                         <div class="q-pa-md">
-                            <q-item-label class="q-mb-sm">Số lệnh âm liên tiếp</q-item-label>
+                            <q-item-label class="q-mb-sm">Số Lệnh Âm Liên Tiếp Muốn Đổi</q-item-label>
                             <q-select filled v-model="lose" :options="optionSelect3"/>
                         </div>
-                        <div class="q-pa-md">
-                          <q-item-label class="q-mb-sm">% Dương muốn đổi</q-item-label>
+                        <div v-if="optionId == 3" class="q-pa-md">
+                          <q-item-label class="q-mb-sm">Số % Dương Liên Tiếp Muốn Đổi</q-item-label>
                           <q-select filled v-model="winPercent" :options="percentOpSelect"/>
                       </div>
-                      <div class="q-pa-md">
-                        <q-item-label class="q-mb-sm">% Âm muốn đổi</q-item-label>
+                      <div v-if="optionId == 3" class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Số % Âm Liên Tiếp Muốn Đổi</q-item-label>
                         <q-select filled v-model="losePercent" :options="percentOpSelect"/>
                     </div>
                     </div>
@@ -107,7 +115,7 @@
   </q-layout>
 </template>
 <script>
-import { useQuasar, QSpinnerFacebook } from 'quasar';
+import { useQuasar, QSpinnerIos } from 'quasar';
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
@@ -143,6 +151,7 @@ export default {
     ]);
     const winPercent = ref(null);
     const losePercent = ref(null);
+    const botIdChange = ref(null);
 
     async function onSetting() {
       if (!accountType.value) {
@@ -212,17 +221,17 @@ export default {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Vui lòng chọn tối đa 5 phương phápp',
+          message: 'Vui lòng chọn tối đa 5 phương pháp',
           icon: 'report_problem',
         });
         return;
       }
 
-      if (this.optionId == 3 && this.botId.length > 2) {
+      if (this.optionId == 3 && this.botIdChange.length > 5) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Vui lòng chọn tối đa 2 phương phápp',
+          message: 'Vui lòng chọn tối đa 5 phương pháp muốn đổi',
           icon: 'report_problem',
         });
         return;
@@ -232,14 +241,14 @@ export default {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Vui lòng chọn tối đa 3 phương phápp',
+          message: 'Vui lòng chọn tối đa 3 phương pháp',
           icon: 'report_problem',
         });
         return;
       }
 
       $q.loading.show({
-        spinner: QSpinnerFacebook,
+        spinner: QSpinnerIos,
         spinnerColor: 'yellow',
         spinnerSize: 140,
         backgroundColor: 'purple',
@@ -834,6 +843,7 @@ export default {
           value: 10,
         },
       ],
+      botIdChange
     };
   },
 };

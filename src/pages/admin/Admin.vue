@@ -75,7 +75,7 @@
 
           </q-expansion-item>
           <q-separator />
-          <MenuItem title='Ví tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
+          <MenuItem title='Chuyển tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
         <q-expansion-item :content-inset-level="0.5">
           <template v-slot:header>
             <q-item-section avatar>
@@ -83,9 +83,10 @@
             </q-item-section>
             <q-item-section>Lịch sử cài đặt</q-item-section>
           </template>
-          <MenuItem title='Copy Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-copytrade' />
+          <!-- <MenuItem title='Copy Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-copytrade' /> -->
           <MenuItem title='Auto Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-autotrade' />
         </q-expansion-item>
+        <q-separator />
           <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
         </q-list>
       </q-scroll-area>
@@ -112,14 +113,14 @@ const linksData = [
   //   link: '/admin/information-bot',
   //   separator: false,
   // },
-  {
-    title: 'Thống kê',
-    caption: 'Thống kê lãi từng ngày trong tháng',
-    icon: 'analytics',
-    iconColor: 'orange',
-    link: '/admin/montly-export',
-    separator: true,
-  },
+  // {
+  //   title: 'Thống kê',
+  //   caption: 'Thống kê lãi từng ngày trong tháng',
+  //   icon: 'analytics',
+  //   iconColor: 'orange',
+  //   link: '/admin/montly-export',
+  //   separator: true,
+  // },
   {
     title: 'Kết nối sàn',
     caption: 'Kết nối vào sàn để đồng bộ lệnh đánh',
@@ -200,7 +201,6 @@ export default {
       groupLinks,
       autoTradeLinks,
       drawerLeft: ref($q.screen.width > 500),
-
     };
   },
 

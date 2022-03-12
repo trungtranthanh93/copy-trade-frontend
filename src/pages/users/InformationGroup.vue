@@ -14,32 +14,43 @@
           relative-position
         "
       >
-        <div class="row">
-        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
-            <q-card
-            class="bg-blue-grey-14 q-ml-md"
-            style="
-              background: linear-gradient(to right, #5c258d, #4389a2);
-            "
-          >
+      <div class="row">
+          <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
+              <q-card class="q-ml-md" style="
+                        background: linear-gradient(to right, #dd5e89, #f7bb97);
+                      ">
+                <q-card-section>
+                  <div class="text-h5">
+                    <q-icon name="paid" color="white" size="3rem" /> Biệt danh</div>
+                </q-card-section>
+
+                <q-card-section :class="'q-pt-none txt-18'">
+                  {{ nickName ? nickName : '' }}
+                </q-card-section>
+              </q-card>
+            </div>
+        <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
+          <q-card class="q-ml-md" style="
+                    background: linear-gradient(to right, #5c258d, #4389a2);
+                  ">
             <q-card-section>
-              <div class="text-h5"><q-icon name="account_circle" color="white" size="3rem" /> Loại tài khoản</div>
+              <div class="text-h5">
+                <q-icon name="account_circle" color="white" size="3rem" /> Loại tài khoản</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
-                Tài khoản <q-badge color="info" text-color="black" :label="accountType" />
+              Tài khoản
+              <q-badge color="info" text-color="black" :label="accountType" />
             </q-card-section>
           </q-card>
         </div>
-        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
-            <q-card
-            class="bg-blue-grey-14 q-ml-md"
-            style="
-              background: linear-gradient(to right, #134e5e, #71b280);
-            "
-          >
+        <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
+          <q-card class="q-ml-md" style="
+                    background: linear-gradient(to right, #134e5e, #71b280);
+                  ">
             <q-card-section>
-              <div class="text-h5"><q-icon name="account_balance_wallet" color="white" size="3rem" /> Số dư ban đầu</div>
+              <div class="text-h5">
+                <q-icon name="account_balance_wallet" color="white" size="3rem" /> Số dư ban đầu</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
@@ -47,35 +58,45 @@
             </q-card-section>
           </q-card>
         </div>
-        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
-            <q-card
-            class="q-ml-md"
-            style="
-              background: linear-gradient(to right, #2bc0e4, #eaecc6);
-            "
-          >
+        <div :class="`${$q.screen.width > 768 ? 'col-4  q-mt-md' : 'col-12 q-mt-md'}`">
+          <q-card class="q-ml-md" style="
+                    background: linear-gradient(to right, #2bc0e4, #eaecc6);
+                  ">
             <q-card-section>
-              <div class="text-h5"><q-icon name="account_balance" color="white" size="3rem"/> Số dư hiện tại</div>
+              <div class="text-h5">
+                <q-icon name="account_balance" color="white" size="3rem" /> Số dư hiện tại</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
-              {{ availableBalance }}
+              {{ availableBalance }}$
             </q-card-section>
           </q-card>
         </div>
-        <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`">
-            <q-card
-            class="q-ml-md"
-            style="
-              background: linear-gradient(to right, #4776e6, #8e54e9);
-            "
-          >
+        <div :class="`${$q.screen.width > 768 ? 'col-4 q-mt-md' : 'col-12 q-mt-md'}`">
+          <q-card class="q-ml-md" style="
+                    background: linear-gradient(to right, #4776e6, #8e54e9);
+                  ">
             <q-card-section>
-              <div class="text-h5"><q-icon name="paid" color="white" size="3rem"/> Lợi nhuận</div>
+              <div class="text-h5">
+                <q-icon name="paid" color="white" size="3rem" /> Lợi nhuận</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
               {{ incomeAmount }}
+            </q-card-section>
+          </q-card>
+        </div>
+        <div :class="`${$q.screen.width > 768 ? 'col-4 q-mt-md' : 'col-12 q-mt-md'}`">
+          <q-card class="q-ml-md" style="
+                    background: linear-gradient(to right, #2980b9, #2c3e50);
+                  ">
+            <q-card-section>
+              <div class="text-h5">
+                <q-icon name="flag" color="white" size="3rem" /> Lệnh thắng thua</div>
+            </q-card-section>
+
+            <q-card-section :class="'q-pt-none txt-18'">
+              {{ winLose ? winLose : '0/0' }}
             </q-card-section>
           </q-card>
         </div>
@@ -138,7 +159,7 @@ const columns = [
 
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-import { useQuasar, date, QSpinnerFacebook } from 'quasar';
+import { useQuasar, date, QSpinnerIos } from 'quasar';
 import { ref, onMounted,onBeforeMount  } from 'vue';
 export default {
   setup() {
@@ -153,6 +174,8 @@ export default {
     const pagination = ref({
       rowsPerPage: 10, // current rows per page being displayed
     });
+    const winLose = ref('');
+    const nickName = ref('');
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
@@ -304,7 +327,7 @@ export default {
     }
     onMounted(async () => {
       $q.loading.show({
-        spinner: QSpinnerFacebook,
+        spinner: QSpinnerIos,
         spinnerColor: 'yellow',
         spinnerSize: 140,
         backgroundColor: 'purple',
@@ -318,6 +341,7 @@ export default {
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       let user = await api.get('/users/get-profile');
+      nickName.value = user.data.username;
       if (user.data.groupId) {
         return;
       }
@@ -372,12 +396,15 @@ export default {
       pagination,
       accountType,
       isCopyTradeScreen,
+      winLose,
+      nickName
     };
   },
 };
 </script>
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 250px
+<style lang="css" scoped>
+.txt-18 {
+      font-size: 18px;
+      font-weight: 500
+    }
 </style>

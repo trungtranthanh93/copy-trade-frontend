@@ -116,7 +116,7 @@ const columns = [
   },
 ];
 
-import { useQuasar, QSpinnerFacebook } from 'quasar';
+import { useQuasar, QSpinnerIos } from 'quasar';
 import { api } from 'boot/axios';
 import { ref, onBeforeMount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -133,7 +133,7 @@ export default {
     });
     async function follow(row) {
       $q.loading.show({
-        spinner: QSpinnerFacebook,
+        spinner: QSpinnerIos,
         spinnerColor: 'yellow',
         spinnerSize: 140,
         backgroundColor: 'purple',

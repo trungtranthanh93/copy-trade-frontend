@@ -58,7 +58,7 @@
   </q-layout>
 </template>
 <script>
-import { useQuasar, QSpinnerFacebook } from 'quasar';
+import { useQuasar, QSpinnerIos } from 'quasar';
 import { ref } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
@@ -105,7 +105,7 @@ export default {
         return;
       }
       $q.loading.show({
-        spinner: QSpinnerFacebook,
+        spinner: QSpinnerIos,
         spinnerColor: 'yellow',
         spinnerSize: 140,
         backgroundColor: 'purple',

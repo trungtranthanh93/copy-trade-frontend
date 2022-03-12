@@ -5,6 +5,7 @@
     <q-item
       clickable
       :to="link"
+      @click="getNameGroup(title)"
     >
       <q-item-section
         v-if="icon"
@@ -58,6 +59,11 @@ export default {
     separator: { // Ligne de sÃ©parator
       default: 'false'
     }
+  },
+  methods: {
+    getNameGroup(title){
+      localStorage.setItem('title-screen', title)
+  }
   }
 }
 </script>
