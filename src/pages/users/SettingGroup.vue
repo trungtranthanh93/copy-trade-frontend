@@ -13,9 +13,9 @@
               <div class="col">
                   <q-label class="text-h5">Cài đặt lệnh</q-label>
               </div>
-              <div class="col text-right">
+              <!-- <div class="col text-right">
                   <DialogSwapMoney />
-              </div>
+              </div> -->
             </div>
 
             <q-separator class="q-mt-md" />
@@ -35,9 +35,21 @@
                           />
                         </div>
                         <div class="q-ma-md">
+                            <q-item-label class="q-mb-sm">Lệnh tối đa (*)</q-item-label>
+                            <q-select
+                              filled
+                              v-model="maxAmount"
+                              :options="optionsMaxAmount"
+                            />
+                          </div>
+                        <div class="q-ma-md">
                             <q-item-label class="q-mb-sm">Mức chốt lãi (*)</q-item-label>
                             <q-select filled v-model="takeProfit" :options="optionsProfit" />
                           </div>
+                          <div class="q-ma-md">
+                              <q-item-label class="q-mb-sm">Mức cắt lỗ (*)</q-item-label>
+                              <q-select filled v-model="stopLoss" :options="optionsLost" />
+                            </div>
                           <div class="q-ma-md">
                               <q-item-label class="q-mb-sm">Hệ số (*)</q-item-label>
                               <q-select
@@ -46,33 +58,17 @@
                                 :options="optionsCoefficient"
                               />
                             </div>
-                </q-card>
-              </div>
-              <div v-bind:class="`${$q.screen.width > 768 ? 'col-5 q-ml-md' : 'col-12 q-mt-md'}`">
-                <q-card class="q-pa-md">
-                    <div class="q-ma-md">
-                        <q-item-label class="q-mb-sm">Chọn các chuyên gia (*)</q-item-label>
-                        <q-select
-                          filled
-                          v-model="listMasterId"
-                          multiple
-                          :options="optionMaster"
-                          use-chips
-                          stack-label
-                        />
-                      </div>
-                      <div class="q-ma-md">
-                          <q-item-label class="q-mb-sm">Lệnh tối đa (*)</q-item-label>
-                          <q-select
-                            filled
-                            v-model="maxAmount"
-                            :options="optionsMaxAmount"
-                          />
-                        </div>
-                        <div class="q-ma-md">
-                            <q-item-label class="q-mb-sm">Mức cắt lỗ (*)</q-item-label>
-                            <q-select filled v-model="stopLoss" :options="optionsLost" />
-                          </div>
+                            <div class="q-ma-md">
+                                <q-item-label class="q-mb-sm">Chọn các chuyên gia (*)</q-item-label>
+                                <q-select
+                                  filled
+                                  v-model="listMasterId"
+                                  multiple
+                                  :options="optionMaster"
+                                  use-chips
+                                  stack-label
+                                />
+                              </div>
                 </q-card>
               </div>
             </div>
@@ -96,13 +92,10 @@ import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
+// import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
 import _ from 'lodash';
 
 export default {
-  components: {
-    DialogSwapMoney,
-  },
   setup() {
     const $router = useRouter();
     const $q = useQuasar();

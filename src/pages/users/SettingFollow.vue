@@ -7,9 +7,9 @@
               <div class="col">
                   <q-label class="text-h5">Cài đặt lệnh</q-label>
               </div>
-              <div class="col text-right">
+              <!-- <div class="col text-right">
                   <DialogSwapMoney />
-              </div>
+              </div> -->
             </div>
           <q-separator class="q-mt-md" />
           <div
@@ -71,11 +71,8 @@ import { useQuasar, QSpinnerFacebook } from 'quasar';
 import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
-import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
+// import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
 export default {
-  components: {
-    DialogSwapMoney,
-  },
   setup() {
     const $router = useRouter();
     const $q = useQuasar();

@@ -102,25 +102,6 @@
           </div>
         </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
-        <div class="row items-center q-gutter-md justify-center">
-          <q-btn
-            color="negative"
-            icon-right="cancel"
-            style=""
-            dense
-            @click="unfollow()"
-            >Dừng follow</q-btn
-          >
-          <q-btn
-            color="green"
-            icon-right="cancel"
-            style=""
-            dense
-            @click="continueFollow()"
-            >Tiếp tục</q-btn
-          >
-        </div>
-        <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <div class="q-pa-md">
           <q-table
             color="primary"
@@ -175,7 +156,7 @@ export default {
       rowsPerPage: 10, // current rows per page being displayed
     });
     const nickName = ref('');
-
+    const winLose = ref('');
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
@@ -186,41 +167,41 @@ export default {
         capital.value = `${responseContent.data.capital}$`;
         incomeAmount.value = `${responseContent.data.incomeAmount}$`;
         accountType.value = `${responseContent.data.userType}`;
-        if (responseContent.data.isTakeProfit) {
-          $q.dialog({
-            title: 'Thông báo',
-            message: `Lợi nhuận hiện tại: <span class="text-green">${incomeAmount.value}</span> đã đạt giới hạn [Chốt lãi:<span class="text-green">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
-            html: true,
-          })
-            .onOk(() => {
-              return;
-            })
-            .onCancel(() => {
-              return;
-            })
-            .onDismiss(() => {
-              // console.log('I am triggered on both OK and Cancel')
-            });
-          return;
-        } else if (responseContent.data.isStopLoss) {
-          $q.dialog({
-            title: 'Thông báo',
-            message: `Lợi nhuận hiện tại: <span class="text-red">${incomeAmount.value}</span> đã đạt giới hạn [Cắt lỗ: <span class="text-red">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
-            html: true,
-          })
-            .onOk(() => {
-              return;
-            })
-            .onCancel(() => {
-              return;
-            })
-            .onDismiss(() => {
-              // console.log('I am triggered on both OK and Cancel')
-            });
-        }
+        // if (responseContent.data.isTakeProfit) {
+        //   $q.dialog({
+        //     title: 'Thông báo',
+        //     message: `Lợi nhuận hiện tại: <span class="text-green">${incomeAmount.value}</span> đã đạt giới hạn [Chốt lãi:<span class="text-green">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
+        //     html: true,
+        //   })
+        //     .onOk(() => {
+        //       return;
+        //     })
+        //     .onCancel(() => {
+        //       return;
+        //     })
+        //     .onDismiss(() => {
+        //       // console.log('I am triggered on both OK and Cancel')
+        //     });
+        //   return;
+        // } else if (responseContent.data.isStopLoss) {
+        //   $q.dialog({
+        //     title: 'Thông báo',
+        //     message: `Lợi nhuận hiện tại: <span class="text-red">${incomeAmount.value}</span> đã đạt giới hạn [Cắt lỗ: <span class="text-red">${incomeAmount.value}</span>]. Hệ thống copy trade đã tự động dừng`,
+        //     html: true,
+        //   })
+        //     .onOk(() => {
+        //       return;
+        //     })
+        //     .onCancel(() => {
+        //       return;
+        //     })
+        //     .onDismiss(() => {
+        //       // console.log('I am triggered on both OK and Cancel')
+        //     });
+        // }
         return;
       } catch (error) {
-        $router.push('/user/list-master');
+        // $router.push('/user/list-master');
       }
     }
     async function onCheckValid() {
@@ -272,38 +253,7 @@ export default {
         return false;
       }
     }
-    async function unfollow() {
-      try {
-        let token = localStorage.getItem('jwt');
-        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        await api.put('users/unfolow');
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Đã dừng follow chuyên gia',
-          position: 'top',
-        });
-        $router.push('/user/list-master');
-      } catch (error) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Có lỗi . Hãy liên hệ admin để được hỗ trợ',
-          icon: 'report_problem',
-        });
-      }
-    }
-
-    async function continueFollow() {
-      let token = localStorage.getItem('jwt');
-      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      let user = await api.get('/users/get-profile');
-      $router.push('/user/setting-follow/' + user.data.masterId);
-    }
     async function getStatistic() {
       let token = localStorage.getItem('jwt');
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -333,7 +283,8 @@ export default {
         backgroundColor: 'purple',
         messageColor: 'black',
       });
-      await getSportBalance(), await getStatistic();
+      await getSportBalance(),
+      await getStatistic();
       $q.loading.hide();
     });
     onBeforeMount(async () => {
@@ -383,20 +334,19 @@ export default {
             // console.log('I am triggered on both OK and Cancel')
           });
       }
-      $router.push('/user/list-master');
+    //   $router.push('/user/list-master');
     });
     return {
       capital,
       availableBalance,
       incomeAmount,
-      unfollow,
-      continueFollow,
       columns,
       rows,
       pagination,
       accountType,
       isCopyTradeScreen,
-      nickName
+      nickName,
+      winLose
     };
   },
 };

@@ -19,6 +19,9 @@
           <img class="top-left" src="logo.png" style="height: 40px; margin-right: 2%;" />
         </div> -->
         <q-list padding>
+        <MenuItem title='Trang chủ' caption='' icon='home' iconColor='orange' link='/admin/home' />
+
+        <q-separator />
           <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
@@ -32,6 +35,7 @@
               v-bind="link"
             />
           </q-expansion-item>
+          <q-separator />
           <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
@@ -65,11 +69,23 @@
               caption= ''
               icon= 'settings_suggest'
               iconColor= 'orange'
-              link= '/admin/setting-bot'
+              link= '/admin/setting-bot-telegram'
             />
             </q-expansion-item>
 
           </q-expansion-item>
+          <q-separator />
+          <MenuItem title='Ví tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
+        <q-expansion-item :content-inset-level="0.5">
+          <template v-slot:header>
+            <q-item-section avatar>
+              <q-icon name="phonelink_setup" color="orange" />
+            </q-item-section>
+            <q-item-section>Lịch sử cài đặt</q-item-section>
+          </template>
+          <MenuItem title='Copy Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-copytrade' />
+          <MenuItem title='Auto Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-autotrade' />
+        </q-expansion-item>
           <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
         </q-list>
       </q-scroll-area>
@@ -102,7 +118,7 @@ const linksData = [
     icon: 'analytics',
     iconColor: 'orange',
     link: '/admin/montly-export',
-    separator: false,
+    separator: true,
   },
   {
     title: 'Kết nối sàn',
@@ -110,7 +126,7 @@ const linksData = [
     icon: 'login',
     iconColor: 'orange',
     link: '/admin/login-exchange',
-    separator: false,
+    separator: true,
   },
   {
     title: 'Đăng xuất',
@@ -118,7 +134,7 @@ const linksData = [
     icon: 'logout',
     iconColor: 'orange',
     link: '/logout',
-    separator: false,
+    separator: true,
   },
 ];
 

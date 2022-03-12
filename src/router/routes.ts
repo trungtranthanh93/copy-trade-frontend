@@ -52,6 +52,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/SettingBot.vue'),
       },
       {
+        path: 'setting-bot-telegram',
+        component: () => import('src/pages/SettingBotTelegram.vue'),
+      },
+      {
         path: 'information-bot',
         component: () => import('pages/admin/Infomation.vue')
       },
@@ -64,6 +68,26 @@ const routes: RouteRecordRaw[] = [
         path: 'telegram-bot',
         name: 'admin-telegram-bot',
         component: () => import('pages/ListTelegramBot.vue'),
+      },
+      {
+        path: 'home',
+        name: 'home-admin',
+        component: () => import('pages/admin/Home.vue'),
+      },
+      {
+        path: 'wallet',
+        name: 'wallet-admin',
+        component: () => import('pages/Wallet.vue'),
+      },
+      {
+        path: 'setting-history-copytrade',
+        name: 'setting-history-copytrade-admin',
+        component: () => import('pages/CopyTradeSettingHistory.vue'),
+      },
+      {
+        path: 'setting-history-autotrade',
+        name: 'setting-history-autotrade-admin',
+        component: () => import('pages/AutoTradeSettingHistory.vue'),
       }
     ],
   },
@@ -108,6 +132,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/SettingBot.vue'),
       },
       {
+        path: 'setting-bot-telegram',
+        component: () => import('src/pages/SettingBotTelegram.vue'),
+      },
+      {
         path: 'information-bot',
         name: 'information-bot',
         component: () => import('pages/users/InformationBot.vue'),
@@ -121,6 +149,26 @@ const routes: RouteRecordRaw[] = [
         path: 'telegram-bot',
         name: 'telegram-bot',
         component: () => import('pages/ListTelegramBot.vue'),
+      },
+      {
+        path: 'home',
+        name: 'home-user',
+        component: () => import('pages/users/Home.vue'),
+      },
+      {
+        path: 'wallet',
+        name: 'wallet-user',
+        component: () => import('pages/Wallet.vue'),
+      },
+      {
+        path: 'setting-history-copytrade',
+        name: 'setting-history-copytrade-user',
+        component: () => import('pages/CopyTradeSettingHistory.vue'),
+      },
+      {
+        path: 'setting-history-autotrade',
+        name: 'setting-history-autotrade-user',
+        component: () => import('pages/AutoTradeSettingHistory.vue'),
       }
     ],
   },

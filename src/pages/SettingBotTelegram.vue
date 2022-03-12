@@ -37,10 +37,6 @@
                       <q-item-label class="q-mb-sm">Hệ số (*)</q-item-label>
                       <q-select filled v-model="coefficient" :options="optionsCoefficient" />
                     </div>
-                    <div class="q-pa-md">
-                      <q-item-label class="q-mb-sm">Quản lý vốn (*)</q-item-label>
-                      <q-select filled v-model="capitalMan" :options="optionCapital" />
-                    </div>
                   </q-card>
                 </div>
                 <div :class="`${$q.screen.width > 768 ? 'col-6 q-pa-md' : 'col-12 q-mt-md'}`">

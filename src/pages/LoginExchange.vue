@@ -64,7 +64,7 @@
                       </form>
                     </template>
                     <template v-else>
-                             <form class="q-gutter-x-xs q-gutter-y-lg">
+                             <form class="q-gutter-x-xs q-gutter-y-lg q-mt-md">
                         <div>
                           <q-item-label class="q-mb-sm">Mã Google Authentication (*)</q-item-label>
                           <q-input
