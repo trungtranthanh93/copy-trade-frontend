@@ -68,11 +68,11 @@
                       </div>
                       <div v-if="optionId == 'CHANGE_BOT' || optionId == 'WIN_LOSE_WAIT'">
                           <div class="q-pa-md">
-                              <q-item-label class="q-mb-sm">Số Lệnh Dương Liên Tiếp Muốn Đổi</q-item-label>
+                              <q-item-label class="q-mb-sm">Số Lệnh Dương Liên Tiếp {{ optionId == 'CHANGE_BOT' ? 'Muốn Đổi' : '' }}</q-item-label>
                               <q-select filled v-model="winOrdersNum" :options="optionSelect3"/>
                           </div>
                           <div class="q-pa-md">
-                              <q-item-label class="q-mb-sm">Số Lệnh Âm Liên Tiếp Muốn Đổi</q-item-label>
+                              <q-item-label class="q-mb-sm">Số Lệnh Âm Liên Tiếp {{ optionId == 'CHANGE_BOT' ? 'Muốn Đổi' : '' }}</q-item-label>
                               <q-select filled v-model="loseOrdersNum" :options="optionSelect3"/>
                           </div>
                           <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
