@@ -3,10 +3,7 @@
   <q-layout class="justify-center">
     <q-page-container class="window-height relative-position">
       <div
-        :class="{
-          'q-pa-md row justify-center rounded-borders dark': true,
-        }"
-        style=""
+        :class="{'q-pa-md row justify-center rounded-borders dark': true}"
       >
         <form class="q-gutter-x-xs q-gutter-y-lg" style="width: 100%">
             <div class="row">
@@ -39,7 +36,7 @@
                     </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Quản lý vốn (*)</q-item-label>
-                      <q-select filled v-model="capitalMan" :options="optionCapital" />
+                      <q-select filled v-model="balanceManagement" :options="optionCapital" />
                     </div>
                   </q-card>
                 </div>
@@ -49,44 +46,44 @@
                     <q-separator class="q-mt-md" />
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Tính năng sử dụng (*)</q-item-label>
-                      <q-select filled v-model="optionId" label="Chọn tính năng sử dụng" :options="optionBotV2" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple" />
+                      <q-select filled v-model="optionId" label="Chọn tính năng sử dụng" :options="optionBotV2" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple"  @update:model-value="val => changeMethods(val)" />
                       <!--<q-toggle :false-value="false" label="Chọn nhiều phương pháp" :true-value="true" color="positive"
                         v-model="isEnalbeMultiple" />-->
                     </div>
-                    <div v-if="optionId == 1" class="q-pa-md">
+                    <div v-if="optionId == 'NORMAL'" class="q-pa-md">
                       <q-item-label class="q-mb-sm">Chọn phương pháp (*)</q-item-label>
-                      <q-select filled v-model="botId" label="Chọn phương pháp" :options="optionBot" :disable="isEnalbeMultiple" />
+                      <q-select filled v-model="botId" label="Chọn phương pháp" :options="optionBot" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple" />
                     </div>
-                    <div v-if="optionId == 2" class="q-pa-md">
+                    <div v-if="optionId == 'MIX'" class="q-pa-md">
                       <q-item-label class="q-mb-sm">Các phương pháp muốn MIX (*)</q-item-label>
-                      <q-select filled v-model="botId" label="Chọn phương pháp muốn MIX" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                      <q-select filled v-model="botId" label="Chọn phương pháp muốn MIX" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple use-chips :disable="isEnalbeMultiple" />
                     </div>
-                    <div v-if="optionId == 3" class="q-pa-md">
+                    <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Chọn phương pháp (*)</q-item-label>
                         <q-select filled v-model="botId" label="Chọn phương pháp" :options="optionBot" option-value="value" emit-value option-label="label" map-options :disable="isEnalbeMultiple" />
                     </div>
-                    <div v-if="optionId == 3" class="q-pa-md">
+                    <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Chọn phương pháp muốn đổi (*)</q-item-label>
-                        <q-select filled v-model="botIdChange" label="Chọn phương pháp muốn đổi" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                        <q-select filled v-model="botIdChange" label="Chọn phương pháp muốn đổi" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple use-chips :disable="isEnalbeMultiple" />
                     </div>
-                    <div v-if="optionId == 4" class="q-pa-md">
+                    <div v-if="optionId == 'WIN_LOSE_WAIT'" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Các phương pháp sử dụng (*)</q-item-label>
-                        <q-select filled v-model="botId" label="Chọn phương pháp sử dụng" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple :disable="isEnalbeMultiple" />
+                        <q-select filled v-model="botId" label="Chọn phương pháp sử dụng" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple use-chips :disable="isEnalbeMultiple" />
                     </div>
-                    <div v-if="optionId == 3 || optionId == 4">
+                    <div v-if="optionId == 'CHANGE_BOT' || optionId == 'WIN_LOSE_WAIT'">
                         <div class="q-pa-md">
                             <q-item-label class="q-mb-sm">Số Lệnh Dương Liên Tiếp Muốn Đổi</q-item-label>
-                            <q-select filled v-model="win" :options="optionSelect3"/>
+                            <q-select filled v-model="winOrdersNum" :options="optionSelect3"/>
                         </div>
                         <div class="q-pa-md">
                             <q-item-label class="q-mb-sm">Số Lệnh Âm Liên Tiếp Muốn Đổi</q-item-label>
-                            <q-select filled v-model="lose" :options="optionSelect3"/>
+                            <q-select filled v-model="loseOrdersNum" :options="optionSelect3"/>
                         </div>
-                        <div v-if="optionId == 3" class="q-pa-md">
+                        <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
                           <q-item-label class="q-mb-sm">Số % Dương Liên Tiếp Muốn Đổi</q-item-label>
                           <q-select filled v-model="winPercent" :options="percentOpSelect"/>
                       </div>
-                      <div v-if="optionId == 3" class="q-pa-md">
+                      <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Số % Âm Liên Tiếp Muốn Đổi</q-item-label>
                         <q-select filled v-model="losePercent" :options="percentOpSelect"/>
                     </div>
@@ -94,8 +91,7 @@
 
                     <!-- <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Phương pháp nâng cao (*)</q-item-label>
-                      <q-select filled v-model="listBotId" multiple max-values="3" :options="optionBot" use-chips stack-label
-                        :disable="!isEnalbeMultiple" />
+                      <q-select filled v-model="listBotId" multiple max-values="3" :options="optionBot" use-chips stack-label/>
                     </div> -->
                   </q-card>
               </div>
@@ -133,12 +129,12 @@ export default {
     const listBotId = ref(null);
     const modelSession = ref(null);
     const isEnalbeMultiple = ref(false);
-    const botId = ref(null);
+    const botId = ref();
     const optionBot = ref([]);
-    const capitalMan = ref(null);
+    const balanceManagement = ref(null);
     const optionId = ref(null);
-    const win = ref(null);
-    const lose = ref(null);
+    const winOrdersNum = ref(null);
+    const loseOrdersNum = ref(null);
     const optionAccount = ref([
       {
         label: 'Tài khoản thực',
@@ -217,7 +213,7 @@ export default {
         });
         return;
       }
-      if (this.optionId == 2 && this.botId.length > 5) {
+      if (this.optionId == 'MIX' && this.botId.length > 5) {
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -227,7 +223,7 @@ export default {
         return;
       }
 
-      if (this.optionId == 3 && this.botIdChange.length > 5) {
+      if (this.optionId == 'CHANGE_BOT' && this.botIdChange.length > 5) {
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -237,7 +233,7 @@ export default {
         return;
       }
 
-      if (this.optionId == 4 && this.botId.length > 3) {
+      if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 3) {
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -258,24 +254,34 @@ export default {
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
+        let botIds
+        if (this.optionId == 'NORMAL' || this.optionId == 'CHANGE_BOT') {
+          botIds = [botId.value]
+        } else {
+          botIds = JSON.parse(JSON.stringify(this.botId))
+        }
         let data = {
-          accountType: accountType.value.value,
-          coefficient: coefficient.value.value,
-          stopLoss: stopLoss.value.value,
-          takeProfit: takeProfit.value.value,
-          isSelectMutilBot: isEnalbeMultiple.value,
-          listBotId: isEnalbeMultiple.value
-            ? listBotId.value.map((obj) => obj.value)
-            : null,
-          botId: !isEnalbeMultiple.value? botId.value.value : null,
-          modelSession: isEnalbeMultiple.value
-            ? modelSession.value.value
-            : null,
+          accountType: accountType.value ? accountType.value.value : null,
+          maxAmount: 10,
+          minAmount: 1,
+          stopLoss: stopLoss.value ? stopLoss.value.value : null,
+          takeProfit: takeProfit.value ? takeProfit.value.value : null,
+          coefficient: coefficient.value ? coefficient.value.value : null,
+          isSelectMutilBot: false,
+          balanceManagement: balanceManagement.value ? balanceManagement.value.value : null,
+          method: optionId.value ? optionId.value : null,
+          methodSetting: {
+            winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
+            loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
+            botList: botIds
+          }
         };
+        const formatData = JSON.parse(JSON.stringify(data),
+          (key, value) => value === null || value === '' ? undefined : value);
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/user-setting/bot', data);
+        let responseContent = await api.put('/user-setting/available-bot', formatData);
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }
@@ -361,8 +367,8 @@ export default {
       } catch (error) {}
     }
 
-    function Changeoption(val) {
-      this.optionId = val.value
+    function changeMethods() {
+      this.botId = null
     }
     onMounted(async () => {
       accountType.value = optionAccount.value[0];
@@ -723,40 +729,39 @@ export default {
       optionCapital: [
         {
           label: 'Đều lệnh',
-          value: 1,
+          value: 'NORMAL',
         },
         {
           label: 'Gấp thếp (1-2-4-8)',
-          value: 2,
+          value: 'MARTINGALE',
         },
         {
           label: 'Fibo (1-2-3-5-8)',
-          value: 3,
+          value: 'FIBO',
         },
       ],
       optionBotV2: [
         {
           label: 'Phương pháp thủ công',
-          value: 1,
+          value: 'NORMAL',
         },
         {
           label: 'Mix phương pháp',
-          value: 2,
+          value: 'MIX',
         },
         {
           label: 'Tự động đổi phương pháp',
-          value: 3,
+          value: 'CHANGE_BOT',
         },
         {
           label: 'Wait Signal (Đợi Win, Lose,...)',
-          value: 4,
+          value: 'WIN_LOSE_WAIT',
         },
       ],
-      Changeoption,
-      capitalMan,
+      balanceManagement,
       optionId,
-      win,
-      lose,
+      winOrdersNum,
+      loseOrdersNum,
       optionSelect3: [
         {
           label: '1',
@@ -843,7 +848,8 @@ export default {
           value: 10,
         },
       ],
-      botIdChange
+      botIdChange,
+      changeMethods
     };
   },
 };
