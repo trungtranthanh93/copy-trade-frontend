@@ -5,7 +5,7 @@
       <q-card class="q-pa-md mr-auto" :style="{width: $q.screen.width > 768 ? '60%' : '97%'}">
           <div class="row q-mt-md">
               <div class="col">
-                  <q-label class="text-h5">Cài đặt lệnh</q-label>
+                  <q-label class="text-h5-title">Cài đặt lệnh</q-label>
               </div>
               <!-- <div class="col text-right">
                   <DialogSwapMoney />

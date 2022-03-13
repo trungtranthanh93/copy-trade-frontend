@@ -4,7 +4,7 @@
                 <div class="row justify-center">
                     <div :class="`${$q.screen.width > 768 ? 'col-5 q-ma-md' : 'col-12 q-pa-md '}`">
                         <q-card class="q-pa-md">
-                            <q-label class="text-h5">Ví tiền</q-label>
+                            <q-label class="text-h5-title">Ví tiền</q-label>
                             <q-separator class="q-mt-md" />
                             <q-card-section>
                                     <div class="row no-wrap q-pa-md">

@@ -16,7 +16,7 @@
       >
       <div class="row q-mb-md">
               <div class="col">
-                  <q-label class="text-h5">Kết quả follow theo bot</q-label>
+                  <q-label class="text-h5-title">Kết quả follow theo bot</q-label>
               </div>
               <div class="col text-right">
                   <q-btn
@@ -36,7 +36,7 @@
                                 ">
                       <q-card-section>
 
-                        <div class="text-h5"> <q-icon name="account_circle" color="white" size="3rem" /> Loại tài khoản</div>
+                        <div class="text-h5-title"> <q-icon name="account_circle" color="white" size="3rem" /> Loại Tài Khoản</div>
                       </q-card-section>
 
                       <q-card-section :class="'q-pt-none txt-18'">
@@ -49,7 +49,7 @@
                                   background: linear-gradient(to right, #134e5e, #71b280);
                                 ">
                       <q-card-section>
-                        <div class="text-h5"><q-icon name="account_balance_wallet" color="white" size="3rem" /> Số dư ban đầu</div>
+                        <div class="text-h5-title"><q-icon name="account_balance_wallet" color="white" size="3rem" /> Số Dư Ban Đầu</div>
                       </q-card-section>
 
                       <q-card-section :class="'q-pt-none txt-18'">
@@ -62,7 +62,7 @@
                                   background: linear-gradient(to right, #2bc0e4, #eaecc6);
                                 ">
                       <q-card-section>
-                        <div class="text-h5"><q-icon name="account_balance" color="white" size="3rem"/> Số dư hiện tại</div>
+                        <div class="text-h5-title"><q-icon name="account_balance" color="white" size="3rem"/> Số dư hiện tại</div>
                       </q-card-section>
 
                       <q-card-section :class="'q-pt-none txt-18'">
@@ -78,7 +78,7 @@
                                       background: linear-gradient(to right, #4776e6, #8e54e9);
                                     ">
                         <q-card-section>
-                          <div class="text-h5"><q-icon name="paid" color="white" size="3rem"/> Lợi nhuận</div>
+                          <div class="text-h5-title"><q-icon name="paid" color="white" size="3rem"/> Lợi nhuận</div>
                         </q-card-section>
 
                         <q-card-section :class="'q-pt-none txt-18'">
@@ -91,7 +91,7 @@
                                       background: linear-gradient(to right, #dd5e89, #f7bb97);
                                     ">
                         <q-card-section>
-                          <div class="text-h5"><q-icon name="record_voice_over" color="white" size="3rem"/> Số người theo dõi</div>
+                          <div class="text-h5-title"><q-icon name="record_voice_over" color="white" size="3rem"/> Số người theo dõi</div>
                         </q-card-section>
                         <q-card-section :class="'q-pt-none txt-18'">
                           {{ countUser }} người  <q-icon name="info" color="white" @click="goUserFollow" size="1.2rem"/>

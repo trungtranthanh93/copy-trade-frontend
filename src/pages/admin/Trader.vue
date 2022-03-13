@@ -12,15 +12,15 @@
           rounded-borders
           relative-position
         ">
-        <q-label class="text-h6">Màn hình {{ titleScreen }}</q-label>
+        <q-label class="text-h6">Màn Hình {{ titleScreen }}</q-label>
           <q-separator class="q-mb-md" />
             <div class="q-md">
                 <div class="row">
                     <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
                             <q-card class="q-md" style="background: linear-gradient(to right, #2980b9, #2c3e50);">
                                 <q-card-section>
-                                    <div class="text-h5">
-                                        <q-icon name="assignment_ind" color="white" size="3rem" /> Biệt danh chuyên gia
+                                    <div class="text-h5-title">
+                                        <q-icon name="assignment_ind" color="white" size="3rem" /> Biệt Danh Chuyên Gia
                                     </div>
                                 </q-card-section>
 
@@ -33,8 +33,8 @@
                     <q-card :class="`${$q.screen.width > 768 ? 'q-ml-md' : ''}`" style="background: linear-gradient(to right, #5c258d, #4389a2);">
                         <q-card-section>
 
-                            <div class="text-h5">
-                                <q-icon name="account_circle" color="white" size="3rem" /> Loại tài khoản</div>
+                            <div class="text-h5-title">
+                                <q-icon name="account_circle" color="white" size="3rem" /> Loại Tài Khoản</div>
                         </q-card-section>
 
                         <q-card-section :class="'q-pt-none txt-18'">
@@ -46,8 +46,8 @@
                 <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12 q-mt-md'}`">
                     <q-card :class="`${$q.screen.width > 768 ? 'q-ml-md' : ''}`" style="background: linear-gradient(to right, #134e5e, #71b280);">
                         <q-card-section>
-                            <div class="text-h5">
-                                <q-icon name="account_balance_wallet" color="white" size="3rem" /> Số dư ban đầu
+                            <div class="text-h5-title">
+                                <q-icon name="account_balance_wallet" color="white" size="3rem" /> Số Dư Ban Đầu
                             </div>
                         </q-card-section>
 
@@ -59,8 +59,8 @@
                 <div :class="`${$q.screen.width > 768 ? 'col-4 q-mt-md' : 'col-12 q-mt-md'}`">
                     <q-card class="q-md" style="background: linear-gradient(to right, #2bc0e4, #eaecc6);">
                         <q-card-section>
-                            <div class="text-h5">
-                                <q-icon name="account_balance" color="white" size="3rem" /> Số dư hiện tại</div>
+                            <div class="text-h5-title">
+                                <q-icon name="account_balance" color="white" size="3rem" /> Số Dư Hiện Tại</div>
                         </q-card-section>
 
                         <q-card-section :class="'q-pt-none txt-18'">
@@ -71,8 +71,8 @@
                 <div :class="`${$q.screen.width > 768 ? 'col-4 q-mt-md' : 'col-12 q-mt-md'}`">
                     <q-card :class="`${$q.screen.width > 768 ? 'q-ml-md' : ''}`" style="background: linear-gradient(to right, #4776e6, #8e54e9);">
                         <q-card-section>
-                            <div class="text-h5">
-                                <q-icon name="paid" color="white" size="3rem" /> Lợi nhuận</div>
+                            <div class="text-h5-title">
+                                <q-icon name="paid" color="white" size="3rem" /> Lợi Nhuận</div>
                         </q-card-section>
 
                         <q-card-section :class="'q-pt-none txt-18'">
@@ -83,8 +83,8 @@
                 <div :class="`${$q.screen.width > 768 ? 'col-4 q-mt-md' : 'col-12 q-mt-md'}`">
                     <q-card :class="`${$q.screen.width > 768 ? 'q-ml-md' : ''}`" style="background: linear-gradient(to right, #dd5e89, #f7bb97);">
                         <q-card-section>
-                            <div class="text-h5">
-                                <q-icon name="record_voice_over" color="white" size="3rem" /> Số người theo dõi
+                            <div class="text-h5-title">
+                                <q-icon name="record_voice_over" color="white" size="3rem" /> Số Người Theo Dõi
                             </div>
                         </q-card-section>
                         <q-card-section :class="'q-pt-none txt-18'">
@@ -105,7 +105,7 @@
                               'q-pa-md q-ma-none no-shadow': true,
                               'full-width': !$q.platform.is.mobile,
                             }" align="left">
-                            <q-label class="text-h5">Cài đặt lệnh</q-label>
+                            <q-label class="text-h5-title">Cài Đặt Lệnh</q-label>
                             <q-separator class="q-mt-md" />
                 <q-card-section>
                       <div class="col">
@@ -130,7 +130,7 @@
           </div>
           <div :class="`${$q.screen.width > 768 ? 'col-9' : 'col-12 q-mt-md'}`">
               <div :class="`${$q.screen.width > 768 ? 'q-pl-md' : ''}`">
-                  <q-table color="primary" flat bordered title="Kết quả" :rows="rows" :columns="columns" row-key="name"
+                  <q-table color="primary" flat bordered title="Kết Quả" :rows="rows" :columns="columns" row-key="name"
                     :pagination="pagination" />
                 </div>
           </div>
@@ -383,7 +383,7 @@
 
 <style>
 .txt-18 {
-  font-size: 18px;
-  font-weight: 500
+  font-size: 20px;
+  font-weight: 600;
 }
 </style>

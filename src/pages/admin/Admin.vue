@@ -19,7 +19,7 @@
           <img class="top-left" src="logo.png" style="height: 40px; margin-right: 2%;" />
         </div> -->
         <q-list padding>
-        <MenuItem title='Trang chủ' caption='' icon='home' iconColor='orange' link='/admin/home' />
+        <MenuItem title='Trang Chủ' caption='' icon='home' iconColor='orange' link='/admin/home' />
 
         <q-separator />
           <q-expansion-item :content-inset-level="0.5">
@@ -44,7 +44,7 @@
               <q-item-section>Auto Trade</q-item-section>
             </template>
             <MenuItem
-              title= 'Bot có sẵn'
+              title= 'Bot Có Sẵn'
               caption= ''
               icon= 'auto_fix_high'
               iconColor= 'orange'
@@ -55,17 +55,17 @@
               <q-item-section avatar>
                 <q-icon name="telegram" color="orange" />
               </q-item-section>
-              <q-item-section>Bot Telegram</q-item-section>
+              <q-item-section>BOT Telegram</q-item-section>
             </template>
             <MenuItem
-              title= 'Tham gia nhóm'
+              title= 'Tham Gia Nhóm'
               caption= ''
               icon= 'add_box'
               iconColor= 'orange'
               link= '/admin/telegram-bot'
             />
             <MenuItem
-              title= 'Cài đặt'
+              title= 'Cài Đặt'
               caption= ''
               icon= 'settings_suggest'
               iconColor= 'orange'
@@ -75,13 +75,13 @@
 
           </q-expansion-item>
           <q-separator />
-          <MenuItem title='Chuyển tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
+          <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
         <q-expansion-item :content-inset-level="0.5">
           <template v-slot:header>
             <q-item-section avatar>
               <q-icon name="phonelink_setup" color="orange" />
             </q-item-section>
-            <q-item-section>Lịch sử cài đặt</q-item-section>
+            <q-item-section>Lịch Sử Cài Đặt</q-item-section>
           </template>
           <!-- <MenuItem title='Copy Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-copytrade' /> -->
           <MenuItem title='Auto Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-autotrade' />
@@ -122,7 +122,7 @@ const linksData = [
   //   separator: true,
   // },
   {
-    title: 'Kết nối sàn',
+    title: 'Kết Nối Sàn',
     caption: 'Kết nối vào sàn để đồng bộ lệnh đánh',
     icon: 'login',
     iconColor: 'orange',
@@ -130,7 +130,7 @@ const linksData = [
     separator: true,
   },
   {
-    title: 'Đăng xuất',
+    title: 'Đăng Xuất',
     caption: '',
     icon: 'logout',
     iconColor: 'orange',

@@ -11,7 +11,7 @@
           <form class="q-gutter-x-xs" style="width: 100%">
             <div class="row">
               <div class="col">
-                  <q-label class="text-h5">Cài đặt lệnh</q-label>
+                  <q-label class="text-h5-title">Cài đặt lệnh</q-label>
               </div>
               <!-- <div class="col text-right">
                   <DialogSwapMoney />

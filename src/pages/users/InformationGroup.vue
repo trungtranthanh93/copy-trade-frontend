@@ -20,8 +20,8 @@
                         background: linear-gradient(to right, #dd5e89, #f7bb97);
                       ">
                 <q-card-section>
-                  <div class="text-h5">
-                    <q-icon name="paid" color="white" size="3rem" /> Biệt danh</div>
+                  <div class="text-h5-title">
+                    <q-icon name="paid" color="white" size="3rem" /> Biệt Danh</div>
                 </q-card-section>
 
                 <q-card-section :class="'q-pt-none txt-18'">
@@ -34,8 +34,8 @@
                     background: linear-gradient(to right, #5c258d, #4389a2);
                   ">
             <q-card-section>
-              <div class="text-h5">
-                <q-icon name="account_circle" color="white" size="3rem" /> Loại tài khoản</div>
+              <div class="text-h5-title">
+                <q-icon name="account_circle" color="white" size="3rem" /> Loại Tài Khoản</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
@@ -49,8 +49,8 @@
                     background: linear-gradient(to right, #134e5e, #71b280);
                   ">
             <q-card-section>
-              <div class="text-h5">
-                <q-icon name="account_balance_wallet" color="white" size="3rem" /> Số dư ban đầu</div>
+              <div class="text-h5-title">
+                <q-icon name="account_balance_wallet" color="white" size="3rem" /> Số Dư Ban Đầu</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
@@ -63,8 +63,8 @@
                     background: linear-gradient(to right, #2bc0e4, #eaecc6);
                   ">
             <q-card-section>
-              <div class="text-h5">
-                <q-icon name="account_balance" color="white" size="3rem" /> Số dư hiện tại</div>
+              <div class="text-h5-title">
+                <q-icon name="account_balance" color="white" size="3rem" /> Số Dư Hiện Tại</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
@@ -77,8 +77,8 @@
                     background: linear-gradient(to right, #4776e6, #8e54e9);
                   ">
             <q-card-section>
-              <div class="text-h5">
-                <q-icon name="paid" color="white" size="3rem" /> Lợi nhuận</div>
+              <div class="text-h5-title">
+                <q-icon name="paid" color="white" size="3rem" /> Lợi Nhuận</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
@@ -91,8 +91,8 @@
                     background: linear-gradient(to right, #2980b9, #2c3e50);
                   ">
             <q-card-section>
-              <div class="text-h5">
-                <q-icon name="flag" color="white" size="3rem" /> Lệnh thắng thua</div>
+              <div class="text-h5-title">
+                <q-icon name="flag" color="white" size="3rem" /> Thắng / Thua</div>
             </q-card-section>
 
             <q-card-section :class="'q-pt-none txt-18'">
@@ -404,7 +404,7 @@ export default {
 </script>
 <style lang="css" scoped>
 .txt-18 {
-      font-size: 18px;
-      font-weight: 500
-    }
+  font-size: 20px;
+  font-weight: 600;
+}
 </style>

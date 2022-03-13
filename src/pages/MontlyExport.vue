@@ -1,7 +1,7 @@
 <template>
   <div class="col-8">
       <q-card class="q-pa-md">
-          <q-label class="text-h6">Thống kê lãi tháng {{monthly + 1}}</q-label>
+          <q-label class="text-h6">Thống Kê Lãi Tháng {{monthly + 1}}</q-label>
           <q-separator class="q-mt-md" />
          <div class="text-center q-pa-md">
             <q-chip color="primary" text-color="white" size="md" icon="attach_money">Tổng lợi nhuận tháng: {{totalMonth}}%</q-chip>

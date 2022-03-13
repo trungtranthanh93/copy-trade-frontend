@@ -14,7 +14,7 @@
                   <q-card class="q-pa-md">
                     <div class="row q-mb-md">
                       <div class="col">
-                          <q-label class="text-h5">Cấu hình quản lý vốn </q-label>
+                          <q-label class="text-h5-title">Cấu Hình Quản Lý Vốn </q-label>
                       </div>
                       <!-- <div class="col text-right">
                           <DialogSwapMoney />
@@ -41,7 +41,7 @@
                 </div>
                 <div :class="`${$q.screen.width > 768 ? 'col-6 q-pa-md' : 'col-12 q-mt-md'}`">
                     <q-card class="q-pa-md">
-                      <q-label class="text-h5">Cấu hình phương pháp</q-label>
+                      <q-label class="text-h5-title">Cấu Hình Phương Pháp</q-label>
                       <q-separator class="q-mt-md" />
                       <div class="q-pa-md">
                         <q-item-label class="q-mb-sm">Tính năng sử dụng (*)</q-item-label>

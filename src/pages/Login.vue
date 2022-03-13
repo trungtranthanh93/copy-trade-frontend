@@ -117,13 +117,15 @@
             } else if (user.groupId) {
               $router.push({ name: 'infomation-copy-group' });
             } else {
-              $router.push({ name: 'infomation-copy-trader' });
+              // $router.push({ name: 'infomation-copy-trader' });
+              $router.push('/user/home');
             }
           } else if (user.role === 1) {
             if (user.botId) {
               $router.push('/admin/information-bot');
             } else {
-              $router.push('/admin/solo');
+              // $router.push('/admin/solo');
+              $router.push('/admin/home');
 
             }
           } else if (user.role === 3) {

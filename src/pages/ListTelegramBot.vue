@@ -3,7 +3,7 @@
   <q-layout class="justify-center">
     <q-page-container class="window-height">
       <q-card class="q-pa-md">
-            <q-label class="text-h5">Danh sách BOT Telegram</q-label>
+            <q-label class="text-h5-title">Danh sách BOT Telegram</q-label>
             <q-separator class="q-mt-md" />
         <div class="row q-mt-md">
             <div v-for="bot in listBot" :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12 q-mt-md'}`" :key="bot.id">
