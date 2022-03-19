@@ -88,6 +88,11 @@ const routes: RouteRecordRaw[] = [
         path: 'setting-history-autotrade',
         name: 'setting-history-autotrade-admin',
         component: () => import('pages/AutoTradeSettingHistory.vue'),
+      },
+      {
+        path: 'statistic-bot',
+        name: 'statistic-bot-admin',
+        component: () => import('pages/StatisticBot.vue'),
       }
     ],
   },
@@ -169,6 +174,11 @@ const routes: RouteRecordRaw[] = [
         path: 'setting-history-autotrade',
         name: 'setting-history-autotrade-user',
         component: () => import('pages/AutoTradeSettingHistory.vue'),
+      },
+      {
+        path: 'statistic-bot',
+        name: 'statistic-bot-user',
+        component: () => import('pages/StatisticBot.vue'),
       }
     ],
   },

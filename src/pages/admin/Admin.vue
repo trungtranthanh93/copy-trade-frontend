@@ -44,35 +44,19 @@
               <q-item-section>Auto Trade</q-item-section>
             </template>
             <MenuItem
-              title= 'Bot Có Sẵn'
+              title= 'Cài Đặt'
               caption= ''
-              icon= 'auto_fix_high'
+              icon= 'settings'
               iconColor= 'orange'
               link= '/admin/setting-bot'
             />
-            <q-expansion-item :content-inset-level="0.5">
-            <template v-slot:header>
-              <q-item-section avatar>
-                <q-icon name="telegram" color="orange" />
-              </q-item-section>
-              <q-item-section>BOT Telegram</q-item-section>
-            </template>
             <MenuItem
-              title= 'Tham Gia Nhóm'
+              title= 'Thống Kê BOT'
               caption= ''
-              icon= 'add_box'
+              icon= 'sticky_note_2'
               iconColor= 'orange'
-              link= '/admin/telegram-bot'
+              link= '/admin/statistic-bot'
             />
-            <MenuItem
-              title= 'Cài Đặt'
-              caption= ''
-              icon= 'settings_suggest'
-              iconColor= 'orange'
-              link= '/admin/setting-bot-telegram'
-            />
-            </q-expansion-item>
-
           </q-expansion-item>
           <q-separator />
           <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />

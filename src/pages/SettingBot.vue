@@ -13,31 +13,41 @@
                       <div class="col">
                           <q-label class="text-h5-title">Cấu Hình Quản Lý Vốn </q-label>
                       </div>
-                      <!-- <div class="col text-right">
-                          <DialogSwapMoney />
-                      </div> -->
+                      <!-- <q-checkbox v-model="cboxChildInterest" label="Lãi con" /> -->
                     </div>
                     <q-separator />
+                    <div class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Tên cấu hình (*)</q-item-label>
+                        <q-input filled type="text" v-model="settingName" placeholder="VD: KingAI 01"/>
+                    </div>
+                    <div v-if="cboxChildInterest" class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Giá trị lãi con ($)</q-item-label>
+                        <q-input filled type="number" v-model="childInterest" placeholder="Nhập giá trị lãi con" />
+                      </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Loại tài khoản (*)</q-item-label>
                       <q-select filled v-model="accountType" :options="optionAccount" />
                     </div>
                     <div class="q-pa-md">
-                        <q-item-label class="q-mb-sm">Mức chốt lãi (*)</q-item-label>
-                        <q-select filled v-model="takeProfit" :options="optionsProfit" />
+                        <q-item-label class="q-mb-sm">Mức chốt lãi % (*)</q-item-label>
+                        <q-input type="number" min="1" max="100" filled v-model="takeProfit" />
                     </div>
                     <div class="q-pa-md">
-                      <q-item-label class="q-mb-sm">Mức cắt lỗ (*)</q-item-label>
-                      <q-select filled v-model="stopLoss" :options="optionsLost" />
-                    </div>
-                    <div class="q-pa-md">
-                      <q-item-label class="q-mb-sm">Hệ số (*)</q-item-label>
-                      <q-select filled v-model="coefficient" :options="optionsCoefficient" />
+                        <q-item-label class="q-mb-sm">Mức cắt lỗ % (*)</q-item-label>
+                        <q-input type="number" min="1" max="100" filled v-model="stopLoss" />
                     </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Quản lý vốn (*)</q-item-label>
-                      <q-select filled v-model="balanceManagement" :options="optionCapital" />
+                      <q-select filled v-model="balanceManagement" emit-value option-label="label" map-options :options="optionCapital" />
                     </div>
+                    <div class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Giá trị vào lệnh (*)</q-item-label>
+                        <q-input type="textarea" autogrow filled v-model="orderPrice" />
+                    </div>
+                    <div v-if="balanceManagement === 'MARTINGALE'" class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Hình thức tăng giá trị</q-item-label>
+                        <q-select filled v-model="increaseWin" emit-value option-label="label" map-options :options="increaseWinType" />
+                      </div>
                   </q-card>
                 </div>
                 <div :class="`${$q.screen.width > 768 ? 'col-6 q-pa-md' : 'col-12 q-mt-md'}`">
@@ -80,19 +90,14 @@
                             <q-select filled v-model="loseOrdersNum" :options="optionSelect3"/>
                         </div>
                         <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
-                          <q-item-label class="q-mb-sm">Số % Dương Liên Tiếp Muốn Đổi</q-item-label>
-                          <q-select filled v-model="winPercent" :options="percentOpSelect"/>
+                          <q-item-label class="q-mb-sm">Mục tiêu chốt lãi đổi phương pháp ($)</q-item-label>
+                          <q-input type="number" filled v-model="winPercent"/>
                       </div>
                       <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
-                        <q-item-label class="q-mb-sm">Số % Âm Liên Tiếp Muốn Đổi</q-item-label>
-                        <q-select filled v-model="losePercent" :options="percentOpSelect"/>
+                        <q-item-label class="q-mb-sm">Mục tiêu cắt lỗ đổi phương pháp ($)</q-item-label>
+                        <q-input type="number" filled v-model="losePercent"/>
                     </div>
                     </div>
-
-                    <!-- <div class="q-pa-md">
-                      <q-item-label class="q-mb-sm">Phương pháp nâng cao (*)</q-item-label>
-                      <q-select filled v-model="listBotId" multiple max-values="3" :options="optionBot" use-chips stack-label/>
-                    </div> -->
                   </q-card>
               </div>
             </div>
@@ -148,8 +153,22 @@ export default {
     const winPercent = ref(null);
     const losePercent = ref(null);
     const botIdChange = ref(null);
+    const cboxChildInterest = ref(false);
+    const childInterest = ref(null);
+    const settingName = ref(null);
+    const orderPrice = ref(null);
+    const increaseWin = ref('LOSE');
 
     async function onSetting() {
+      if (!settingName.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy nhập tên cấu hình!',
+          icon: 'report_problem',
+        });
+        return;
+      }
       if (!accountType.value) {
         $q.notify({
           color: 'negative',
@@ -163,7 +182,7 @@ export default {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Hãy chọn Mức chốt lãi!',
+          message: 'Hãy nhập Mức chốt lãi!',
           icon: 'report_problem',
         });
         return;
@@ -172,16 +191,16 @@ export default {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Hãy chọn Mức cắt lỗ!',
+          message: 'Hãy nhập Mức cắt lỗ!',
           icon: 'report_problem',
         });
         return;
       }
-      if (!coefficient.value) {
+      if (!balanceManagement.value) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Hãy chọn Hệ số!',
+          message: 'Chọn 1 giá trị Quản lý vốn!',
           icon: 'report_problem',
         });
         return;
@@ -260,28 +279,39 @@ export default {
         } else {
           botIds = JSON.parse(JSON.stringify(this.botId))
         }
+        let orderPriceList
+        if(orderPrice.value.indexOf('-')){
+          orderPriceList = (orderPrice.value).split('-');
+        } else {
+          orderPriceList = [orderPrice.value]
+        }
+
         let data = {
+          settingName: settingName.value,
           accountType: accountType.value ? accountType.value.value : null,
           maxAmount: 10,
           minAmount: 1,
-          stopLoss: stopLoss.value ? stopLoss.value.value : null,
-          takeProfit: takeProfit.value ? takeProfit.value.value : null,
-          coefficient: coefficient.value ? coefficient.value.value : null,
-          isSelectMutilBot: false,
-          balanceManagement: balanceManagement.value ? balanceManagement.value.value : null,
+          stopLoss: stopLoss.value ? stopLoss.value : null,
+          takeProfit: takeProfit.value ? takeProfit.value : null,
+          balanceManagement: balanceManagement.value ? balanceManagement.value : null,
           method: optionId.value ? optionId.value : null,
           methodSetting: {
             winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
             loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
             botList: botIds
+          },
+          balanceSetting: {
+            orderPriceList: orderPriceList.map(Number),
+            increaseCondition: increaseWin.value
           }
-        };
+        }
+        console.log(data);
         const formatData = JSON.parse(JSON.stringify(data),
           (key, value) => value === null || value === '' ? undefined : value);
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/user-setting/available-bot', formatData);
+        let responseContent = await api.put('/user-setting/bot', formatData);
         if (responseContent.status !== 200 && responseContent.status !== 201) {
           throw new Error();
         }
@@ -370,6 +400,7 @@ export default {
     function changeMethods() {
       this.botId = null
     }
+
     onMounted(async () => {
       accountType.value = optionAccount.value[0];
       await getListBot();
@@ -732,12 +763,16 @@ export default {
           value: 'NORMAL',
         },
         {
-          label: 'Gấp thếp (1-2-4-8)',
+          label: 'Gấp thếp',
           value: 'MARTINGALE',
         },
         {
-          label: 'Fibo (1-2-3-5-8)',
+          label: 'Fibo 1',
           value: 'FIBO',
+        },
+        {
+          label: 'Fibo 2',
+          value: 'FIBO2',
         },
       ],
       optionBotV2: [
@@ -764,44 +799,80 @@ export default {
       loseOrdersNum,
       optionSelect3: [
         {
-          label: '1',
-          value: 1,
-        },
-        {
-          label: '2',
+          label: '2%',
           value: 2,
         },
         {
-          label: '3',
+          label: '3%',
           value: 3,
         },
         {
-          label: '4',
+          label: '4%',
           value: 4,
         },
         {
-          label: '5',
+          label: '5%',
           value: 5,
         },
         {
-          label: '6',
+          label: '6%',
           value: 6,
         },
         {
-          label: '7',
+          label: '7%',
           value: 7,
         },
         {
-          label: '8',
+          label: '8%',
           value: 8,
         },
         {
-          label: '9',
+          label: '9%',
           value: 9,
         },
         {
-          label: '10',
+          label: '10%',
           value: 10,
+        },
+        {
+          label: '11%',
+          value: 11,
+        },
+        {
+          label: '12%',
+          value: 12,
+        },
+        {
+          label: '13%',
+          value: 13,
+        },
+        {
+          label: '14%',
+          value: 14,
+        },
+        {
+          label: '15%',
+          value: 15,
+        },
+        {
+          label: '16%',
+          value: 16,
+        },
+        {
+          label: '17%',
+          value: 17,
+        },
+        {
+          label: '18%',
+          value: 18,
+        },
+        {
+          label: '19%',
+          value: 19,
+        },
+        {
+          label: '20%',
+          value: 20,
         },
       ],
       winPercent,
@@ -849,7 +920,26 @@ export default {
         },
       ],
       botIdChange,
-      changeMethods
+      changeMethods,
+      cboxChildInterest,
+      childInterest,
+      settingName,
+      orderPrice,
+      increaseWinType: [
+        {
+          label: 'Gấp khi WIN',
+          value: 'WIN'
+        },
+        {
+          label: 'Gấp khi LOSE',
+          value: 'LOSE'
+        },
+        {
+          label: 'Luôn gấp',
+          value: 'ALWAYS'
+        }
+      ],
+      increaseWin
     };
   },
 };

@@ -23,28 +23,20 @@
               </q-item-section>
               <q-item-section>Auto Trade</q-item-section>
             </template>
-            <MenuItem title='BOT Có Sẵn' caption='' icon='auto_fix_high' iconColor='orange' link='/user/setting-bot' />
-            <q-expansion-item :content-inset-level="0.5">
-              <template v-slot:header>
-                <q-item-section avatar>
-                  <q-icon name="telegram" color="orange" />
-                </q-item-section>
-                <q-item-section>BOT Telegram</q-item-section>
-              </template>
-              <MenuItem title='Tham Gia Nhóm' caption='' icon='add_box' iconColor='orange' link='/user/telegram-bot' />
-              <MenuItem title='Cài Đặt' caption='' icon='settings_suggest' iconColor='orange'
-                link='/user/setting-bot-telegram' />
-            </q-expansion-item>
-            <q-separator />
-            <q-expansion-item :content-inset-level="0.5">
-                <template v-slot:header>
-                  <q-item-section avatar>
-                    <q-icon name="telegram" color="orange" />
-                  </q-item-section>
-                  <q-item-section>BOT VIP</q-item-section>
-                </template>
-                <MenuItem v-for="link in menuLinksBotVip" :key="link.title" v-bind="link" />
-              </q-expansion-item>
+            <MenuItem
+              title= 'Cài Đặt'
+              caption= ''
+              icon= 'settings'
+              iconColor= 'orange'
+              link= '/user/setting-bot'
+            />
+            <MenuItem
+              title= 'Thống Kê BOT'
+              caption= ''
+              icon= 'sticky_note_2'
+              iconColor= 'orange'
+              link= '/user/statistic-bot'
+            />
           </q-expansion-item>
           <q-separator />
           <!-- <q-expansion-item :content-inset-level="0.5">
