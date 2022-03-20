@@ -38,7 +38,7 @@
                     </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Quản lý vốn (*)</q-item-label>
-                      <q-select filled v-model="balanceManagement" emit-value option-label="label" map-options :options="optionCapital" />
+                      <q-select filled v-model="balanceManagement" emit-value option-label="label" map-options :options="optionCapital" @update:model-value="val => changeBalanceManagement(val)"/>
                     </div>
                     <div class="q-pa-md">
                         <q-item-label class="q-mb-sm">Giá trị vào lệnh (*)</q-item-label>
@@ -264,11 +264,11 @@ export default {
         return;
       }
 
-      if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 3) {
+      if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Vui lòng chọn tối đa 3 phương pháp',
+          message: 'Vui lòng chọn tối đa 5 phương pháp',
           icon: 'report_problem',
         });
         return;
@@ -319,7 +319,6 @@ export default {
             increaseCondition: increaseWin.value
           }
         }
-        console.log(data);
         const formatData = JSON.parse(JSON.stringify(data),
           (key, value) => value === null || value === '' ? undefined : value);
         let token = localStorage.getItem('jwt');
@@ -413,6 +412,16 @@ export default {
 
     function changeMethods() {
       this.botId = null
+    }
+
+    function changeBalanceManagement(val) {
+      if (val === 'MARTINGALE') {
+        this.orderPrice = '1-2-4-8-17-35';
+      } else if (val === 'FIBO' || val === 'FIBO2') {
+        this.orderPrice = '1-2-3-5-8-13-21-34-55-89-144';
+      } else {
+        this.orderPrice = 1;
+      }
     }
 
     onMounted(async () => {
@@ -955,7 +964,8 @@ export default {
       ],
       increaseWin,
       takeIncome,
-      loseIncome
+      loseIncome,
+      changeBalanceManagement
     };
   },
 };

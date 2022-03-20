@@ -61,9 +61,9 @@
 const columns = [
     { name: 'botId', align: 'center', label: 'STT', field: 'botId', sortable: true },
     { name: 'botName', align: 'center', label: 'Tên phương pháp', field: 'botName', sortable: true },
-    { name: 'alwayWin', align: 'center', label: 'Số lệnh win liên tiếp', field: 'alwayWin', sortable: true },
-    { name: 'alwayLose', align: 'center', label: 'Số lệnh lose liên tiếp', field: 'alwayLose', sortable: true },
-    { name: 'winLoseInDay', align: 'center', label: 'Số lệnh Win/Lose ngày', field: 'winLoseInDay' },
+    { name: 'alwayWin', align: 'center', label: 'Chuỗi lệnh win liên tiếp', field: 'alwayWin', sortable: true },
+    { name: 'alwayLose', align: 'center', label: 'Chuỗi lệnh lose liên tiếp', field: 'alwayLose', sortable: true },
+    { name: 'winLoseInDay', align: 'center', label: 'Chuỗi lệnh Win/Lose ngày', field: 'winLoseInDay' },
     { name: 'winRate', align: 'center', label: 'Tỉ lệ thắng', field: 'winRate' },
 ]
 
@@ -75,6 +75,9 @@ export default {
     setup () {
         // const $q = useQuasar();
         const rows = ref([]);
+        const pagination = ref({
+            rowsPerPage: 10, // current rows per page being displayed
+        });
 
         async function getStatistic() {
             // $q.loading.show({
@@ -117,7 +120,8 @@ export default {
 
         return {
             columns,
-            rows
+            rows,
+            pagination
         }
     }
 }
