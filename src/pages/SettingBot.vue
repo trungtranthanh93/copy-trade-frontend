@@ -22,7 +22,7 @@
                     </div>
                     <div v-if="cboxChildInterest" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Giá trị lãi con ($)</q-item-label>
-                        <q-input filled type="number" v-model="childInterest" placeholder="Nhập giá trị lãi con" />
+                        <q-input filled type="number" v-model="childInterest" placeholder="Nhập giá trị lãi con" suffix="$"/>
                       </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Loại tài khoản (*)</q-item-label>
@@ -30,11 +30,11 @@
                     </div>
                     <div class="q-pa-md">
                         <q-item-label class="q-mb-sm">Mức chốt lãi % (*)</q-item-label>
-                        <q-input type="number" min="1" max="100" filled v-model="takeProfit" />
+                        <q-input type="number" min="1" max="100" filled v-model="takeProfit" suffix="%" />
                     </div>
                     <div class="q-pa-md">
                         <q-item-label class="q-mb-sm">Mức cắt lỗ % (*)</q-item-label>
-                        <q-input type="number" min="1" max="100" filled v-model="stopLoss" />
+                        <q-input type="number" min="1" max="100" filled v-model="stopLoss" suffix="%" />
                     </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Quản lý vốn (*)</q-item-label>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="q-pa-md">
                         <q-item-label class="q-mb-sm">Giá trị vào lệnh (*)</q-item-label>
-                        <q-input type="textarea" autogrow filled v-model="orderPrice" />
+                        <q-input type="textarea" autogrow filled v-model="orderPrice" placholder=""/>
                     </div>
                     <div v-if="balanceManagement === 'MARTINGALE'" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Hình thức tăng giá trị</q-item-label>
@@ -91,13 +91,23 @@
                         </div>
                         <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
                           <q-item-label class="q-mb-sm">Mục tiêu chốt lãi đổi phương pháp ($)</q-item-label>
-                          <q-input type="number" filled v-model="winPercent"/>
+                          <q-input type="number" filled v-model="winPercent" suffix="$"/>
                       </div>
                       <div v-if="optionId == 'CHANGE_BOT'" class="q-pa-md">
                         <q-item-label class="q-mb-sm">Mục tiêu cắt lỗ đổi phương pháp ($)</q-item-label>
-                        <q-input type="number" filled v-model="losePercent"/>
+                        <q-input type="number" filled v-model="losePercent" suffix="$"/>
                     </div>
                     </div>
+                    <div v-if="optionId == 'WIN_LOSE_WAIT'">
+                      <div class="q-pa-md">
+                        <q-item-label class="q-mb-sm">Mục tiêu chốt lãi muốn chờ ($)</q-item-label>
+                        <q-input type="number" filled v-model="takeIncome" suffix="$" />
+                    </div>
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Mục tiêu cắt lỗ muốn chờ ($)</q-item-label>
+                      <q-input type="number" filled v-model="loseIncome" suffix="$" />
+                  </div>
+                  </div>
                   </q-card>
               </div>
             </div>
@@ -158,6 +168,8 @@ export default {
     const settingName = ref(null);
     const orderPrice = ref(null);
     const increaseWin = ref('LOSE');
+    const takeIncome = ref(null);
+    const loseIncome = ref(null);
 
     async function onSetting() {
       if (!settingName.value) {
@@ -298,7 +310,9 @@ export default {
           methodSetting: {
             winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
             loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
-            botList: botIds
+            botList: botIds,
+            takeIncome: takeIncome.value ? takeIncome.value : null,
+            loseIncome: loseIncome.value ? loseIncome.value : null
           },
           balanceSetting: {
             orderPriceList: orderPriceList.map(Number),
@@ -799,79 +813,79 @@ export default {
       loseOrdersNum,
       optionSelect3: [
         {
-          label: '2%',
+          label: '2',
           value: 2,
         },
         {
-          label: '3%',
+          label: '3',
           value: 3,
         },
         {
-          label: '4%',
+          label: '4',
           value: 4,
         },
         {
-          label: '5%',
+          label: '5',
           value: 5,
         },
         {
-          label: '6%',
+          label: '6',
           value: 6,
         },
         {
-          label: '7%',
+          label: '7',
           value: 7,
         },
         {
-          label: '8%',
+          label: '8',
           value: 8,
         },
         {
-          label: '9%',
+          label: '9',
           value: 9,
         },
         {
-          label: '10%',
+          label: '10',
           value: 10,
         },
         {
-          label: '11%',
+          label: '11',
           value: 11,
         },
         {
-          label: '12%',
+          label: '12',
           value: 12,
         },
         {
-          label: '13%',
+          label: '13',
           value: 13,
         },
         {
-          label: '14%',
+          label: '14',
           value: 14,
         },
         {
-          label: '15%',
+          label: '15',
           value: 15,
         },
         {
-          label: '16%',
+          label: '16',
           value: 16,
         },
         {
-          label: '17%',
+          label: '17',
           value: 17,
         },
         {
-          label: '18%',
+          label: '18',
           value: 18,
         },
         {
-          label: '19%',
+          label: '19',
           value: 19,
         },
         {
-          label: '20%',
+          label: '20',
           value: 20,
         },
       ],
@@ -939,7 +953,9 @@ export default {
           value: 'ALWAYS'
         }
       ],
-      increaseWin
+      increaseWin,
+      takeIncome,
+      loseIncome
     };
   },
 };

@@ -34,6 +34,7 @@
               :key="link.title"
               v-bind="link"
             />
+          <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/admin/setting-history-copytrade' />
           </q-expansion-item>
           <q-separator />
           <q-expansion-item :content-inset-level="0.5">
@@ -57,19 +58,10 @@
               iconColor= 'orange'
               link= '/admin/statistic-bot'
             />
+            <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/admin/setting-history-autotrade' />
           </q-expansion-item>
           <q-separator />
           <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
-        <q-expansion-item :content-inset-level="0.5">
-          <template v-slot:header>
-            <q-item-section avatar>
-              <q-icon name="phonelink_setup" color="orange" />
-            </q-item-section>
-            <q-item-section>Lịch Sử Cài Đặt</q-item-section>
-          </template>
-          <!-- <MenuItem title='Copy Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-copytrade' /> -->
-          <MenuItem title='Auto Trade' caption='' icon='' iconColor='orange' link='/admin/setting-history-autotrade' />
-        </q-expansion-item>
         <q-separator />
           <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
         </q-list>

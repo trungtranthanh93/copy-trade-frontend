@@ -14,8 +14,18 @@
       <q-scroll-area style="height: 100%; border-right: 1px solid #ddd">
         <q-list padding>
           <MenuItem title='Trang Chủ' caption='' icon='home' iconColor='orange' link='/user/home' />
-          <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
-          <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
+          <q-expansion-item :content-inset-level="0.5">
+            <template v-slot:header>
+              <q-item-section avatar>
+                <q-icon name="add_task" color="orange" />
+              </q-item-section>
+              <q-item-section>Copy Trade</q-item-section>
+            </template>
+            <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
+            <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
+            <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/user/setting-history-copytrade' />
+          </q-expansion-item>
+          <q-separator />
           <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
@@ -37,6 +47,7 @@
               iconColor= 'orange'
               link= '/user/statistic-bot'
             />
+            <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/user/setting-history-autotrade' />
           </q-expansion-item>
           <q-separator />
           <!-- <q-expansion-item :content-inset-level="0.5">
@@ -51,17 +62,6 @@
             <MenuItem :key="menuLinks[8].title" v-bind="menuLinks[8]" />
           </q-expansion-item> -->
           <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/user/wallet' />
-          <q-expansion-item :content-inset-level="0.5">
-            <template v-slot:header>
-              <q-item-section avatar>
-                <q-icon name="phonelink_setup" color="orange" />
-              </q-item-section>
-              <q-item-section>Lịch Sử Cài Đặt</q-item-section>
-            </template>
-            <MenuItem title='Copy Trade' caption='' icon='' iconColor='orange' link='/user/setting-history-copytrade' />
-            <MenuItem title='Auto Trade' caption='' icon='' iconColor='orange' link='/user/setting-history-autotrade' />
-          </q-expansion-item>
-          <q-separator />
           <MenuItem :key="menuLinks[3].title" v-bind="menuLinks[3]" />
           <MenuItem :key="menuLinks[4].title" v-bind="menuLinks[4]" />
           <!-- <MenuItem :key="menuLinks[5].title" v-bind="menuLinks[5]" /> -->
@@ -81,9 +81,9 @@
   import { useQuasar } from 'quasar';
   const linksData = [
     {
-      title: 'Copy Trade',
+      title: 'Danh Sách Chuyên Gia',
       caption: 'Đánh lệnh theo chuyên gia',
-      icon: 'account_balance',
+      icon: 'ballot',
       iconColor: 'orange',
       link: '/user/infomation-copy-trader',
       separator: true,
