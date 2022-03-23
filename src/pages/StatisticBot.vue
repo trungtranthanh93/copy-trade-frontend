@@ -7,8 +7,8 @@
             :pagination="pagination">
             <template v-slot:body="props">
                 <q-tr :props="props">
-                    <q-td key="botId" :props="props">
-                            {{ props.row.botId }}
+                    <q-td key="stt" :props="props">
+                            {{ props.row.stt }}
                     </q-td>
                     <q-td key="botName" :props="props">
                             {{ props.row.botName }}
@@ -59,7 +59,7 @@
 </template>
 <script>
 const columns = [
-    { name: 'botId', align: 'center', label: 'STT', field: 'botId', sortable: true },
+    { name: 'stt', align: 'center', label: 'STT', field: 'stt', sortable: true },
     { name: 'botName', align: 'center', label: 'Tên phương pháp', field: 'botName', sortable: true },
     { name: 'alwayWin', align: 'center', label: 'Chuỗi lệnh win liên tiếp', field: 'alwayWin', sortable: true },
     { name: 'alwayLose', align: 'center', label: 'Chuỗi lệnh lose liên tiếp', field: 'alwayLose', sortable: true },
