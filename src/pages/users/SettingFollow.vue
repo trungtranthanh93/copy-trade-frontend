@@ -194,12 +194,25 @@ export default {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message:
-              'Không đủ vốn, folow thất bại. Quý khách vui lòng nâng vốn thối thiểu là 100 đô để tiến hành folow',
+            message:'Không đủ vốn, Folow thất bại!',
             icon: 'report_problem',
           });
           return;
         }
+
+        if (
+          error.response.status === 400 &&
+          error.response.data.message === 'master.isLocked'
+        ) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message:'Cài đặt thất bại, chuyên gia đang trong ca. Vui lòng liên hệ chuyên gia!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+
         $q.notify({
           color: 'negative',
           position: 'top',

@@ -100,12 +100,15 @@
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
 
         <div class="row">
-          <div :class="`${$q.screen.width > 768 ? 'col-3' : 'col-12'}`">
+          <div :class="`${$q.screen.width > 768 ? 'col-4' : 'col-12'}`">
               <q-card :class="{
                               'q-pa-md q-ma-none no-shadow': true,
                               'full-width': !$q.platform.is.mobile,
                             }" align="left">
-                            <q-label class="text-h5-title">Cài Đặt Lệnh</q-label>
+                            <div class="row">
+                              <div class="col"><q-label class="text-h5-title">Cài Đặt Lệnh</q-label></div>
+                              <div class="col text-right"><q-btn v-on:click="setLock" color="primary" :icon="locked ? 'lock_open' : 'lock'" :label="!locked ? 'Khoá' : 'Mở khoá'" /></div>
+                            </div>
                             <q-separator class="q-mt-md" />
                 <q-card-section>
                       <div class="col">
@@ -128,7 +131,7 @@
                 </q-card-section>
               </q-card>
           </div>
-          <div :class="`${$q.screen.width > 768 ? 'col-9' : 'col-12 q-mt-md'}`">
+          <div :class="`${$q.screen.width > 768 ? 'col-8' : 'col-12 q-mt-md'}`">
               <div :class="`${$q.screen.width > 768 ? 'q-pl-md' : ''}`">
                   <q-table color="primary" flat bordered title="Kết Quả" :rows="rows" :columns="columns" row-key="name"
                     :pagination="pagination" />
@@ -182,6 +185,7 @@
       const isDisableDown = ref(false);
       const nickName = ref('');
       const titleScreen = ref('');
+      const locked = ref('');
 
       async function getSportBalance() {
         try {
@@ -295,6 +299,7 @@
           await api.post('/users/valid-token');
           let user = await api.get('/users/get-profile');
           nickName.value = user.data.username;
+          locked.value = user.data.isLocked;
           if (user.data.botId) {
             $q
               .dialog({
@@ -351,6 +356,40 @@
       function getTitleScreen() {
         titleScreen.value = localStorage.getItem('title-screen');
       }
+
+      async function setLock(){
+        $q.loading.show({
+          spinner: QSpinnerIos,
+          spinnerColor: 'yellow',
+          spinnerSize: 140,
+          backgroundColor: 'purple',
+          message: 'Đang xử lý ....',
+          messageColor: 'black',
+        });
+        try {
+          let token = localStorage.getItem('jwt');
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          let response = await api.put('/users/lock', {
+            type: !locked.value ? 'lock' : 'unlock'
+          });
+          if(response.status === 200) {
+            $q.notify({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: `Bạn đã ${!locked.value ? 'khoá' : 'mở khoá'} follow thành công!`,
+              position: 'top',
+            });
+            locked.value = response.data.isLocked
+          }
+        } catch (error) {
+          console.log(error);
+        } finally {
+          $q.loading.hide();
+        }
+
+
+      }
       onBeforeMount(onCheckValid);
       onMounted(async () => {
         await getSportBalance(), await getCountUser(), await getStatistic(), getTitleScreen();
@@ -372,7 +411,9 @@
         isDisableDown,
         logout,
         nickName,
-        titleScreen
+        titleScreen,
+        locked,
+        setLock
       };
     },
     updated(){

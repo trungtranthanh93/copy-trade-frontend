@@ -285,7 +285,7 @@
               color: 'negative',
               position: 'top',
               message:
-                'Không đủ vốn, folow thất bại. Quý khách vui lòng nâng vốn thối thiểu là 1000 đô để tiến hành folow',
+                'Không đủ vốn, Folow thất bại',
               icon: 'report_problem',
             });
             return;
