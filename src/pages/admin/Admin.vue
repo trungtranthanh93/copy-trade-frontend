@@ -34,7 +34,6 @@
               :key="link.title"
               v-bind="link"
             />
-          <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/admin/setting-history-copytrade' />
           </q-expansion-item>
           <q-separator />
           <q-expansion-item :content-inset-level="0.5">
