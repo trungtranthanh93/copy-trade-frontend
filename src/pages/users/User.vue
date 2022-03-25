@@ -34,6 +34,13 @@
               <q-item-section>Auto Trade</q-item-section>
             </template>
             <MenuItem
+              title= 'MH Kết Quả'
+              caption= ''
+              icon= 'task'
+              iconColor= 'orange'
+              link= '/user/information-bot'
+            />
+            <MenuItem
               title= 'Cài Đặt'
               caption= ''
               icon= 'settings'

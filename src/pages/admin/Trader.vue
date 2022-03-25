@@ -304,7 +304,7 @@
             $q
               .dialog({
                 title: 'Thông báo',
-                message: 'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và tự đánh lệnh ?',
+                message: 'Bạn đang cài Auto Trade. Bạn có chắc chắn dừng?',
                 html: true,
                 cancel: true,
                 persistent: true,

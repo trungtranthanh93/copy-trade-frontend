@@ -330,12 +330,14 @@ export default {
       nickName.value = user.data.username;
       if (user.data.botId) {
         return;
+      } else {
+        $router.back()
       }
       if(user.data.masterId){
         $q.dialog({
         title: 'Thông báo',
         message:
-          'Bạn đang follow theo chuyên gia. Bạn chắc chắn muốn dừng follow chuyên gia và follow theo bot?',
+          'Bạn đang Follow CG. Bạn có chắc chắn dừng?',
         cancel: true,
         persistent: true,
       })
@@ -350,10 +352,10 @@ export default {
         });
       }
       if(user.data.groupId) {
-                $q.dialog({
+        $q.dialog({
           title: 'Thông báo',
           message:
-            'Bạn đang follow theo nhóm chuyên gia. Bạn chắc chắn muốn dừng follow nhóm chuyên gia và follow theo bot?',
+            'Bạn đang Follow theo nhóm CG. Bạn có chắc chắn dừng?',
           cancel: true,
           persistent: true,
         })

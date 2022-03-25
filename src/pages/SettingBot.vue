@@ -127,7 +127,7 @@
 </template>
 <script>
 import { useQuasar, QSpinnerIos } from 'quasar';
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 // import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
@@ -292,14 +292,15 @@ export default {
           botIds = JSON.parse(JSON.stringify(this.botId))
         }
         let orderPriceList
-        if(orderPrice.value.indexOf('-')){
-          orderPriceList = (orderPrice.value).split('-');
-        } else {
+        if (!((orderPrice.value).toString()).indexOf('-') > 0) {
           orderPriceList = [orderPrice.value]
+
+        } else {
+          orderPriceList = (orderPrice.value.toString()).split('-');
         }
 
         let data = {
-          settingName: settingName.value,
+          settingName: settingName.value ? settingName.value : null,
           accountType: accountType.value ? accountType.value.value : null,
           maxAmount: 10,
           minAmount: 1,
@@ -319,6 +320,7 @@ export default {
             increaseCondition: increaseWin.value
           }
         }
+        // console.log(data)
         const formatData = JSON.parse(JSON.stringify(data),
           (key, value) => value === null || value === '' ? undefined : value);
         let token = localStorage.getItem('jwt');
@@ -423,6 +425,55 @@ export default {
         this.orderPrice = 1;
       }
     }
+
+    onBeforeMount(async () => {
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let user = await api.get('/users/get-profile');
+      if (user.data.masterId) {
+        $q.dialog({
+          title: 'Thông báo',
+          message:
+            'Bạn đang Follow CG. Bạn có chắc chắn dừng?',
+          cancel: true,
+          persistent: true,
+        })
+          .onOk(async () => {
+            await api.put('/user-setting/unfolow-bot');
+            $router.push('/user/list-master');
+          })
+          .onCancel(() => {
+            $router.push('/user/information-bot');
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+      }
+      if (user.data.botId) {
+          return
+      }
+      if(user.data.groupId) {
+                $q.dialog({
+          title: 'Thông báo',
+          message:
+            'Bạn đang Follow theo nhóm CG. Bạn có chắc chắn dừng?',
+          cancel: true,
+          persistent: true,
+        })
+          .onOk(async () => {
+            await api.put('/user-setting/unfolow');
+            $router.push('/user/list-master');
+          })
+          .onCancel(() => {
+            $router.push('/user/infomation-copy-group');
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+      }
+      // $router.push('/user/list-master');
+    });
 
     onMounted(async () => {
       accountType.value = optionAccount.value[0];

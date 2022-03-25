@@ -287,47 +287,47 @@ export default {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       let user = await api.get('/users/get-profile');
       nickName.value = user.data.username;
-      if (user.data.masterId) {
-        return;
-      }
-      if (user.data.botId) {
-        $q.dialog({
-          title: 'Thông báo',
-          message:
-            'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và follow theo chuyên gia?',
-          cancel: true,
-          persistent: true,
-        })
-          .onOk(async () => {
-            await api.put('/user-setting/unfolow-bot');
-            $router.push('/user/list-master');
-          })
-          .onCancel(() => {
-            $router.push('/user/information-bot');
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
-      }
-      if(user.data.groupId) {
-                $q.dialog({
-          title: 'Thông báo',
-          message:
-            'Bạn đang follow theo nhóm chuyên gia. Bạn chắc chắn muốn dừng follow nhóm chuyên gia và follow theo chuyên gia?',
-          cancel: true,
-          persistent: true,
-        })
-          .onOk(async () => {
-            await api.put('/user-setting/unfolow');
-            $router.push('/user/list-master');
-          })
-          .onCancel(() => {
-            $router.push('/user/infomation-copy-group');
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
-      }
+      // if (user.data.masterId) {
+      //   return;
+      // }
+      // if (user.data.botId) {
+      //   $q.dialog({
+      //     title: 'Thông báo',
+      //     message:
+      //       'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và follow theo chuyên gia?',
+      //     cancel: true,
+      //     persistent: true,
+      //   })
+      //     .onOk(async () => {
+      //       await api.put('/user-setting/unfolow-bot');
+      //       $router.push('/user/list-master');
+      //     })
+      //     .onCancel(() => {
+      //       $router.push('/user/information-bot');
+      //     })
+      //     .onDismiss(() => {
+      //       // console.log('I am triggered on both OK and Cancel')
+      //     });
+      // }
+      // if(user.data.groupId) {
+      //           $q.dialog({
+      //     title: 'Thông báo',
+      //     message:
+      //       'Bạn đang follow theo nhóm chuyên gia. Bạn chắc chắn muốn dừng follow nhóm chuyên gia và follow theo chuyên gia?',
+      //     cancel: true,
+      //     persistent: true,
+      //   })
+      //     .onOk(async () => {
+      //       await api.put('/user-setting/unfolow');
+      //       $router.push('/user/list-master');
+      //     })
+      //     .onCancel(() => {
+      //       $router.push('/user/infomation-copy-group');
+      //     })
+      //     .onDismiss(() => {
+      //       // console.log('I am triggered on both OK and Cancel')
+      //     });
+      // }
     //   $router.push('/user/list-master');
     });
     return {

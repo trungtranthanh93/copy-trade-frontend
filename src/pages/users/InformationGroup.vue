@@ -349,7 +349,7 @@ export default {
         $q.dialog({
           title: 'Thông báo',
           message:
-            'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và follow theo Group?',
+            'Bạn đang cài Auto Trade. Bạn có chắc chắn dừng?',
           cancel: true,
           persistent: true,
         })
@@ -368,7 +368,7 @@ export default {
         $q.dialog({
           title: 'Thông báo',
           message:
-            'Bạn đang follow theo Chuyên gia. Bạn chắc chắn muốn dừng follow chuyên gia và follow theo Group?',
+            'Bạn đang Follow CG. Bạn có chắc chắn dừng?',
           cancel: true,
           persistent: true,
         })

@@ -173,22 +173,22 @@
                     await api.post('/users/valid-token');
                     let user = await api.get('/users/get-profile');
                     nickName.value = user.data.username;
-                    if (user.data.botId) {
-                        $q
-                            .dialog({
-                                title: 'Thông báo',
-                                message: 'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và tự đánh lệnh ?',
-                                html: true,
-                                cancel: true,
-                                persistent: true,
-                            })
-                            .onOk(async () => {
-                                await api.put('/user-setting/unfolow-bot');
-                            })
-                            .onCancel(() => {
-                                $router.push('/admin/information-bot');
-                            });
-                    }
+                    // if (user.data.botId) {
+                    //     $q
+                    //         .dialog({
+                    //             title: 'Thông báo',
+                    //             message: 'Bạn đang follow theo bot. Bạn chắc chắn muốn dừng follow bot và tự đánh lệnh ?',
+                    //             html: true,
+                    //             cancel: true,
+                    //             persistent: true,
+                    //         })
+                    //         .onOk(async () => {
+                    //             await api.put('/user-setting/unfolow-bot');
+                    //         })
+                    //         .onCancel(() => {
+                    //             $router.push('/admin/information-bot');
+                    //         });
+                    // }
                 } catch (error) {
                     $q.notify({
                         color: 'negative',
