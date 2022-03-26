@@ -4,7 +4,7 @@
           <q-label class="text-h6">Thống Kê Lãi Tháng {{monthly + 1}}</q-label>
           <q-separator class="q-mt-md" />
          <div class="text-center q-pa-md">
-            <q-chip color="primary" text-color="white" size="md" icon="attach_money">Tổng lợi nhuận tháng: {{totalMonth}}%</q-chip>
+            <q-chip color="primary" text-color="white" size="md" icon="attach_money">Tổng lợi nhuận tháng: {{totalIncomeUsd}}$ ({{totalMonth}}%)</q-chip>
          </div>
 
           <div class="row justify-center">
@@ -34,7 +34,7 @@
                       class="my-event"
                     >
                       <div class="title q-calendar__ellipsis">
-                        {{ event.title}}%
+                        {{event.monthlyTotalIncome}}$ &nbsp;({{ event.monthlyIncomePercent}})%
                       </div>
                     </div>
                   </template>
@@ -93,6 +93,7 @@ export default defineComponent({
 
       ],
       totalMonth: 0,
+      totalIncomeUsd: 0
     }
   },
   computed: {
@@ -148,11 +149,13 @@ export default defineComponent({
         this.monthly = new Date(this.selectedDate).getMonth();
         let data = await api.get('/users/monthly-export/'+(this.monthly + 1));
         this.totalMonth = data.data.totalIncome ? parseFloat(data.data.totalIncome).toFixed(2)  : 0;
+        this.totalIncomeUsd = data.data.totalIncomeUsd ? parseFloat(data.data.totalIncomeUsd).toFixed(2)  : 0;
         const dailyReport = data.data.dailyReport;
         this.events = _.map(dailyReport, (obj) => {
           return {
             id: 1,
-            title: parseFloat(obj.monthlyIncomePercent).toFixed(2),
+            monthlyIncomePercent: parseFloat(obj.monthlyIncomePercent).toFixed(2),
+            monthlyTotalIncome: obj.monthlyTotalIncome,
             date: getCurrentDay(this.monthly, obj.daysOfMonth),
             bgcolor: obj.monthlyIncomePercent >= 0 ? 'green' : 'red',
           };
