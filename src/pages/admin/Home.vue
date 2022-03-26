@@ -86,7 +86,7 @@
                                     </div>
                                 </q-card-section>
                                 <q-card-section :class="'q-pt-none txt-18'">
-                                        {{ winLose ? winLose : '0/0' }}
+                                        {{ winOrderQuan ? winOrderQuan: '0'}} / {{loseOrderQuan? loseOrderQuan : '0' }}
                                 </q-card-section>
                             </q-card>
                         </div>
@@ -97,7 +97,7 @@
                 <q-separator color="dark" class="q-mt-md q-mb-md" inset />
 
                 <div :class="`${$q.screen.width > 768 ? 'col-12' : 'col-12 q-mt-md'}`">
-                    <MontlyExport />
+                    <MontlyExport @updateWinLose="updateWinLose"/>
                 </div>
 
             </div>
@@ -143,10 +143,10 @@
             const availableBalance = ref('');
             const incomeAmount = ref('');
             const accountType = ref('');
-            const winLose = ref('');
+            const winOrderQuan = ref('');
+            const loseOrderQuan = ref('');
             const rows = ref([]);
             const nickName = ref('');
-
             async function getSportBalance() {
                 try {
                     let token = localStorage.getItem('jwt');
@@ -223,6 +223,10 @@
                     return obj;
                 });
             }
+            function updateWinLose(data) {
+                winOrderQuan.value = data.winOrderQuan,
+                loseOrderQuan.value = data.loseOrderQuan
+            }
             onBeforeMount(onCheckValid);
             onMounted(async () => {
                 await getSportBalance(), await getStatistic();
@@ -235,10 +239,12 @@
                 incomeAmount,
                 columns,
                 rows,
-                winLose,
                 accountType,
                 logout,
-                nickName
+                nickName,
+                updateWinLose,
+                winOrderQuan,
+                loseOrderQuan
             };
         },
     };

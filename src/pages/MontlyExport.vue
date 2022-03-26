@@ -82,6 +82,7 @@ export default defineComponent({
     NavigationBar,
     QCalendarMonth
   },
+  emits: ["updateWinLose"],
   data () {
     return {
       disablePrev: false,
@@ -151,6 +152,10 @@ export default defineComponent({
         this.totalMonth = data.data.totalIncome ? parseFloat(data.data.totalIncome).toFixed(2)  : 0;
         this.totalIncomeUsd = data.data.totalIncomeUsd ? parseFloat(data.data.totalIncomeUsd).toFixed(2)  : 0;
         const dailyReport = data.data.dailyReport;
+        this.$emit('updateWinLose', {
+          winOrderQuan: data.data.winOrderQuan,
+          loseOrderQuan: data.data.loseOrderQuan
+        })
         this.events = _.map(dailyReport, (obj) => {
           return {
             id: 1,

@@ -96,7 +96,7 @@
               </q-card-section>
 
               <q-card-section :class="'q-pt-none txt-18'">
-                {{ winLose ? winLose : '0/0' }}
+                {{ winOrderQuan ? winOrderQuan: '0'}}/{{loseOrderQuan? loseOrderQuan : '0' }}
               </q-card-section>
             </q-card>
           </div>
@@ -150,7 +150,8 @@ export default {
       rowsPerPage: 10, // current rows per page being displayed
     });
     const nickName = ref('');
-    const winLose = ref('');
+    const winOrderQuan = ref('');
+    const loseOrderQuan = ref('');
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
@@ -269,6 +270,10 @@ export default {
         return obj;
       });
     }
+    function updateWinLose(data) {
+        this.winOrderQuan = data.winOrderQuan,
+        this.loseOrderQuan = data.loseOrderQuan
+    }
     onMounted(async () => {
       $q.loading.show({
         spinner: QSpinnerIos,
@@ -340,7 +345,9 @@ export default {
       accountType,
       isCopyTradeScreen,
       nickName,
-      winLose
+      winOrderQuan,
+      loseOrderQuan,
+      updateWinLose
     };
   },
 };
