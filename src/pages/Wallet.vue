@@ -50,12 +50,14 @@
         </q-layout>
 </template>
 <script>
-    import { ref, onMounted } from 'vue';
+    import { ref, onBeforeMount, onMounted } from 'vue';
     import { api } from 'boot/axios';
     import { useQuasar, QSpinnerIos } from 'quasar';
+    import { useRouter } from 'vue-router';
     // import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
     export default {
         setup() {
+            const $router = useRouter();
             const $q = useQuasar();
             const firstWallet = ref('Tài khoản thực');
             const secondWallet = ref('USDT Wallet');
@@ -148,6 +150,59 @@
                 }
             }
             onMounted(getSportBalance);
+
+            onBeforeMount(async () => {
+                let token = localStorage.getItem('jwt');
+                // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                let user = await api.get('/users/get-profile');
+                if (user.data.masterId) {
+                    $q.dialog({
+                        title: 'Thông báo',
+                        message:
+                            'Bạn đang sử dụng Copy Trade. Bạn có muốn chuyển tiền?',
+                        cancel: true,
+                        persistent: true,
+                    })
+                        .onOk(async () => {
+                            await api.put('/user-setting/unfolow');
+                            $router.push('/user/list-master');
+                            return
+                        })
+                        .onCancel(() => {
+                            $router.push('/user/infomation-copy-trader');
+                        })
+                        .onDismiss(() => {
+                            // console.log('I am triggered on both OK and Cancel')
+                        });
+                }
+                if (user.data.botId) {
+                    $q.dialog({
+                        title: 'Thông báo',
+                        message: 'Bạn đang sử dụng Auto Trade. Bạn có muốn chuyển tiền?',
+                        cancel: true,
+                        persistent: true,
+                    })
+                        .onOk(async () => {
+                            await api.put('/user-setting/unfolow');
+                            // $router.push('/user/list-master');
+                            return
+                        })
+                        .onCancel(() => {
+                            let data = JSON.parse(localStorage.getItem('user'));
+                            console.log('data', data)
+                            if (data.role == 0) {
+                                $router.push('/user/information-bot');
+                            } else if (data.role == 1) {
+                                $router.push('/admin/information-bot');
+                            }
+                            return
+                        })
+                        .onDismiss(() => {
+                            // console.log('I am triggered on both OK and Cancel')
+                        });
+                }
+            })
             return {
                 firstWallet,
                 secondWallet,

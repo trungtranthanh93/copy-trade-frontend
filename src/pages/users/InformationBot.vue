@@ -345,7 +345,7 @@ export default {
           $router.push('/user/setting-bot');
         })
         .onCancel(() => {
-            $router.push('/user/infomation-copy-trade');
+            $router.push('/user/infomation-copy-trader');
         })
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')

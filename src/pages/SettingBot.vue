@@ -26,7 +26,7 @@
                       </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Loại tài khoản (*)</q-item-label>
-                      <q-select filled v-model="accountType" :options="optionAccount" />
+                      <q-select filled v-model="accountType" emit-value option-label="label" map-options :options="optionAccount" />
                     </div>
                     <div class="q-pa-md">
                         <q-item-label class="q-mb-sm">Mức chốt lãi % (*)</q-item-label>
@@ -111,15 +111,66 @@
                   </q-card>
               </div>
             </div>
-          <div class="row justify-center">
-              <q-btn
-                class="full-width bg-positive q-mb-md"
+          <div class="row justify-center q-mb-md">
+            <div :class="`${$q.screen.width > 768 ? 'col-1 q-mr-md' : 'col-6 q-mr-md'}`">
+                <q-btn
+                class="full-width bg-positive"
                 @click="onSetting()"
                 label="Cài đặt"
                 style="width: 100%; max-width: 200px"
               />
             </div>
+            <div class="`${$q.screen.width > 768 ? 'col-2' : 'col-6'}`">
+                <q-btn
+                class="full-width bg-positive"
+                @click="onSave()"
+                label="Lưu cấu hình"
+                style="width: 100%; max-width: 150px"
+              />
+            </div>
+            </div>
         </form>
+        <div class="w-100 q-pa-md">
+            <q-card class="q-pa-md">
+                <q-label class="text-h5-title">Cấu hình cài đặt</q-label>
+                <q-separator class="q-mt-md" />
+                <q-table color="primary" flat bordered title="" :rows="rows" :columns="columns" row-key="name"
+                    :pagination="pagination">
+                    <template v-slot:body="props">
+                        <q-tr :props="props">
+                          <q-td key="stt" :props="props">
+                            {{ props.row.stt }}
+                          </q-td>
+                          <q-td key="settingName" :props="props">
+                            {{ props.row.settingName }}
+                          </q-td>
+                          <q-td key="takeProfit" :props="props">
+                            {{ props.row.takeProfit }}%
+                          </q-td>
+                          <q-td key="stopLoss" :props="props">
+                            {{ props.row.stopLoss }}%
+                          </q-td>
+                          <q-td key="nameMethod" :props="props">
+                            {{ props.row.nameMethod }}
+                          </q-td>
+                          <q-td key="" :props="props">
+                            <div class="row justify-center">
+                                <q-btn v-on:click="applySetting(props.row)" :class="`${$q.screen.width > 768 ? 'q-mr-sm' : 'q-mb-sm'}`" icon="auto_fix_high" color="primary" label="">
+                                    <q-tooltip class="bg-accent">Áp dụng</q-tooltip>
+                                </q-btn>
+                                <q-btn v-on:click="viewSetting(props.row)" :class="`${$q.screen.width > 768 ? 'q-mr-sm' : 'q-mb-sm'}`" icon="info" color="info" label="">
+                                    <q-tooltip class="bg-accent">Chi tiết</q-tooltip>
+                                </q-btn>
+                                <q-btn v-on:click="deleteSetting(props.row.id)" icon="delete" color="red" label="">
+                                    <q-tooltip class="bg-accent">Xoá</q-tooltip>
+                                </q-btn>
+                            </div>
+                          </q-td>
+                        </q-tr>
+                    </template>
+                </q-table>
+            </q-card>
+          </div>
       </div>
       <router-view />
     </q-page-container>
@@ -133,6 +184,15 @@ import { useRouter } from 'vue-router';
 // import DialogSwapMoney from 'layouts/DialogSwapMoney.vue';
 import _ from 'lodash';
 
+const columns = [
+    { name: 'stt', align: 'center', label: 'STT', field: 'stt', sortable: true },
+    { name: 'settingName', align: 'center', label: 'Tên cấu hình', field: 'settingName', sortable: true },
+    { name: 'takeProfit', align: 'center', label: 'Mức chốt lãi', field: 'takeProfit', sortable: true },
+    { name: 'stopLoss', align: 'center', label: 'Mức cắt lỗ', field: 'stopLoss', sortable: true },
+    { name: 'nameMethod', align: 'center', label: 'Tính năng', field: 'nameMethod', sortable: true },
+    { name: '', align: 'center', label: 'Hành động', field: '', sortable: true }
+]
+
 export default {
   setup() {
     const $router = useRouter();
@@ -144,7 +204,7 @@ export default {
     const listBotId = ref(null);
     const modelSession = ref(null);
     const isEnalbeMultiple = ref(false);
-    const botId = ref();
+    const botId = ref(null);
     const optionBot = ref([]);
     const balanceManagement = ref(null);
     const optionId = ref(null);
@@ -170,8 +230,40 @@ export default {
     const increaseWin = ref('LOSE');
     const takeIncome = ref(null);
     const loseIncome = ref(null);
+    const rows = ref([]);
+    const pagination = ref({
+        rowsPerPage: 10, // current rows per page being displayed
+    });
+    const checkUser = ref(null)
 
     async function onSetting() {
+      if(checkUser.value.botId){
+        $q.dialog({
+          title: 'Thông báo',
+          message:'Bạn đang cài Auto Trade. Bạn có chắc chắn dừng?',
+          cancel: true,
+          persistent: true,
+        })
+          .onOk(async () => {
+            await api.put('/user-setting/unfolow');
+            // $router.push('/user/list-master');
+            return
+          })
+          .onCancel(() => {
+            let data = JSON.parse(localStorage.getItem('user'));
+            if (data.role == 0)  {
+              $router.push('/user/information-bot');
+            } else if(data.role == 1) {
+              $router.push('/admin/information-bot');
+            }
+            return
+          })
+          .onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+          });
+          return
+      }
+
       if (!settingName.value) {
         $q.notify({
           color: 'negative',
@@ -301,7 +393,7 @@ export default {
 
         let data = {
           settingName: settingName.value ? settingName.value : null,
-          accountType: accountType.value ? accountType.value.value : null,
+          accountType: accountType.value ? accountType.value : accountType.value.value,
           maxAmount: 10,
           minAmount: 1,
           stopLoss: stopLoss.value ? stopLoss.value : null,
@@ -320,7 +412,6 @@ export default {
             increaseCondition: increaseWin.value
           }
         }
-        // console.log(data)
         const formatData = JSON.parse(JSON.stringify(data),
           (key, value) => value === null || value === '' ? undefined : value);
         let token = localStorage.getItem('jwt');
@@ -356,6 +447,199 @@ export default {
         $q.loading.hide();
       }
     }
+
+    async function onSave() {
+      if (!settingName.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy nhập tên cấu hình!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!accountType.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn Loại tài khoản!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!takeProfit.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy nhập Mức chốt lãi!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!stopLoss.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy nhập Mức cắt lỗ!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!balanceManagement.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Chọn 1 giá trị Quản lý vốn!',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (!isEnalbeMultiple.value && !botId.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn phương pháp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (isEnalbeMultiple.value && !listBotId.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn phương pháp nâng cao',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (isEnalbeMultiple.value && !modelSession.value) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Hãy chọn số phiên âm liên tiếp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+      if (this.optionId == 'MIX' && this.botId.length > 5) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Vui lòng chọn tối đa 5 phương pháp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+
+      if (this.optionId == 'CHANGE_BOT' && this.botIdChange.length > 5) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Vui lòng chọn tối đa 5 phương pháp muốn đổi',
+          icon: 'report_problem',
+        });
+        return;
+      }
+
+      if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Vui lòng chọn tối đa 5 phương pháp',
+          icon: 'report_problem',
+        });
+        return;
+      }
+
+      $q.loading.show({
+        spinner: QSpinnerIos,
+        spinnerColor: 'yellow',
+        spinnerSize: 140,
+        backgroundColor: 'purple',
+        message: 'Đang xử lý ....',
+        messageColor: 'black',
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      try {
+        let botIds
+        if (this.optionId == 'NORMAL' || this.optionId == 'CHANGE_BOT') {
+          botIds = [botId.value]
+        } else {
+          botIds = JSON.parse(JSON.stringify(this.botId))
+        }
+        let orderPriceList
+        if (!((orderPrice.value).toString()).indexOf('-') > 0) {
+          orderPriceList = [orderPrice.value]
+
+        } else {
+          orderPriceList = (orderPrice.value.toString()).split('-');
+        }
+
+        let data = {
+          settingName: settingName.value ? settingName.value : null,
+          accountType: accountType.value ? accountType.value.value: null,
+          maxAmount: 10,
+          minAmount: 1,
+          stopLoss: stopLoss.value ? stopLoss.value : null,
+          takeProfit: takeProfit.value ? takeProfit.value : null,
+          balanceManagement: balanceManagement.value ? balanceManagement.value : null,
+          method: optionId.value ? optionId.value : null,
+          methodSetting: {
+            winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
+            loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
+            botList: botIds,
+            takeIncome: takeIncome.value ? takeIncome.value : null,
+            loseIncome: loseIncome.value ? loseIncome.value : null
+          },
+          balanceSetting: {
+            orderPriceList: orderPriceList.map(Number),
+            increaseCondition: increaseWin.value
+          }
+        }
+        // console.log(data)
+        const formatData = JSON.parse(JSON.stringify(data),
+          (key, value) => value === null || value === '' ? undefined : value);
+        let token = localStorage.getItem('jwt');
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        let responseContent = await api.put('/bot-setting-config', formatData);
+        if (responseContent.status !== 200 && responseContent.status !== 201) {
+          throw new Error();
+        }
+        $q.loading.value = false;
+        $q.notify({
+          color: 'green-4',
+          position: 'top',
+          message: 'Lưu thành công cấu hình cài đặt',
+          icon: 'cloud_done',
+        });
+        $router.go()
+      } catch (error) {
+        if (
+          error.response.status === 400 &&
+          error.response.data.message === 'notEnough.Amount'
+        ) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message:
+              'Không đủ vốn, Folow thất bại',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Cài đặt thất bại. Vui lòng cài đặt lại',
+          icon: 'report_problem',
+        });
+      } finally {
+        $q.loading.hide();
+      }
+    }
+
     function autoClose() {
       let seconds = 3;
       let path = $router.currentRoute.value.path;
@@ -426,11 +710,171 @@ export default {
       }
     }
 
+    async function getListSetting() {
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let responseContent = await api.get('bot-setting-config');
+      let data = responseContent.data;
+      let index = 1;
+      let option = [
+        {
+          label: 'Phương pháp thủ công',
+          value: 'NORMAL',
+        },
+        {
+          label: 'Mix phương pháp',
+          value: 'MIX',
+        },
+        {
+          label: 'Tự động đổi phương pháp',
+          value: 'CHANGE_BOT',
+        },
+        {
+          label: 'Wait Signal (Đợi Win, Lose,...)',
+          value: 'WIN_LOSE_WAIT',
+        },
+      ];
+      rows.value = data.map((obj) => {
+          obj.stt = index;
+          index++;
+          let found = option.find(element => element.value === obj.method);
+          obj.nameMethod = found.label
+          return obj;
+      });
+    }
+
+    function applySetting(config) {
+      if(config.settingName) {
+        settingName.value = config.settingName
+      }
+      if(config.accountType) {
+        accountType.value = config.accountType
+      }
+      if(config.takeProfit) {
+        takeProfit.value = config.takeProfit
+      }
+      if(config.stopLoss) {
+        stopLoss.value = config.stopLoss
+      }
+      if(config.balanceManagement) {
+        balanceManagement.value = config.balanceManagement
+      }
+      if(config.balanceSetting.orderPriceList) {
+        if(config.balanceSetting.orderPriceList.length == 1){
+          this.orderPrice = config.balanceSetting.orderPriceList
+        } else {
+          this.orderPrice = config.balanceSetting.orderPriceList.join('-')
+        }
+      }
+      if(config.balanceSetting.increaseCondition) {
+        increaseWin.value = config.balanceSetting.increaseCondition
+      }
+      if(config.method) {
+        this.optionId = config.method
+      }
+      if(config.methodSetting.botList) {
+        if (config.methodSetting.botList.length > 1){
+          botId.value = config.methodSetting.botList
+        }else {
+          botId.value = config.methodSetting.botList[0]
+        }
+      }
+      if(config.methodSetting.winOrdersNum) {
+        winOrdersNum.value = config.methodSetting.winOrdersNum
+      }
+      if(config.methodSetting.loseOrdersNum) {
+        loseOrdersNum.value = config.methodSetting.loseOrdersNum
+      }
+      if(config.methodSetting.takeIncome) {
+        takeIncome.value = config.methodSetting.takeIncome
+      }
+      if(config.methodSetting.loseIncome) {
+        loseIncome.value = config.methodSetting.loseIncome
+      }
+    }
+
+    async function deleteSetting(botId) {
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let responseContent = await api.delete(`bot-setting-config/${botId}`);
+      if (responseContent.status == 200){
+        $q.notify({
+          color: 'green-4',
+          position: 'top',
+          message: 'Xoá thành công cấu hình cài đặt',
+          icon: 'cloud_dome',
+        });
+        $router.go()
+      }
+    }
+
+    function viewSetting (data) {
+      let orderPriceList
+      if (data.balanceSetting.orderPriceList.length == 1) {
+        orderPriceList = data.balanceSetting.orderPriceList[0]
+      } else {
+        orderPriceList = data.balanceSetting.orderPriceList.join('-')
+      }
+      let lstBot = []
+      for (let i = 0; i < data.methodSetting.botList.length; i++) {
+        for (let j = 0; j < optionBot.value.length; j++) {
+          if(data.methodSetting.botList[i] == optionBot.value[j].value) {
+            lstBot.push(optionBot.value[j].label)
+          }
+        }
+      }
+      lstBot = lstBot.join(', ')
+      $q.dialog({
+                title: '<p class="text-center">Chi tiết cấu hình cài đặt</p>',
+                message: `
+                    <p class="text-left">Tên cấu hình: ${data.settingName || ''}</p>
+                    <p class="text-left">Cấu hình quản lý vốn</p>
+                    <p class="text-left">Loại tài khoản: ${data.accountType || ''}</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-left">Mức chốt lãi: ${data.takeProfit || 0}%</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-left">Mức cắt lỗ: ${data.stopLoss || 0}%</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-left">Quản lý vốn: ${data.balanceManagement || ''}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-left">Giá trị vào lệnh: ${orderPriceList}</p>
+                        </div>
+                    </div>
+                    <p class="text-left">Cấu hình phương pháp</p>
+                    <p class="text-left">Tính năng: ${data.nameMethod || ''}</p>
+                    <p class="text-left">Phương pháp: ${lstBot || ''}</p>
+                    <p class="text-left">Số lệnh dương liên tiếp: ${data.methodSetting.winOrdersNum || ''}</p>
+                    <p class="text-left">Số lệnh âm liên tiếp: ${data.methodSetting.loseOrdersNum || ''}</p>
+                    <p class="text-left">Mục tiêu chốt lãi muốn chờ: ${data.methodSetting.takeIncome || ''}%</p>
+                    <p class="text-left">Mục tiêu cắt lỗ muốn chờ: ${data.methodSetting.loseIncome || ''}%</p>
+                `,
+                html: true,
+            })
+            // .onOk(() => {
+            //     return;
+            // })
+            .onCancel(() => {
+                return;
+            })
+            .onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            });
+            return;
+    }
     onBeforeMount(async () => {
       let token = localStorage.getItem('jwt');
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       let user = await api.get('/users/get-profile');
+      checkUser.value = user.data
       if (user.data.masterId) {
         $q.dialog({
           title: 'Thông báo',
@@ -440,21 +884,23 @@ export default {
           persistent: true,
         })
           .onOk(async () => {
-            await api.put('/user-setting/unfolow-bot');
+            await api.put('/user-setting/unfolow');
             $router.push('/user/list-master');
+            return
           })
           .onCancel(() => {
-            $router.push('/user/information-bot');
+            $router.push('/user/infomation-copy-trader');
           })
           .onDismiss(() => {
             // console.log('I am triggered on both OK and Cancel')
           });
       }
       if (user.data.botId) {
-          return
+        return
       }
+
       if(user.data.groupId) {
-                $q.dialog({
+        $q.dialog({
           title: 'Thông báo',
           message:
             'Bạn đang Follow theo nhóm CG. Bạn có chắc chắn dừng?',
@@ -464,9 +910,11 @@ export default {
           .onOk(async () => {
             await api.put('/user-setting/unfolow');
             $router.push('/user/list-master');
+            return
           })
           .onCancel(() => {
             $router.push('/user/infomation-copy-group');
+            return
           })
           .onDismiss(() => {
             // console.log('I am triggered on both OK and Cancel')
@@ -478,6 +926,7 @@ export default {
     onMounted(async () => {
       accountType.value = optionAccount.value[0];
       await getListBot();
+      await getListSetting();
     });
     return {
       accountType,
@@ -1016,9 +1465,22 @@ export default {
       increaseWin,
       takeIncome,
       loseIncome,
-      changeBalanceManagement
+      changeBalanceManagement,
+      onSave,
+      columns,
+      rows,
+      pagination,
+      getListSetting,
+      applySetting,
+      deleteSetting,
+      viewSetting,
+      checkUser
     };
   },
 };
 </script>
-<style></style>
+<style>
+.w-100 {
+  width: 100%
+}
+</style>
