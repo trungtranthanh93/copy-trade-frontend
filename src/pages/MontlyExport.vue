@@ -34,7 +34,10 @@
                       class="my-event"
                     >
                       <div class="title q-calendar__ellipsis">
-                        {{event.monthlyTotalIncome}}$ &nbsp;({{ event.monthlyIncomePercent}})%
+                        {{event.monthlyTotalIncome > 0 ? '+'+event.monthlyTotalIncome : event.monthlyTotalIncome  }}$
+                      </div>
+                      <div class="title q-calendar__ellipsis">
+                        {{event.monthlyIncomePercent > 0 ? '+'+event.monthlyIncomePercent : event.monthlyIncomePercent}}%
                       </div>
                     </div>
                   </template>
