@@ -112,12 +112,12 @@
               </div>
             </div>
           <div class="row justify-center q-mb-md">
-            <div :class="`${$q.screen.width > 768 ? 'col-1 q-mr-md' : 'col-6 q-mr-md'}`">
+            <div :class="`${$q.screen.width > 768 ? 'q-mr-md' : 'col-6 q-mr-md'}`">
                 <q-btn
                 class="full-width bg-positive"
                 @click="onSetting()"
                 label="Cài đặt"
-                style="width: 100%; max-width: 200px"
+                style="width: 200px"
               />
             </div>
             <div class="`${$q.screen.width > 768 ? 'col-2' : 'col-6'}`">
@@ -396,7 +396,7 @@ export default {
 
           let data = {
             settingName: settingName.value ? settingName.value : null,
-            accountType: accountType.value ? accountType.value : accountType.value.value,
+            accountType: accountType.value.value ? accountType.value.value : accountType.value,
             maxAmount: 10,
             minAmount: 1,
             stopLoss: stopLoss.value ? stopLoss.value : null,
@@ -830,11 +830,30 @@ export default {
         }
       }
       lstBot = lstBot.join(', ')
+      let options = [
+        {
+          label: 'Đều lệnh',
+          value: 'NORMAL',
+        },
+        {
+          label: 'Gấp thếp',
+          value: 'MARTINGALE',
+        },
+        {
+          label: 'Fibo 1',
+          value: 'FIBO',
+        },
+        {
+          label: 'Fibo 2',
+          value: 'FIBO2',
+        },
+      ]
+      let balanceManagementName = options.find(element => element.value === data.balanceManagement);
       $q.dialog({
                 title: '<p class="text-center">Chi tiết cấu hình cài đặt</p>',
                 message: `
                     <p class="text-left">Tên cấu hình: ${data.settingName || ''}</p>
-                    <p class="text-left">Cấu hình quản lý vốn</p>
+                    <p class="text-left text-uppercase text-weight-bold">Cấu hình quản lý vốn</p>
                     <p class="text-left">Loại tài khoản: ${data.accountType || ''}</p>
                     <div class="row">
                         <div class="col-md-6">
@@ -846,13 +865,13 @@ export default {
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p class="text-left">Quản lý vốn: ${data.balanceManagement || ''}</p>
+                            <p class="text-left">Quản lý vốn: ${balanceManagementName.label || ''}</p>
                         </div>
                         <div class="col-md-6">
                             <p class="text-left">Giá trị vào lệnh: ${orderPriceList}</p>
                         </div>
                     </div>
-                    <p class="text-left">Cấu hình phương pháp</p>
+                    <p class="text-left text-uppercase text-weight-bold">Cấu hình phương pháp</p>
                     <p class="text-left">Tính năng: ${data.nameMethod || ''}</p>
                     <p class="text-left">Phương pháp: ${lstBot || ''}</p>
                     <p class="text-left">Số lệnh dương liên tiếp: ${data.methodSetting.winOrdersNum || ''}</p>
