@@ -85,7 +85,7 @@ export default defineComponent({
     NavigationBar,
     QCalendarMonth
   },
-  emits: ["updateWinLose"],
+  emits: ['updateWinLose'],
   data () {
     return {
       disablePrev: false,

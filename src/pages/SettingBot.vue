@@ -237,23 +237,27 @@ export default {
     const checkUser = ref(null)
 
     async function onSetting() {
-      if(checkUser.value.botId){
+      let token = localStorage.getItem('jwt');
+      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      let user = await api.get('/users/get-profile');
+      if (user.data.botId) {
         $q.dialog({
           title: 'Thông báo',
-          message:'Bạn đang cài Auto Trade. Bạn có chắc chắn dừng?',
+          message: 'Bạn đang cài Auto Trade. Bạn có chắc chắn dừng?',
           cancel: true,
           persistent: true,
         })
           .onOk(async () => {
-            await api.put('/user-setting/unfolow');
+            await api.put('/user-setting/unfolow-bot');
             // $router.push('/user/list-master');
             return
           })
           .onCancel(() => {
             let data = JSON.parse(localStorage.getItem('user'));
-            if (data.role == 0)  {
+            if (data.role == 0) {
               $router.push('/user/information-bot');
-            } else if(data.role == 1) {
+            } else if (data.role == 1) {
               $router.push('/admin/information-bot');
             }
             return
@@ -261,384 +265,383 @@ export default {
           .onDismiss(() => {
             // console.log('I am triggered on both OK and Cancel')
           });
-          return
+        return
       }
-
-      if (!settingName.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy nhập tên cấu hình!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!accountType.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn Loại tài khoản!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!takeProfit.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy nhập Mức chốt lãi!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!stopLoss.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy nhập Mức cắt lỗ!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!balanceManagement.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Chọn 1 giá trị Quản lý vốn!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!isEnalbeMultiple.value && !botId.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn phương pháp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (isEnalbeMultiple.value && !listBotId.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn phương pháp nâng cao',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (isEnalbeMultiple.value && !modelSession.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn số phiên âm liên tiếp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (this.optionId == 'MIX' && this.botId.length > 5) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Vui lòng chọn tối đa 5 phương pháp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-
-      if (this.optionId == 'CHANGE_BOT' && this.botIdChange.length > 5) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Vui lòng chọn tối đa 5 phương pháp muốn đổi',
-          icon: 'report_problem',
-        });
-        return;
-      }
-
-      if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Vui lòng chọn tối đa 5 phương pháp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-
-      $q.loading.show({
-        spinner: QSpinnerIos,
-        spinnerColor: 'yellow',
-        spinnerSize: 140,
-        backgroundColor: 'purple',
-        message: 'Đang xử lý ....',
-        messageColor: 'black',
-      });
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      try {
-        let botIds
-        if (this.optionId == 'NORMAL' || this.optionId == 'CHANGE_BOT') {
-          botIds = [botId.value]
-        } else {
-          botIds = JSON.parse(JSON.stringify(this.botId))
-        }
-        let orderPriceList
-        if (!((orderPrice.value).toString()).indexOf('-') > 0) {
-          orderPriceList = [orderPrice.value]
-
-        } else {
-          orderPriceList = (orderPrice.value.toString()).split('-');
-        }
-
-        let data = {
-          settingName: settingName.value ? settingName.value : null,
-          accountType: accountType.value ? accountType.value : accountType.value.value,
-          maxAmount: 10,
-          minAmount: 1,
-          stopLoss: stopLoss.value ? stopLoss.value : null,
-          takeProfit: takeProfit.value ? takeProfit.value : null,
-          balanceManagement: balanceManagement.value ? balanceManagement.value : null,
-          method: optionId.value ? optionId.value : null,
-          methodSetting: {
-            winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
-            loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
-            botList: botIds,
-            takeIncome: takeIncome.value ? takeIncome.value : null,
-            loseIncome: loseIncome.value ? loseIncome.value : null
-          },
-          balanceSetting: {
-            orderPriceList: orderPriceList.map(Number),
-            increaseCondition: increaseWin.value
-          }
-        }
-        const formatData = JSON.parse(JSON.stringify(data),
-          (key, value) => value === null || value === '' ? undefined : value);
-        let token = localStorage.getItem('jwt');
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/user-setting/bot', formatData);
-        if (responseContent.status !== 200 && responseContent.status !== 201) {
-          throw new Error();
-        }
-        $q.loading.value = false;
-        autoClose();
-      } catch (error) {
-        if (
-          error.response.status === 400 &&
-          error.response.data.message === 'notEnough.Amount'
-        ) {
+        if (!settingName.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message:
-              'Không đủ vốn, Folow thất bại',
+            message: 'Hãy nhập tên cấu hình!',
             icon: 'report_problem',
           });
           return;
         }
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Cài đặt thất bại. Vui lòng cài đặt lại',
-          icon: 'report_problem',
-        });
-      } finally {
-        $q.loading.hide();
-      }
-    }
-
-    async function onSave() {
-      if (!settingName.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy nhập tên cấu hình!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!accountType.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn Loại tài khoản!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!takeProfit.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy nhập Mức chốt lãi!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!stopLoss.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy nhập Mức cắt lỗ!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!balanceManagement.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Chọn 1 giá trị Quản lý vốn!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (!isEnalbeMultiple.value && !botId.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn phương pháp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (isEnalbeMultiple.value && !listBotId.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn phương pháp nâng cao',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (isEnalbeMultiple.value && !modelSession.value) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy chọn số phiên âm liên tiếp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if (this.optionId == 'MIX' && this.botId.length > 5) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Vui lòng chọn tối đa 5 phương pháp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-
-      if (this.optionId == 'CHANGE_BOT' && this.botIdChange.length > 5) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Vui lòng chọn tối đa 5 phương pháp muốn đổi',
-          icon: 'report_problem',
-        });
-        return;
-      }
-
-      if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Vui lòng chọn tối đa 5 phương pháp',
-          icon: 'report_problem',
-        });
-        return;
-      }
-
-      $q.loading.show({
-        spinner: QSpinnerIos,
-        spinnerColor: 'yellow',
-        spinnerSize: 140,
-        backgroundColor: 'purple',
-        message: 'Đang xử lý ....',
-        messageColor: 'black',
-      });
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      try {
-        let botIds
-        if (this.optionId == 'NORMAL' || this.optionId == 'CHANGE_BOT') {
-          botIds = [botId.value]
-        } else {
-          botIds = JSON.parse(JSON.stringify(this.botId))
-        }
-        let orderPriceList
-        if (!((orderPrice.value).toString()).indexOf('-') > 0) {
-          orderPriceList = [orderPrice.value]
-
-        } else {
-          orderPriceList = (orderPrice.value.toString()).split('-');
-        }
-
-        let data = {
-          settingName: settingName.value ? settingName.value : null,
-          accountType: accountType.value ? accountType.value.value: null,
-          maxAmount: 10,
-          minAmount: 1,
-          stopLoss: stopLoss.value ? stopLoss.value : null,
-          takeProfit: takeProfit.value ? takeProfit.value : null,
-          balanceManagement: balanceManagement.value ? balanceManagement.value : null,
-          method: optionId.value ? optionId.value : null,
-          methodSetting: {
-            winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
-            loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
-            botList: botIds,
-            takeIncome: takeIncome.value ? takeIncome.value : null,
-            loseIncome: loseIncome.value ? loseIncome.value : null
-          },
-          balanceSetting: {
-            orderPriceList: orderPriceList.map(Number),
-            increaseCondition: increaseWin.value
-          }
-        }
-        // console.log(data)
-        const formatData = JSON.parse(JSON.stringify(data),
-          (key, value) => value === null || value === '' ? undefined : value);
-        let token = localStorage.getItem('jwt');
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let responseContent = await api.put('/bot-setting-config', formatData);
-        if (responseContent.status !== 200 && responseContent.status !== 201) {
-          throw new Error();
-        }
-        $q.loading.value = false;
-        $q.notify({
-          color: 'green-4',
-          position: 'top',
-          message: 'Lưu thành công cấu hình cài đặt',
-          icon: 'cloud_done',
-        });
-        $router.go()
-      } catch (error) {
-        if (
-          error.response.status === 400 &&
-          error.response.data.message === 'notEnough.Amount'
-        ) {
+        if (!accountType.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message:
-              'Không đủ vốn, Folow thất bại',
+            message: 'Hãy chọn Loại tài khoản!',
             icon: 'report_problem',
           });
           return;
         }
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Cài đặt thất bại. Vui lòng cài đặt lại',
-          icon: 'report_problem',
+        if (!takeProfit.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy nhập Mức chốt lãi!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!stopLoss.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy nhập Mức cắt lỗ!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!balanceManagement.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Chọn 1 giá trị Quản lý vốn!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!isEnalbeMultiple.value && !botId.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (isEnalbeMultiple.value && !listBotId.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn phương pháp nâng cao',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (isEnalbeMultiple.value && !modelSession.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn số phiên âm liên tiếp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (this.optionId == 'MIX' && this.botId.length > 5) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng chọn tối đa 5 phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+
+        if (this.optionId == 'CHANGE_BOT' && this.botIdChange.length > 5) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng chọn tối đa 5 phương pháp muốn đổi',
+            icon: 'report_problem',
+          });
+          return;
+        }
+
+        if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng chọn tối đa 5 phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+
+        $q.loading.show({
+          spinner: QSpinnerIos,
+          spinnerColor: 'yellow',
+          spinnerSize: 140,
+          backgroundColor: 'purple',
+          message: 'Đang xử lý ....',
+          messageColor: 'black',
         });
-      } finally {
-        $q.loading.hide();
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        try {
+          let botIds
+          if (this.optionId == 'NORMAL' || this.optionId == 'CHANGE_BOT') {
+            botIds = [botId.value]
+          } else {
+            botIds = JSON.parse(JSON.stringify(this.botId))
+          }
+          let orderPriceList
+          if (!((orderPrice.value).toString()).indexOf('-') > 0) {
+            orderPriceList = [orderPrice.value]
+
+          } else {
+            orderPriceList = (orderPrice.value.toString()).split('-');
+          }
+
+          let data = {
+            settingName: settingName.value ? settingName.value : null,
+            accountType: accountType.value ? accountType.value : accountType.value.value,
+            maxAmount: 10,
+            minAmount: 1,
+            stopLoss: stopLoss.value ? stopLoss.value : null,
+            takeProfit: takeProfit.value ? takeProfit.value : null,
+            balanceManagement: balanceManagement.value ? balanceManagement.value : null,
+            method: optionId.value ? optionId.value : null,
+            methodSetting: {
+              winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
+              loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
+              botList: botIds,
+              takeIncome: takeIncome.value ? takeIncome.value : null,
+              loseIncome: loseIncome.value ? loseIncome.value : null
+            },
+            balanceSetting: {
+              orderPriceList: orderPriceList.map(Number),
+              increaseCondition: increaseWin.value
+            }
+          }
+          const formatData = JSON.parse(JSON.stringify(data),
+            (key, value) => value === null || value === '' ? undefined : value);
+          let token = localStorage.getItem('jwt');
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          let responseContent = await api.put('/user-setting/bot', formatData);
+          if (responseContent.status !== 200 && responseContent.status !== 201) {
+            throw new Error();
+          }
+          $q.loading.value = false;
+          autoClose();
+        } catch (error) {
+          if (
+            error.response.status === 400 &&
+            error.response.data.message === 'notEnough.Amount'
+          ) {
+            $q.notify({
+              color: 'negative',
+              position: 'top',
+              message:
+                'Không đủ vốn, Folow thất bại',
+              icon: 'report_problem',
+            });
+            return;
+          }
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Cài đặt thất bại. Vui lòng cài đặt lại',
+            icon: 'report_problem',
+          });
+        } finally {
+          $q.loading.hide();
+        }
       }
-    }
+
+      async function onSave() {
+        if (!settingName.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy nhập tên cấu hình!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!accountType.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn Loại tài khoản!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!takeProfit.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy nhập Mức chốt lãi!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!stopLoss.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy nhập Mức cắt lỗ!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!balanceManagement.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Chọn 1 giá trị Quản lý vốn!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (!isEnalbeMultiple.value && !botId.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (isEnalbeMultiple.value && !listBotId.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn phương pháp nâng cao',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (isEnalbeMultiple.value && !modelSession.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn số phiên âm liên tiếp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (this.optionId == 'MIX' && this.botId.length > 5) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng chọn tối đa 5 phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+
+        if (this.optionId == 'CHANGE_BOT' && this.botIdChange.length > 5) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng chọn tối đa 5 phương pháp muốn đổi',
+            icon: 'report_problem',
+          });
+          return;
+        }
+
+        if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng chọn tối đa 5 phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+
+        $q.loading.show({
+          spinner: QSpinnerIos,
+          spinnerColor: 'yellow',
+          spinnerSize: 140,
+          backgroundColor: 'purple',
+          message: 'Đang xử lý ....',
+          messageColor: 'black',
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        try {
+          let botIds
+          if (this.optionId == 'NORMAL' || this.optionId == 'CHANGE_BOT') {
+            botIds = [botId.value]
+          } else {
+            botIds = JSON.parse(JSON.stringify(this.botId))
+          }
+          let orderPriceList
+          if (!((orderPrice.value).toString()).indexOf('-') > 0) {
+            orderPriceList = [orderPrice.value]
+
+          } else {
+            orderPriceList = (orderPrice.value.toString()).split('-');
+          }
+
+          let data = {
+            settingName: settingName.value ? settingName.value : null,
+            accountType: accountType.value.value ? accountType.value.value : accountType.value,
+            maxAmount: 10,
+            minAmount: 1,
+            stopLoss: stopLoss.value ? stopLoss.value : null,
+            takeProfit: takeProfit.value ? takeProfit.value : null,
+            balanceManagement: balanceManagement.value ? balanceManagement.value : null,
+            method: optionId.value ? optionId.value : null,
+            methodSetting: {
+              winOrdersNum: winOrdersNum.value ? winOrdersNum.value.value : null,
+              loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
+              botList: botIds,
+              takeIncome: takeIncome.value ? takeIncome.value : null,
+              loseIncome: loseIncome.value ? loseIncome.value : null
+            },
+            balanceSetting: {
+              orderPriceList: orderPriceList.map(Number),
+              increaseCondition: increaseWin.value
+            }
+          }
+          // console.log(data)
+          const formatData = JSON.parse(JSON.stringify(data),
+            (key, value) => value === null || value === '' ? undefined : value);
+          let token = localStorage.getItem('jwt');
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          let responseContent = await api.put('/bot-setting-config', formatData);
+          if (responseContent.status !== 200 && responseContent.status !== 201) {
+            throw new Error();
+          }
+          $q.loading.value = false;
+          $q.notify({
+            color: 'green-4',
+            position: 'top',
+            message: 'Lưu thành công cấu hình cài đặt',
+            icon: 'cloud_done',
+          });
+          $router.go()
+        } catch (error) {
+          if (
+            error.response.status === 400 &&
+            error.response.data.message === 'notEnough.Amount'
+          ) {
+            $q.notify({
+              color: 'negative',
+              position: 'top',
+              message:
+                'Không đủ vốn, Folow thất bại',
+              icon: 'report_problem',
+            });
+            return;
+          }
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Cài đặt thất bại. Vui lòng cài đặt lại',
+            icon: 'report_problem',
+          });
+        } finally {
+          $q.loading.hide();
+        }
+      }
 
     function autoClose() {
       let seconds = 3;
@@ -745,6 +748,7 @@ export default {
     }
 
     function applySetting(config) {
+      window.scrollTo(0, 0);
       if(config.settingName) {
         settingName.value = config.settingName
       }
@@ -874,7 +878,6 @@ export default {
       // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       let user = await api.get('/users/get-profile');
-      checkUser.value = user.data
       if (user.data.masterId) {
         $q.dialog({
           title: 'Thông báo',
