@@ -77,10 +77,10 @@
                         <q-select filled v-model="botIdChange" label="Chọn phương pháp muốn đổi" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple use-chips :disable="isEnalbeMultiple" />
                     </div>
                     <div v-if="optionId == 'WIN_LOSE_WAIT'" class="q-pa-md">
-                        <q-item-label class="q-mb-sm">Các phương pháp sử dụng (*)</q-item-label>
-                        <q-select filled v-model="botId" label="Chọn phương pháp sử dụng" :options="optionBot" option-value="value" emit-value option-label="label" map-options multiple use-chips :disable="isEnalbeMultiple" />
+                        <q-item-label class="q-mb-sm">Chọn phương pháp (*)</q-item-label>
+                        <q-select filled v-model="waitLoseSignalBotId" label="Chọn phương pháp sử dụng" :options="optionBotK" option-value="value" emit-value option-label="label" map-options use-chips :disable="isEnalbeMultiple" />
                     </div>
-                    <div v-if="optionId == 'CHANGE_BOT' || optionId == 'WIN_LOSE_WAIT'">
+                    <div v-if="optionId == 'CHANGE_BOT'">
                         <div class="q-pa-md">
                             <q-item-label class="q-mb-sm">Số Lệnh Dương Liên Tiếp {{ optionId == 'CHANGE_BOT' ? 'Muốn Đổi' : '' }}</q-item-label>
                             <q-select filled v-model="winOrdersNum" :options="optionSelect3"/>
@@ -98,16 +98,30 @@
                         <q-input type="number" filled v-model="losePercent" suffix="$"/>
                     </div>
                     </div>
+                    <!-- START WIN LOSE -->
                     <div v-if="optionId == 'WIN_LOSE_WAIT'">
+                        <div class="q-pa-md">
+                            <q-item-label class="q-mb-sm">Hình thức giao dịch</q-item-label>
+                          <q-select label="Chọn hình thức giao dịch" filled v-model="signalType" option-value="value" emit-value option-label="label" map-options :options="transactionType" @update:model-value="val => changeSignalType(val)"/>
+                        </div>
+                    </div>
+                    <div v-if="signalType == 'ORDER'">
+                        <div class="q-pa-md">
+                          <q-item-label class="q-mb-sm">Số phiên vào lệnh</q-item-label>
+                          <q-input type="number" filled v-model="sessionNum" />
+                      </div>
+                    </div>
+                    <div v-if="signalType == 'LOSE_SESSION'">
                       <div class="q-pa-md">
-                        <q-item-label class="q-mb-sm">Mục tiêu chốt lãi muốn chờ ($)</q-item-label>
-                        <q-input type="number" filled v-model="takeIncome" suffix="$" />
+                        <q-item-label class="q-mb-sm">Số phiên theo sau phiên cháy</q-item-label>
+                        <q-input type="number" filled v-model="sessionNum" />
                     </div>
                     <div class="q-pa-md">
-                      <q-item-label class="q-mb-sm">Mục tiêu cắt lỗ muốn chờ ($)</q-item-label>
-                      <q-input type="number" filled v-model="loseIncome" suffix="$" />
+                      <q-item-label class="q-mb-sm">Số phiên cháy liên tiếp để vào lệnh</q-item-label>
+                      <q-input type="number" filled v-model="loseSessionNum" />
                   </div>
                   </div>
+                  <!-- END WIN LOSE -->
                   </q-card>
               </div>
             </div>
@@ -132,7 +146,7 @@
         </form>
         <div class="w-100 q-pa-md">
             <q-card class="q-pa-md">
-                <q-label class="text-h5-title">Cấu hình cài đặt</q-label>
+                <q-label class="text-h5-title">Cấu Hình Cài Đặt</q-label>
                 <q-separator class="q-mt-md" />
                 <q-table color="primary" flat bordered title="" :rows="rows" :columns="columns" row-key="name"
                     :pagination="pagination">
@@ -234,7 +248,12 @@ export default {
     const pagination = ref({
         rowsPerPage: 10, // current rows per page being displayed
     });
-    const checkUser = ref(null)
+    const checkUser = ref(null);
+    const signalType = ref(null);
+    const waitLoseSignalBotId = ref(null);
+    const loseSessionNum = ref(null);
+    const sessionNum = ref(null);
+    const optionBotK = ref([]);
 
     async function onSetting() {
       let token = localStorage.getItem('jwt');
@@ -312,7 +331,7 @@ export default {
           });
           return;
         }
-        if (!isEnalbeMultiple.value && !botId.value) {
+        if (this.optionId != 'WIN_LOSE_WAIT' && !botId.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
@@ -321,11 +340,20 @@ export default {
           });
           return;
         }
-        if (isEnalbeMultiple.value && !listBotId.value) {
+        if (this.optionId == 'WIN_LOSE_WAIT' && !waitLoseSignalBotId.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message: 'Hãy chọn phương pháp nâng cao',
+            message: 'Hãy chọn phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (this.optionId == 'WIN_LOSE_WAIT' && !signalType.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn hình thức giao dịch',
             icon: 'report_problem',
           });
           return;
@@ -358,12 +386,20 @@ export default {
           });
           return;
         }
-
-        if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
+        if (this.optionId == 'WIN_LOSE_WAIT' && !sessionNum.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message: 'Vui lòng chọn tối đa 5 phương pháp',
+            message: 'Vui lòng nhập Số phiên vào lệnh!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (this.optionId == 'WIN_LOSE_WAIT' && this.signalType == 'LOSE_SESSION' && !loseSessionNum.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng nhập Số phiên cháy liên tiếp để vào lệnh!',
             icon: 'report_problem',
           });
           return;
@@ -408,7 +444,11 @@ export default {
               loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
               botList: botIds,
               takeIncome: takeIncome.value ? takeIncome.value : null,
-              loseIncome: loseIncome.value ? loseIncome.value : null
+              loseIncome: loseIncome.value ? loseIncome.value : null,
+              signalType: signalType.value ? signalType.value : null,
+              waitLoseSignalBotId: waitLoseSignalBotId.value ? waitLoseSignalBotId.value : null,
+              loseSessionNum: loseSessionNum.value ? loseSessionNum.value : null,
+              sessionNum: sessionNum.value ? sessionNum.value : null,
             },
             balanceSetting: {
               orderPriceList: orderPriceList.map(Number),
@@ -497,7 +537,7 @@ export default {
           });
           return;
         }
-        if (!isEnalbeMultiple.value && !botId.value) {
+        if (this.optionId != 'WIN_LOSE_WAIT' && !botId.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
@@ -506,11 +546,20 @@ export default {
           });
           return;
         }
-        if (isEnalbeMultiple.value && !listBotId.value) {
+        if (this.optionId == 'WIN_LOSE_WAIT' && !waitLoseSignalBotId.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message: 'Hãy chọn phương pháp nâng cao',
+            message: 'Hãy chọn phương pháp',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (this.optionId == 'WIN_LOSE_WAIT' && !signalType.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Hãy chọn hình thức giao dịch',
             icon: 'report_problem',
           });
           return;
@@ -543,12 +592,20 @@ export default {
           });
           return;
         }
-
-        if (this.optionId == 'WIN_LOSE_WAIT' && this.botId.length > 5) {
+        if (this.optionId == 'WIN_LOSE_WAIT' && !sessionNum.value) {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message: 'Vui lòng chọn tối đa 5 phương pháp',
+            message: 'Vui lòng nhập Số phiên vào lệnh!',
+            icon: 'report_problem',
+          });
+          return;
+        }
+        if (this.optionId == 'WIN_LOSE_WAIT' && this.signalType == 'LOSE_SESSION' && !loseSessionNum.value) {
+          $q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Vui lòng nhập Số phiên cháy liên tiếp để vào lệnh!',
             icon: 'report_problem',
           });
           return;
@@ -593,7 +650,11 @@ export default {
               loseOrdersNum: loseOrdersNum.value ? loseOrdersNum.value.value : null,
               botList: botIds,
               takeIncome: takeIncome.value ? takeIncome.value : null,
-              loseIncome: loseIncome.value ? loseIncome.value : null
+              loseIncome: loseIncome.value ? loseIncome.value : null,
+              signalType: signalType.value ? signalType.value : null,
+              waitLoseSignalBotId: waitLoseSignalBotId.value ? waitLoseSignalBotId.value : null,
+              loseSessionNum: loseSessionNum.value ? loseSessionNum.value : null,
+              sessionNum: sessionNum.value ? sessionNum.value : null,
             },
             balanceSetting: {
               orderPriceList: orderPriceList.map(Number),
@@ -699,8 +760,30 @@ export default {
       } catch (error) {}
     }
 
+    async function getListBotLoseSession() {
+      try {
+        let token = localStorage.getItem('jwt');
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        let data = await api.get('/bot/list?type=WIN_LOSE_WAIT');
+        optionBotK.value = _.map(data.data, (obj) => {
+          return {
+            label: obj.botName,
+            value: obj.id,
+          };
+        });
+      } catch (error) {}
+    }
+
     function changeMethods() {
       this.botId = null
+      signalType.value = null
+      waitLoseSignalBotId.value = null
+    }
+
+    function changeSignalType() {
+      sessionNum.value = null
+      loseSessionNum.value = null
     }
 
     function changeBalanceManagement(val) {
@@ -796,6 +879,18 @@ export default {
       if(config.methodSetting.loseIncome) {
         loseIncome.value = config.methodSetting.loseIncome
       }
+      if(config.methodSetting.signalType) {
+        signalType.value = config.methodSetting.signalType
+      }
+      if(config.methodSetting.waitLoseSignalBotId) {
+        waitLoseSignalBotId.value = config.methodSetting.waitLoseSignalBotId
+      }
+      if(config.methodSetting.loseSessionNum) {
+        loseSessionNum.value = config.methodSetting.loseSessionNum
+      }
+      if(config.methodSetting.sessionNum) {
+        sessionNum.value = config.methodSetting.sessionNum
+      }
     }
 
     async function deleteSetting(botId) {
@@ -822,14 +917,17 @@ export default {
         orderPriceList = data.balanceSetting.orderPriceList.join('-')
       }
       let lstBot = []
-      for (let i = 0; i < data.methodSetting.botList.length; i++) {
-        for (let j = 0; j < optionBot.value.length; j++) {
-          if(data.methodSetting.botList[i] == optionBot.value[j].value) {
-            lstBot.push(optionBot.value[j].label)
+      if (data.methodSetting.botList && data.methodSetting.botList.length) {
+        for (let i = 0; i < data.methodSetting.botList.length; i++) {
+          for (let j = 0; j < optionBot.value.length; j++) {
+            if (data.methodSetting.botList[i] == optionBot.value[j].value) {
+              lstBot.push(optionBot.value[j].label)
+            }
           }
         }
+        lstBot = lstBot.join(', ')
       }
-      lstBot = lstBot.join(', ')
+
       let options = [
         {
           label: 'Đều lệnh',
@@ -849,6 +947,18 @@ export default {
         },
       ]
       let balanceManagementName = options.find(element => element.value === data.balanceManagement);
+      let nameMethodWinLose = optionBotK.value.find(el => el.id = data.methodSetting.waitLoseSignalBotId);
+      let optionSignalType = [
+        {
+          label: 'Theo BOT',
+          value: 'ORDER'
+        },
+        {
+          label: 'Theo Phiên Cháy',
+          value: 'LOSE_SESSION'
+        }
+      ];
+      let signalType = optionSignalType.find(el => el.value = data.methodSetting.signalType)
       $q.dialog({
                 title: '<p class="text-center">Chi tiết cấu hình cài đặt</p>',
                 message: `
@@ -873,11 +983,14 @@ export default {
                     </div>
                     <p class="text-left text-uppercase text-weight-bold">Cấu hình phương pháp</p>
                     <p class="text-left">Tính năng: ${data.nameMethod || ''}</p>
-                    <p class="text-left">Phương pháp: ${lstBot || ''}</p>
+                    <p class="text-left">Phương pháp: ${nameMethodWinLose.label ? nameMethodWinLose.label : lstBot}</p>
                     <p class="text-left">Số lệnh dương liên tiếp: ${data.methodSetting.winOrdersNum || ''}</p>
                     <p class="text-left">Số lệnh âm liên tiếp: ${data.methodSetting.loseOrdersNum || ''}</p>
                     <p class="text-left">Mục tiêu chốt lãi muốn chờ: ${data.methodSetting.takeIncome || ''}%</p>
                     <p class="text-left">Mục tiêu cắt lỗ muốn chờ: ${data.methodSetting.loseIncome || ''}%</p>
+                    <p class="text-left">Hình thức giao dịch: ${signalType.label || ''}</p>
+                    <p class="text-left">Số phiên vào lệnh: ${data.methodSetting.sessionNum || ''}</p>
+                    <p class="text-left">Số phiên cháy liên tiếp để vào lệnh: ${data.methodSetting.loseSessionNum || ''}</p>
                 `,
                 html: true,
             })
@@ -949,6 +1062,7 @@ export default {
       accountType.value = optionAccount.value[0];
       await getListBot();
       await getListSetting();
+      await getListBotLoseSession();
     });
     return {
       accountType,
@@ -1496,7 +1610,24 @@ export default {
       applySetting,
       deleteSetting,
       viewSetting,
-      checkUser
+      checkUser,
+      transactionType: [
+        {
+          label: 'Theo BOT',
+          value: 'ORDER'
+        },
+        {
+          label: 'Theo Phiên Cháy',
+          value: 'LOSE_SESSION'
+        }
+      ],
+      signalType,
+      waitLoseSignalBotId,
+      loseSessionNum,
+      sessionNum,
+      optionBotK,
+      getListBotLoseSession,
+      changeSignalType
     };
   },
 };
