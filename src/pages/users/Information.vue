@@ -172,7 +172,7 @@ export default {
     const rows = ref([]);
     const isCopyTradeScreen = ref(true);
     const pagination = ref({
-      rowsPerPage: 10, // current rows per page being displayed
+      rowsPerPage: 20, // current rows per page being displayed
     });
     const nickName = ref('');
 

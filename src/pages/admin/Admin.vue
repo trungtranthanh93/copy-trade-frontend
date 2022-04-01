@@ -57,14 +57,33 @@
               iconColor= 'orange'
               link= '/admin/setting-bot'
             />
-            <MenuItem
+            <q-expansion-item :content-inset-level="0.5">
+              <template v-slot:header>
+                <q-item-section avatar>
+                  <q-icon name="telegram" color="orange" />
+                </q-item-section>
+                <q-item-section>Link Telegram</q-item-section>
+              </template>
+              <a v-for="item in linksTelegram" :key="item.title" :href="item.link" class="text-white text-none" target="_blank"
+                rel="noopener noreferrer">
+                <q-item clickable>
+                  <q-item-section avatar>
+                    <q-icon :name="item.icon" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{item.title}}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </a>
+            </q-expansion-item>
+            <!-- <MenuItem
               title= 'Thống Kê BOT'
               caption= ''
               icon= 'sticky_note_2'
               iconColor= 'orange'
               link= '/admin/statistic-bot'
-            />
-            <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/admin/setting-history-autotrade' />
+            /> -->
+            <!-- <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/admin/setting-history-autotrade' /> -->
           </q-expansion-item>
           <q-separator />
           <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
@@ -174,6 +193,57 @@ export default {
       }
     ];
 
+    let linksTelegram =  [
+    // {
+    //     title: 'KINGAI 1.3',
+    //     caption: '',
+    //     icon: 'arrow_right',
+    //     iconColor: 'orange',
+    //     link: 'https://t.me/kingai13',
+    //     separator: true
+    //   },
+      {
+        title: 'KINGAI 1.4',
+        caption: '',
+        icon: 'arrow_right',
+        iconColor: 'orange',
+        link: 'https://t.me/+GEpYLNzVc8UzZWZl',
+        separator: true
+      }
+      // {
+      //   title: 'KINGAI 1.5',
+      //   caption: '',
+      //   icon: 'arrow_right',
+      //   iconColor: 'orange',
+      //   link: 'https://t.me/+bqmY6guu9tw0OTA1',
+      //   separator: true
+      // },
+      // {
+      //   title: 'KINGAI 1.6',
+      //   caption: '',
+      //   icon: 'arrow_right',
+      //   iconColor: 'orange',
+      //   link: 'https://t.me/kingai16',
+      //   separator: true
+      // },
+      // {
+      //   title: 'KINGAI 1.7',
+      //   caption: '',
+      //   icon: 'arrow_right',
+      //   iconColor: 'orange',
+      //   link: 'https://t.me/kingai17',
+      //   separator: true
+      // },
+      // {
+      //   title: 'NỐI BÓNG',
+      //   caption: '',
+      //   icon: 'arrow_right',
+      //   iconColor: 'orange',
+      //   link: 'https://t.me/+PEpW6H9jhe4yN2E1',
+      //   separator: true
+      // }
+      ];
+
     return {
       leftDrawerOpen: ref(false),
       toggleLeftDrawer() {
@@ -183,6 +253,7 @@ export default {
       groupLinks,
       autoTradeLinks,
       drawerLeft: ref($q.screen.width > 500),
+      linksTelegram
     };
   },
 
@@ -191,3 +262,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.text-none {
+  text-decoration: none
+}
+</style>

@@ -18,14 +18,6 @@
               <div class="col">
                   <q-label class="text-h5-title">Kết quả follow theo bot</q-label>
               </div>
-              <div class="col text-right">
-                  <q-btn
-            size="md"
-            class="bg-positive"
-            label="Kết thúc"
-            @click="unfollowBot"
-          />
-              </div>
             </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <div class="q-pa-md">
@@ -102,6 +94,15 @@
               </div>
         </div>
         <q-separator color="dark" class="q-mt-md q-mb-md" inset />
+        <div class="row items-center q-gutter-md justify-center">
+        <q-btn
+            size="md"
+            class="bg-positive"
+            label="Kết thúc"
+            @click="unfollowBot"
+          />
+      </div>
+      <q-separator color="dark" class="q-mt-md q-mb-md" inset />
         <div class="q-pa-md">
           <q-table
             color="primary"
@@ -156,6 +157,10 @@ export default {
     const accountType = ref('');
     const countUser = ref('');
     const rows = ref([]);
+    const pagination = ref({
+      rowsPerPage: 20, // current rows per page being displayed
+    });
+
     async function getSportBalance() {
       try {
         let token = localStorage.getItem('jwt');
@@ -294,6 +299,7 @@ export default {
       goUserFollow,
       accountType,
       unfollowBot,
+      pagination
     };
   },
 };

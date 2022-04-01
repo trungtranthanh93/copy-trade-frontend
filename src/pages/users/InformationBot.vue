@@ -164,7 +164,7 @@ export default {
     const accountType = ref('');
     const rows = ref([]);
     const pagination = ref({
-      rowsPerPage: 10, // current rows per page being displayed
+      rowsPerPage: 20, // current rows per page being displayed
     });
     const nickName = ref('');
     const winLose = ref('');

@@ -186,6 +186,9 @@
       const nickName = ref('');
       const titleScreen = ref('');
       const locked = ref('');
+      const pagination = ref({
+        rowsPerPage: 20, // current rows per page being displayed
+      });
 
       async function getSportBalance() {
         try {
@@ -413,7 +416,8 @@
         nickName,
         titleScreen,
         locked,
-        setLock
+        setLock,
+        pagination
       };
     },
     updated(){
