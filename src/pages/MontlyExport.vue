@@ -4,7 +4,7 @@
           <q-label class="text-h6">Thống Kê Lãi Tháng {{monthly + 1}}</q-label>
           <q-separator class="q-mt-md" />
          <div class="text-center q-pa-md">
-            <q-chip color="primary" text-color="white" size="md" icon="attach_money">Tổng lợi nhuận tháng: {{totalIncomeUsd}}$ ({{totalMonth}}%)</q-chip>
+            <q-chip color="primary" text-color="white" size="md" icon="attach_money">Tổng lợi nhuận tháng: {{totalIncomeUsd}}$</q-chip>
          </div>
 
           <div class="row justify-center">
@@ -36,9 +36,9 @@
                       <div class="title q-calendar__ellipsis">
                         {{event.monthlyTotalIncome > 0 ? '+'+event.monthlyTotalIncome : event.monthlyTotalIncome  }}$
                       </div>
-                      <div class="title q-calendar__ellipsis">
+                      <!-- <div class="title q-calendar__ellipsis">
                         {{event.monthlyIncomePercent > 0 ? '+'+event.monthlyIncomePercent : event.monthlyIncomePercent}}%
-                      </div>
+                      </div> -->
                     </div>
                   </template>
                 </template>
@@ -155,9 +155,13 @@ export default defineComponent({
         this.totalMonth = data.data.totalIncome ? parseFloat(data.data.totalIncome).toFixed(2)  : 0;
         this.totalIncomeUsd = data.data.totalIncomeUsd ? parseFloat(data.data.totalIncomeUsd).toFixed(2)  : 0;
         const dailyReport = data.data.dailyReport;
+        let curentDay = new Date().getDate()
+        let dataAmount = dailyReport.find(el => el.daysOfMonth === curentDay)
+
         this.$emit('updateWinLose', {
           winOrderQuan: data.data.winOrderQuan,
-          loseOrderQuan: data.data.loseOrderQuan
+          loseOrderQuan: data.data.loseOrderQuan,
+          monthlyTotalIncome: dataAmount ? dataAmount.monthlyTotalIncome : 0
         })
         this.events = _.map(dailyReport, (obj) => {
           return {
@@ -165,7 +169,7 @@ export default defineComponent({
             monthlyIncomePercent: parseFloat(obj.monthlyIncomePercent).toFixed(2),
             monthlyTotalIncome: obj.monthlyTotalIncome,
             date: getCurrentDay(this.monthly, obj.daysOfMonth),
-            bgcolor: obj.monthlyIncomePercent >= 0 ? 'green' : 'red',
+            bgcolor: obj.monthlyTotalIncome >= 0 ? 'green' : 'red',
           };
         });
       } catch (error) {}

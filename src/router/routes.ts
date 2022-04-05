@@ -93,6 +93,11 @@ const routes: RouteRecordRaw[] = [
         path: 'statistic-bot',
         name: 'statistic-bot-admin',
         component: () => import('pages/StatisticBot.vue'),
+      },
+      {
+        path: 'session-statistic-bot',
+        name: 'session-statistic-bot-admin',
+        component: () => import('pages/StatisticBotSession.vue'),
       }
     ],
   },
@@ -179,6 +184,11 @@ const routes: RouteRecordRaw[] = [
         path: 'statistic-bot',
         name: 'statistic-bot-user',
         component: () => import('pages/StatisticBot.vue'),
+      },
+      {
+        path: 'session-statistic-bot',
+        name: 'session-statistic-bot-user',
+        component: () => import('pages/StatisticBotSession.vue'),
       }
     ],
   },

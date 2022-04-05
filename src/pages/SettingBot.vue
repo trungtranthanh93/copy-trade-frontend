@@ -794,7 +794,7 @@ export default {
         },
       ]
       let balanceManagementName = options.find(element => element.value === data.balanceManagement);
-      let nameMethodWinLose = data.methodSetting.waitLoseSignalBotId ? optionBotK.value.find(el => el.id = data.methodSetting.waitLoseSignalBotId) : null
+      let nameMethodWinLose = data.methodSetting.waitLoseSignalBotId ? optionBotK.value.find(el => el.value === data.methodSetting.waitLoseSignalBotId) : null
       let optionSignalType = [
         {
           label: 'Theo BOT',

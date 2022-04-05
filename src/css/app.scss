@@ -8,6 +8,15 @@ body.body--dark .q-header {
     height: 62px;
 }
 .text-h5-title {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
+}
+
+.card {
+    border: none;
+    margin-bottom: 1.5rem;
+}
+
+.nickname {
+    word-wrap: break-word;
 }

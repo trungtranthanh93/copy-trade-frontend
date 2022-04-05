@@ -29,27 +29,42 @@
             </div>
             <div>
               <q-item-label class="q-mb-sm">Lệnh tối thiểu (*)</q-item-label>
-              <q-select filled v-model="minAmount" :options="optionsMinAmount" />
+              <!-- <q-select filled v-model="minAmount" :options="optionsMinAmount" /> -->
+              <q-input filled type="text" v-model="minAmount" suffix="%" lazy-rules
+                :rules="[(val) => (val !== null && val !== '') || 'Hãy điền lệnh tối thiểu', (val) => (val > 0 && val <= 10) || 'Hãy điền lệnh tối thiểu từ 0.1 đến 10',]">
+              </q-input>
             </div>
             <div>
               <q-item-label class="q-mb-sm">Lệnh tối đa (*)</q-item-label>
-              <q-select filled v-model="maxAmount" :options="optionsMaxAmount" />
+              <!-- <q-select filled v-model="maxAmount" :options="optionsMaxAmount" /> -->
+              <q-input filled type="text" v-model="maxAmount" suffix="%" lazy-rules
+                :rules="[(val) => (val !== null && val !== '') || 'Hãy điền lệnh tối đa', (val) => (val > 0 && val <= 100) || 'Hãy điền lệnh tối đa từ 0.1 đến 100',]">
+              </q-input>
             </div>
             <div>
               <q-item-label class="q-mb-sm">Mức chốt lãi (*)</q-item-label>
-              <q-select filled v-model="takeProfit" :options="optionsProfit" />
+              <!-- <q-select filled v-model="takeProfit" :options="optionsProfit" /> -->
+              <q-input filled type="text" v-model="takeProfit" suffix="%" lazy-rules
+                :rules="[(val) => (val !== null && val !== '') || 'Hãy điền mức chốt lãi', (val) => (val > 0 && val <= 500) || 'Hãy điền mức chốt lãi từ 0.1 đến 500',]">
+              </q-input>
             </div>
             <div>
               <q-item-label class="q-mb-sm">Mức cắt lỗ (*)</q-item-label>
-              <q-select filled v-model="stopLoss" :options="optionsLost" />
+              <!-- <q-select filled v-model="stopLoss" :options="optionsLost" /> -->
+              <q-input filled type="text" v-model="stopLoss" suffix="%" lazy-rules
+                :rules="[(val) => (val !== null && val !== '') || 'Hãy điền mức cắt lỗ', (val) => (val > 0 && val <= 100) || 'Hãy điền mức cắt lỗ từ 0.1 đến 100',]">
+              </q-input>
             </div>
             <div>
               <q-item-label class="q-mb-sm">Hệ số (*)</q-item-label>
-              <q-select
+              <!-- <q-select
                 filled
                 v-model="coefficient"
                 :options="optionsCoefficient"
-              />
+              /> -->
+              <q-input filled type="text" v-model="coefficient" lazy-rules
+                :rules="[(val) => (val !== null && val !== '') || 'Hãy điền hệ số', (val) => (val >=0.1 && val <= 10) || 'Hãy điền hệ số từ 0.1 đến 10',]">
+              </q-input>
             </div>
             <div class="text-center">
                 <q-btn
@@ -142,12 +157,12 @@ export default {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Hãy chọn Hệ số!',
+          message: 'Hãy điền Hệ số!',
           icon: 'report_problem',
         });
         return;
       }
-      if (maxAmount.value.value < minAmount.value.value) {
+      if (maxAmount.value < minAmount.value) {
         $q.notify({
           color: 'negative',
           position: 'top',
@@ -168,11 +183,11 @@ export default {
       try {
         let data = {
           accountType: accountType.value.value,
-          maxAmount: maxAmount.value.value,
-          minAmount: minAmount.value.value,
-          stopLoss: stopLoss.value.value,
-          takeProfit: takeProfit.value.value,
-          coefficient: coefficient.value.value
+          maxAmount: Number(maxAmount.value),
+          minAmount: Number(minAmount.value),
+          stopLoss: Number(stopLoss.value),
+          takeProfit: Number(takeProfit.value),
+          coefficient: Number(coefficient.value)
         };
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -229,7 +244,7 @@ export default {
       const dialog = $q
         .dialog({
           title: 'Thông báo',
-          message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+          message: 'Follow thành công!',
           html: true,
         })
         .onOk(() => {
@@ -247,9 +262,9 @@ export default {
         seconds--;
 
         if (seconds > 0) {
-          dialog.update({
-            message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
-          });
+          // dialog.update({
+          //   message: `Đã follow theo chuyên gia thành công! Sẽ chuyển sang màn hình kết quả sau ${seconds} giây.`,
+          // });
         } else {
           clearInterval(timer);
           $router.push({name: 'infomation-copy-trader'});
