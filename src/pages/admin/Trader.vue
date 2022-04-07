@@ -127,6 +127,7 @@
               <div class="row">
                 <div class="col">
                   <q-label class="text-h5-title">Cài Đặt Lệnh</q-label>
+                  <q-checkbox v-model="isStatistics" checked-icon="star" unchecked-icon="star_border" @update:model-value="val => handleChange(val)"/>
                 </div>
                 <div class="col text-right">
                   <q-btn v-on:click="setLock" color="primary" :icon="locked ? 'lock_open' : 'lock'"
@@ -214,6 +215,7 @@
       const pagination = ref({
         rowsPerPage: 20, // current rows per page being displayed
       });
+      const isStatistics = ref(true);
 
       async function getSportBalance() {
         try {
@@ -252,6 +254,7 @@
           let data = {
             betType: value,
             betAmount: Number(money.value),
+            isStatistics: isStatistics.value
           };
           let response;
           if ($router.currentRoute.value.name === 'trader-group') {
@@ -415,8 +418,25 @@
         } finally {
           $q.loading.hide();
         }
+      }
 
-
+      function handleChange(val) {
+        $q.dialog({
+        title: 'Thông báo',
+        message: !val ? 'Ẩn lịch sử lệnh của User' : 'Hiển thị lịch sử lệnh của User',
+        cancel: true,
+        persistent: true,
+      })
+        .onOk(() => {
+          isStatistics.value = val
+        })
+        .onCancel(() => {
+          isStatistics.value = !val
+          return
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        });
       }
       onBeforeMount(onCheckValid);
       onMounted(async () => {
@@ -442,7 +462,9 @@
         titleScreen,
         locked,
         setLock,
-        pagination
+        pagination,
+        isStatistics,
+        handleChange
       };
     },
     updated() {

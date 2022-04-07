@@ -13,7 +13,7 @@
           relative-position
         ">
         <div class="row">
-          <div class="col-12 col-lg-4 col-md-6">
+          <div class="col-12 col-lg-3 col-md-6">
             <q-card class="q-ma-sm"
               style="background: linear-gradient(to right, #2980b9, #2c3e50);">
               <div class="q-pt-md q-pb-md">
@@ -29,7 +29,7 @@
               </div>
             </q-card>
           </div>
-          <div class="col-12 col-lg-4 col-md-6">
+          <!-- <div class="col-12 col-lg-4 col-md-6">
             <q-card class="q-ma-sm"
               style="background: linear-gradient(to right, #2980b9, #2c3e50);">
               <div class="q-pt-md q-pb-md">
@@ -44,8 +44,8 @@
                 </div>
               </div>
             </q-card>
-          </div>
-          <div class="col-12 col-lg-4 col-md-6">
+          </div> -->
+          <!-- <div class="col-12 col-lg-4 col-md-6">
             <q-card class="q-ma-sm"
               style="background: linear-gradient(to right, #134e5e, #71b280);">
               <div class="q-pt-md q-pb-md">
@@ -60,8 +60,8 @@
                 </div>
               </div>
             </q-card>
-          </div>
-          <div class="col-12 col-lg-4 col-md-6">
+          </div> -->
+          <div class="col-12 col-lg-3 col-md-6">
             <q-card class="q-ma-sm"
               style="background: linear-gradient(to right, #2bc0e4, #eaecc6);">
               <div class="q-pt-md q-pb-md">
@@ -70,14 +70,16 @@
                     <q-icon name="account_balance" color="white" size="4rem" />
                   </div>
                   <div class="col-9">
-                    <h6 class="text-muted font-semibold q-ma-sm">Số Dư Hiện Tại</h6>
+                    <h6 class="text-muted font-semibold q-ma-sm">Số Dư Hiện Tại
+                      <q-badge>{{ accountType || '' }}</q-badge>
+                    </h6>
                     <h4 class="font-extrabold mb-0 q-ma-sm">{{ availableBalance || '' }}$</h4>
                   </div>
                 </div>
               </div>
             </q-card>
           </div>
-          <div class="col-12 col-lg-4 col-md-6">
+          <div class="col-12 col-lg-3 col-md-6">
             <q-card class="q-ma-sm"
               style="background: linear-gradient(to right, #4776e6, #8e54e9);">
               <div class="q-pt-md q-pb-md">
@@ -93,7 +95,7 @@
               </div>
             </q-card>
           </div>
-          <div class="col-12 col-lg-4 col-md-6">
+          <div class="col-12 col-lg-3 col-md-6">
             <q-card class="q-ma-sm"
               style="background: linear-gradient(to right, #dd5e89, #f7bb97);">
               <div class="q-pt-md q-pb-md">

@@ -155,7 +155,13 @@ export default defineComponent({
         this.totalMonth = data.data.totalIncome ? parseFloat(data.data.totalIncome).toFixed(2)  : 0;
         this.totalIncomeUsd = data.data.totalIncomeUsd ? parseFloat(data.data.totalIncomeUsd).toFixed(2)  : 0;
         const dailyReport = data.data.dailyReport;
-        let curentDay = new Date().getDate()
+        let currentHours = new Date().getHours()
+        let curentDay
+        if (currentHours > 7) {
+          curentDay = new Date().getDate()
+        } else {
+          curentDay = new Date().getDate() - 1
+        }
         let dataAmount = dailyReport.find(el => el.daysOfMonth === curentDay)
 
         this.$emit('updateWinLose', {
