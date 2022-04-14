@@ -119,7 +119,11 @@
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Số phiên cháy liên tiếp để vào lệnh</q-item-label>
                       <q-input type="number" filled v-model="loseSessionNum" />
-                  </div>
+                    </div>
+                    <div class="q-pa-md">
+                      <q-item-label class="q-mb-sm">Vào lệnh cách phiên cháy</q-item-label>
+                      <q-input type="number" filled v-model="sessionWaitNum" />
+                    </div>
                   </div>
                   <!-- END WIN LOSE -->
                   </q-card>
@@ -246,6 +250,7 @@ export default {
     const loseSessionNum = ref(null);
     const sessionNum = ref(null);
     const optionBotK = ref([]);
+    const sessionWaitNum = ref(null);
 
     function onSetting(obj) {
       $q.dialog({
@@ -483,6 +488,7 @@ export default {
               waitLoseSignalBotId: waitLoseSignalBotId.value ? waitLoseSignalBotId.value : null,
               loseSessionNum: loseSessionNum.value ? loseSessionNum.value : null,
               sessionNum: sessionNum.value ? sessionNum.value : null,
+              sessionWaitNum: sessionWaitNum.value ? sessionWaitNum.value : 0,
             },
             balanceSetting: {
               orderPriceList: orderPriceList.map(Number),
@@ -719,6 +725,9 @@ export default {
       if(config.methodSetting.sessionNum) {
         sessionNum.value = config.methodSetting.sessionNum
       }
+      if(config.methodSetting.sessionWaitNum) {
+        sessionWaitNum.value = config.methodSetting.sessionWaitNum
+      }
     }
 
     function deleteSetting(botId) {
@@ -829,6 +838,7 @@ export default {
                     <p class="text-left">Hình thức giao dịch: ${signalType && signalType.label ? signalType.label : ''}</p>
                     <p class="text-left">Số phiên vào lệnh: ${data.methodSetting.sessionNum || ''}</p>
                     <p class="text-left">Số phiên cháy liên tiếp để vào lệnh: ${data.methodSetting.loseSessionNum || ''}</p>
+                    <p class="text-left">Vào lệnh cách phiên cháy: ${data.methodSetting.sessionWaitNum || ''}</p>
                 `,
                 html: true,
             })
@@ -1485,7 +1495,8 @@ export default {
       optionBotK,
       getListBotLoseSession,
       changeSignalType,
-      onReset
+      onReset,
+      sessionWaitNum
     };
   },
 };

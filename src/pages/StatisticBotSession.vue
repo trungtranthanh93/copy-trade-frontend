@@ -85,6 +85,7 @@ export default {
         const pagination = ref({
             rowsPerPage: 20, // current rows per page being displayed
         });
+        const teleBotLink = ref([]);
 
         async function getStatistic() {
             // $q.loading.show({
@@ -101,30 +102,8 @@ export default {
                 api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 let responseContent = await api.get('/bot-stastistics/4-wait-lose-signal');
                 let data = responseContent.data;
-                let teleBotLink = [
-                {
-                    name: 'KingAI-1.3',
-                    link: 'https://t.me/kingai13'
-                },
-                {
-                    name: 'KingAI-1.4',
-                    link: 'https://t.me/+GEpYLNzVc8UzZWZl'
-                },
-                {
-                    name: 'KingAI-1.5',
-                    link: 'https://t.me/+bqmY6guu9tw0OTA1'
-                },
-                {
-                    name: 'KingAI-1.6',
-                    link: 'https://t.me/kingai16'
-                },
-                {
-                    name: 'KingAI-1.7',
-                    link: 'https://t.me/kingai17'
-                },
-            ]
                 rows.value = data.map((obj) => {
-                    obj.link = teleBotLink.find(el => el.name === obj.botName)['link']
+                    obj.link = (teleBotLink.value).find(el => el.id == obj.botId)['link']
                     if (obj.totalWinMin === -1) {
                         obj.totalWinMin = '-'
                     }
@@ -138,7 +117,24 @@ export default {
             }
         }
 
+        async function getListBotLoseSession() {
+            try {
+                let token = localStorage.getItem('jwt');
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                let data = await api.get('/bot/list?type=WIN_LOSE_WAIT');
+                teleBotLink.value = _.map(data.data, (obj) => {
+                    return {
+                        id: obj.id,
+                        botName: obj.botName,
+                        link: obj.link,
+                    };
+                });
+            } catch (error) { }
+        }
+
         onBeforeMount(async () => {
+            await getListBotLoseSession();
             await getStatistic();
         })
 
@@ -151,7 +147,9 @@ export default {
         return {
             columns,
             rows,
-            pagination
+            pagination,
+            teleBotLink,
+            getListBotLoseSession
         }
     }
 }

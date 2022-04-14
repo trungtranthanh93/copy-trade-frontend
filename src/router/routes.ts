@@ -52,12 +52,20 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/SettingBot.vue'),
       },
       {
+        path: 'setting-bot-winlose',
+        component: () => import('src/pages/SettingBot.vue'),
+      },
+      {
         path: 'setting-bot-telegram',
         component: () => import('src/pages/SettingBotTelegram.vue'),
       },
       {
         path: 'information-bot',
         component: () => import('pages/admin/Infomation.vue')
+      },
+      {
+        path: 'information-bot-winlose',
+        component: () => import('pages/admin/InfomationWinLose.vue')
       },
       {
         path: 'montly-export',
@@ -98,6 +106,11 @@ const routes: RouteRecordRaw[] = [
         path: 'session-statistic-bot',
         name: 'session-statistic-bot-admin',
         component: () => import('pages/StatisticBotSession.vue'),
+      },
+      {
+        path: 'statistic-bot-9-win-lose',
+        name: 'statistic-bot-9-win-lose-admin',
+        component: () => import('pages/StatisticBot9WinLose.vue'),
       }
     ],
   },
@@ -142,6 +155,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/SettingBot.vue'),
       },
       {
+        path: 'setting-bot-winlose',
+        component: () => import('src/pages/SettingBot.vue'),
+      },
+      {
         path: 'setting-bot-telegram',
         component: () => import('src/pages/SettingBotTelegram.vue'),
       },
@@ -149,6 +166,10 @@ const routes: RouteRecordRaw[] = [
         path: 'information-bot',
         name: 'information-bot',
         component: () => import('pages/users/InformationBot.vue'),
+      },
+      {
+        path: 'information-bot-winlose',
+        component: () => import('pages/users/InformationBotWinLose.vue'),
       },
       {
         path: 'montly-export',
@@ -189,6 +210,11 @@ const routes: RouteRecordRaw[] = [
         path: 'session-statistic-bot',
         name: 'session-statistic-bot-user',
         component: () => import('pages/StatisticBotSession.vue'),
+      },
+      {
+        path: 'statistic-bot-9-win-lose',
+        name: 'statistic-bot-9-win-lose-user',
+        component: () => import('pages/StatisticBot9WinLose.vue'),
       }
     ],
   },

@@ -43,28 +43,31 @@
               </q-item-section>
               <q-item-section>Auto Trade</q-item-section>
             </template>
-            <MenuItem
-              title= 'MH Kết Quả'
-              caption= ''
-              icon= 'task'
-              iconColor= 'orange'
-              link= '/admin/information-bot'
-            />
-            <MenuItem
-              title= 'Cài Đặt'
-              caption= ''
-              icon= 'settings'
-              iconColor= 'orange'
-              link= '/admin/setting-bot'
-            />
-            <q-separator />
-            <MenuItem
-              title= 'Thống Kê'
-              caption= ''
-              icon= 'sticky_note_2'
-              iconColor= 'orange'
-              link= '/admin/session-statistic-bot'
-            />
+            <q-expansion-item :content-inset-level="0.5">
+              <template v-slot:header>
+                <q-item-section avatar>
+                  <q-icon name="celebration" color="orange" />
+                </q-item-section>
+                <q-item-section>Nổ Hũ</q-item-section>
+              </template>
+              <MenuItem title='MH Kết Quả' caption='' icon='task' iconColor='orange' link='/admin/information-bot' />
+              <MenuItem title='Cài Đặt' caption='' icon='settings' iconColor='orange' link='/admin/setting-bot' />
+              <q-separator />
+              <MenuItem title='Thống Kê' caption='' icon='sticky_note_2' iconColor='orange'
+                link='/admin/statistic-bot-9-win-lose' />
+            </q-expansion-item>
+            <q-expansion-item :content-inset-level="0.5">
+              <template v-slot:header>
+                <q-item-section avatar>
+                  <q-icon name="import_export" color="orange" />
+                </q-item-section>
+                <q-item-section>Né Lose</q-item-section>
+              </template>
+              <MenuItem title='MH Kết Quả' caption='' icon='task' iconColor='orange' link='/admin/information-bot-winlose' />
+              <MenuItem title='Cài Đặt' caption='' icon='settings' iconColor='orange' link='/admin/setting-bot-winlose' />
+              <q-separator />
+              <MenuItem title='Thống Kê' caption='' icon='sticky_note_2' iconColor='orange' link='/admin/session-statistic-bot' />
+            </q-expansion-item>
             <!-- <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/admin/setting-history-autotrade' /> -->
           </q-expansion-item>
           <q-separator />
