@@ -323,6 +323,10 @@
         });
         await getSportBalance(), await getStatistic();
         $q.loading.hide();
+
+        setInterval(async () => {
+          await getStatistic();
+        }, 20000);
       });
       onBeforeMount(async () => {
         let token = localStorage.getItem('jwt');

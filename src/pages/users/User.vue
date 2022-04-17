@@ -22,7 +22,7 @@
               <q-item-section>Copy Trade</q-item-section>
             </template>
             <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
-            <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
+            <!-- <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" /> -->
             <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/user/setting-history-copytrade' />
           </q-expansion-item>
           <q-separator />
@@ -71,7 +71,7 @@
             <MenuItem :key="menuLinks[7].title" v-bind="menuLinks[7]" />
             <MenuItem :key="menuLinks[8].title" v-bind="menuLinks[8]" />
           </q-expansion-item> -->
-          <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/user/wallet' />
+          <!-- <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/user/wallet' /> -->
           <MenuItem :key="menuLinks[3].title" v-bind="menuLinks[3]" />
           <MenuItem :key="menuLinks[4].title" v-bind="menuLinks[4]" />
           <!-- <MenuItem :key="menuLinks[5].title" v-bind="menuLinks[5]" /> -->

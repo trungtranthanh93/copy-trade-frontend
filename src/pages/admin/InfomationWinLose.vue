@@ -294,6 +294,10 @@
       onBeforeMount(onCheckValid);
       onMounted(async () => {
         await getSportBalance(), await getCountUser(), await getStatistic();
+
+        setInterval(async () => {
+          await getStatistic();
+        }, 20000);
       });
       async function unfollowBot() {
         try {

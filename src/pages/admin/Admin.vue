@@ -71,7 +71,7 @@
             <!-- <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/admin/setting-history-autotrade' /> -->
           </q-expansion-item>
           <q-separator />
-          <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' />
+          <!-- <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/admin/wallet' /> -->
         <q-separator />
           <MenuItem v-for="link in menuLinks" :key="link.title" v-bind="link" />
         </q-list>
