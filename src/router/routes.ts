@@ -215,6 +215,11 @@ const routes: RouteRecordRaw[] = [
         path: 'statistic-bot-9-win-lose',
         name: 'statistic-bot-9-win-lose-user',
         component: () => import('pages/StatisticBot9WinLose.vue'),
+      },
+      {
+        path: 'summary-win',
+        name: 'summary-win',
+        component: () => import('pages/SummaryWin.vue'),
       }
     ],
   },
