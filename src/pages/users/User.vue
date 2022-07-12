@@ -57,19 +57,10 @@
               <MenuItem title='Cài Đặt' caption='' icon='settings' iconColor='orange' link='/user/setting-bot' />
               <q-separator />
               <MenuItem title='Thống Kê' caption='' icon='sticky_note_2' iconColor='orange' link='/user/session-statistic-bot' />
-            </q-expansion-item>
-            <q-expansion-item :content-inset-level="0.5">
-              <template v-slot:header>
-                <q-item-section avatar>
-                  <q-icon name="import_export" color="orange" />
-                </q-item-section>
-                <q-item-section>BOT Lệnh</q-item-section>
-              </template>
-              <q-separator />
-              <MenuItem title='Thống Kê' caption='' icon='sticky_note_2' iconColor='orange' link='/user/summary-win' />
+              <MenuItem title='Thống Kê Lệnh' caption='' icon='sticky_note_2' iconColor='orange' link='/user/summary-win' />
             </q-expansion-item>
           </q-expansion-item>
-          <q-separator />
+          <q-separator /> 
           <!-- <q-expansion-item :content-inset-level="0.5">
             <template v-slot:header>
               <q-item-section avatar>
