@@ -22,7 +22,7 @@
               <q-item-section>Copy Trade</q-item-section>
             </template>
             <MenuItem :key="menuLinks[0].title" v-bind="menuLinks[0]" />
-            <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" />
+            <!-- <MenuItem :key="menuLinks[1].title" v-bind="menuLinks[1]" /> -->
             <MenuItem title='Lịch Sử Cài Đặt' caption='' icon='auto_fix_high' iconColor='orange' link='/user/setting-history-copytrade' />
           </q-expansion-item>
           <q-separator />
@@ -33,7 +33,7 @@
               </q-item-section>
               <q-item-section>Auto Trade</q-item-section>
             </template>
-            <q-expansion-item :content-inset-level="0.5">
+            <!-- <q-expansion-item :content-inset-level="0.5">
               <template v-slot:header>
                 <q-item-section avatar>
                   <q-icon name="celebration" color="orange" />
@@ -45,7 +45,7 @@
               <q-separator />
               <MenuItem title='Thống Kê' caption='' icon='sticky_note_2' iconColor='orange'
                 link='/user/statistic-bot-9-win-lose' />
-            </q-expansion-item>
+            </q-expansion-item> -->
             <q-expansion-item :content-inset-level="0.5">
               <template v-slot:header>
                 <q-item-section avatar>
@@ -53,8 +53,8 @@
                 </q-item-section>
                 <q-item-section>Né Lose</q-item-section>
               </template>
-              <MenuItem title='MH Kết Quả' caption='' icon='task' iconColor='orange' link='/user/information-bot-winlose' />
-              <MenuItem title='Cài Đặt' caption='' icon='settings' iconColor='orange' link='/user/setting-bot-winlose' />
+              <MenuItem title='MH Kết Quả' caption='' icon='task' iconColor='orange' link='/user/information-bot' />
+              <MenuItem title='Cài Đặt' caption='' icon='settings' iconColor='orange' link='/user/setting-bot' />
               <q-separator />
               <MenuItem title='Thống Kê' caption='' icon='sticky_note_2' iconColor='orange' link='/user/session-statistic-bot' />
             </q-expansion-item>
@@ -71,7 +71,7 @@
             <MenuItem :key="menuLinks[7].title" v-bind="menuLinks[7]" />
             <MenuItem :key="menuLinks[8].title" v-bind="menuLinks[8]" />
           </q-expansion-item> -->
-          <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/user/wallet' />
+          <!-- <MenuItem title='Chuyển Tiền' caption='' icon='account_balance_wallet' iconColor='orange' link='/user/wallet' /> -->
           <MenuItem :key="menuLinks[3].title" v-bind="menuLinks[3]" />
           <MenuItem :key="menuLinks[4].title" v-bind="menuLinks[4]" />
           <!-- <MenuItem :key="menuLinks[5].title" v-bind="menuLinks[5]" /> -->

@@ -263,7 +263,7 @@
             response = await api.post('/trade/v1/bet', data);
           }
           if (response.data.ok === false) {
-            if (response.data.d ?.err_code === 'betsession_is_invalid') {
+            if (response.data.d ?.err_code === 'betsession_is_invalid' || response.data.d ?.err_code === 'order_session_is_invalid') {
               $q.notify({
                 color: 'negative',
                 position: 'top',
@@ -441,6 +441,9 @@
       onBeforeMount(onCheckValid);
       onMounted(async () => {
         await getSportBalance(), await getCountUser(), await getStatistic(), getTitleScreen();
+        setInterval(async () => {
+          await getStatistic();
+        }, 20000);
       });
       return {
         putOptions,

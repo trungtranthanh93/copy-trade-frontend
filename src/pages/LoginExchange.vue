@@ -3,11 +3,9 @@
   <q-layout class="justify-center">
     <q-page-container class="window-height relative-position">
         <div class="row justify-center">
-            <div
-            :class="`${$q.screen.width > 768 ? 'col-6 q-ma-md' : 'col-12 q-pa-md '}`"
-          >
+            <div class="col-12 col-lg-5 col-md-6 q-pa-md">
               <q-card class="q-pa-md">
-                  <q-label class="text-h5-title">Kết nối vào sàn</q-label>
+                  <q-label class="text-h5-title">Kết Nối Vào Sàn</q-label>
                   <q-separator class="q-mt-md"/>
                   <div class="text-center q-ma-md">
                       <img src="logo.png" style="height: 80px" />
@@ -17,32 +15,19 @@
                       rounded
                       class="bg-positive text-white q-mb-md text-center"
                     >
-                      Tài khoản của Quý Khách đã dừng Copytrade. Quý Khách vui lòng đăng
-                      nhập lại.
+                      <div class="text-h6">{{ message }}</div>
                     </q-banner>
-                    <template v-if="!isShowAuthenticator">
-                      <form class="q-gutter-x-xs q-gutter-y-lg q-ma-md">
+                    <form class="q-gutter-x-xs q-gutter-y-lg q-ma-md">
                         <div>
-                          <q-item-label class="q-mb-sm">Địa chỉ email (*)</q-item-label>
+                          <q-item-label class="q-mb-sm">AccessToken (*)</q-item-label>
                           <q-input
                             dark
                             outlined
-                            v-model="email"
-                            readonly
-                            style="width: 100%"
-                            placeholder="Điền email"
-                          >
-                          </q-input>
-                        </div>
-                        <div>
-                          <q-item-label class="q-mb-sm">Mật khẩu (*)</q-item-label>
-                          <q-input
-                            dark
-                            outlined
-                            v-model="password"
+                            v-model="accessToken"
                             style="width: 100%"
                             :type="isPwd ? 'password' : 'text'"
-                            placeholder="Điền mật khẩu"
+                            placeholder="Nhập mã AccessToken"
+                            :readonly="logined"
                           >
                             <template v-slot:append>
                               <q-icon
@@ -54,38 +39,10 @@
                           </q-input>
                         </div>
                         <div class="text-center">
-                            <q-btn
-                            class="bg-positive"
-                            @click="onLogin()"
-                            label="Kết nối sàn"
-                            style=""
-                          />
+                            <q-btn v-if="!logined" class="bg-positive" @click="onLogin()" label="Kết Nối Sàn" />
+                            <q-btn v-else class="bg-positive" @click="removeToken()" label="Xoá Token" />
                         </div>
                       </form>
-                    </template>
-                    <template v-else>
-                             <form class="q-gutter-x-xs q-gutter-y-lg q-mt-md">
-                        <div>
-                          <q-item-label class="q-mb-sm">Mã Google Authentication (*)</q-item-label>
-                          <q-input
-                            dark
-                            outlined
-                            v-model="authenticatorCode"
-                            style="width: 100%"
-                            placeholder="Điền mã Google Authentication"
-                          >
-                          </q-input>
-                        </div>
-                        <div class="text-center">
-                        <q-btn
-                          class="bg-positive"
-                          @click="onAuthenticator()"
-                          label="Kết nối sàn"
-                          style=""
-                        />
-                      </div>
-                      </form>
-                    </template>
               </q-card>
             </div>
         </div>
@@ -95,7 +52,7 @@
 </template>
 <script>
 import { useQuasar, QSpinnerIos } from 'quasar';
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { api } from 'src/boot/axios';
 import { useRouter } from 'vue-router';
 
@@ -103,125 +60,17 @@ export default {
   setup() {
     const $router = useRouter();
     const $q = useQuasar();
-    const email = ref(null);
-    const password = ref(null);
+    const accessToken = ref(null);
     const isPwd = ref(true);
-    const authenticatorCode = ref(null);
-    const isShowAuthenticator = ref(false);
-    function isValidEmail() {
-      const emailPattern =
-        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return emailPattern.test(email.value) || 'Hãy nhập đúng định dạng email';
-    }
+    const logined = ref(false);
+    const message = ref('Bạn chưa kết nối sàn. Vui lòng nhập Token tại đây!');
 
-    // async function onLogin() {
-    //   if(!email.value) {
-    //     $q.notify({
-    //       color: 'negative',
-    //       position: 'top',
-    //       message: 'Hãy điền email!',
-    //       icon: 'report_problem',
-    //     });
-    //     return;
-    //   }
-    //   if(!isValidEmail()){
-    //     $q.notify({
-    //       color: 'negative',
-    //       position: 'top',
-    //       message: 'Email không đúng định dạng!',
-    //       icon: 'report_problem',
-    //     });
-    //     return;
-    //   }
-    //   if(!password.value){
-    //     $q.notify({
-    //       color: 'negative',
-    //       position: 'top',
-    //       message: 'Hãy điền password!',
-    //       icon: 'report_problem',
-    //     });
-    //     return;
-    //   }
-    //   $q.loading.show({
-    //     spinner: QSpinnerIos,
-    //     spinnerColor: 'yellow',
-    //     spinnerSize: 140,
-    //     backgroundColor: 'purple',
-    //     message: 'Đang xử lý ....',
-    //     messageColor: 'black',
-    //   });
-    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    //   try {
-    //     let data = {
-    //       email: email.value,
-    //       password: password.value,
-    //     };
-    //     let token = localStorage.getItem('jwt');
-    //     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    //     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    //     let responseContent = await api.post('/users/login-pocinex', data);
-    //     if (responseContent.status !== 200 && responseContent.status !== 201) {
-    //       throw new Error();
-    //     }
-    //     $q.notify({
-    //       color: 'green-4',
-    //       textColor: 'white',
-    //       icon: 'cloud_done',
-    //       message: 'Hãy điền tiếp mã Authenticator ',
-    //       position: 'top',
-    //     });
-    //     isShowAuthenticator.value = true;
-    //     authenticatorCode.value='';
-    //     $q.loading.value = false;
-    //   } catch (error) {
-    //     if (
-    //       error.response.status === 400 &&
-    //       error.data.d?.err_code === 'user.limit.exceed'
-    //     ) {
-    //       $q.notify({
-    //         color: 'negative',
-    //         position: 'top',
-    //         message:
-    //           'Đang có hơn 1000 người vào hệ thống . Vui lòng đăng nhập lại sau vài phút',
-    //         icon: 'report_problem',
-    //       });
-    //       $router.push('/user/setting-follow');
-    //     }
-    //     $q.notify({
-    //       color: 'negative',
-    //       position: 'top',
-    //       message: 'Đăng nhập thất bại ! Vui lòng đăng nhập lại',
-    //       icon: 'report_problem',
-    //     });
-    //     isShowAuthenticator.value = false;
-    //   } finally {
-    //     $q.loading.hide();
-    //   }
-    // }
     async function onLogin() {
-      if(!email.value) {
+      if(!accessToken.value) {
         $q.notify({
           color: 'negative',
           position: 'top',
-          message: 'Hãy điền email!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if(!isValidEmail()){
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Email không đúng định dạng!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if(!password.value){
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy điền password!',
+          message: 'Vui lòng nhập accessToken!',
           icon: 'report_problem',
         });
         return;
@@ -237,8 +86,7 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       try {
         let data = {
-          email: email.value,
-          password: password.value,
+          accessToken: accessToken.value
         };
         let token = localStorage.getItem('jwt');
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -249,14 +97,19 @@ export default {
         }
         $q.notify({
           color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Hãy điền tiếp mã Authenticator ',
           position: 'top',
+          message: 'Kết nối sàn Thành Công !',
+          icon: 'cloud_done',
         });
         localStorage.setItem('d_t', responseContent.data.d.t);
-        isShowAuthenticator.value = true;
-        authenticatorCode.value='';
+        let userData = JSON.parse(localStorage.getItem('user'));
+        setTimeout(() => {
+          if (userData.role == 0) {
+            $router.push('/user/home');
+          } else if (userData.role == 1) {
+            $router.push('/admin/home');
+          }
+        }, 2000)
         $q.loading.value = false;
       } catch (error) {
         if (
@@ -277,17 +130,7 @@ export default {
           $q.notify({
             color: 'negative',
             position: 'top',
-            message: 'Email hoặc mật khẩu không đúng!',
-            icon: 'report_problem',
-          });
-        } else if (
-          error.response.status === 400 &&
-          error.response.data.message === '2fa.notSetting'
-        ) {
-          $q.notify({
-            color: 'negative',
-            position: 'top',
-            message: 'Mã 2FA chưa được setting!',
+            message: 'Mã accessToken sai. Vui lòng nhập lại!',
             icon: 'report_problem',
           });
         } else {
@@ -298,115 +141,84 @@ export default {
             icon: 'report_problem',
           });
         }
-        isShowAuthenticator.value = false;
       } finally {
         $q.loading.hide();
       }
     }
-    async function onAuthenticator() {
-      if(!authenticatorCode.value){
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy điền mã Google Authentication!',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      if(authenticatorCode.value.length !== 6){
-        $q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Hãy điền mã Google Authentication bao gồm 6 số',
-          icon: 'report_problem',
-        });
-        return;
-      }
-      $q.loading.show({
-        spinner: QSpinnerIos,
-        spinnerColor: 'yellow',
-        spinnerSize: 140,
-        backgroundColor: 'purple',
-        message: 'Đang xử lý ....',
-        messageColor: 'black',
-      });
-      try {
-        let dataAuthenticatorCode = {
-          email: email.value,
-          code: authenticatorCode.value,
-          token: localStorage.getItem('d_t')
-        };
-        let token = localStorage.getItem('jwt');
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        let res = await api.post(
-          '/users/authentication',
-          dataAuthenticatorCode
-        );
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error();
-        }
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Đăng nhập sàn thành công!',
-          position: 'top',
-        });
-        localStorage.removeItem('d_t')
-        $q.loading.value = false;
-        // tslint:disable-next-line:no-floating-promises
-        $router.back();
-      } catch (error) {
-        if(error.response.data.message === 'Invalid.2faCode') {
-          $q.notify({
-            color: 'negative',
-            position: 'top',
-            message:
-              'Mã Authenticator không đúng định dạng! Vui lòng nhập mã gồm 6 kí tự',
-            icon: 'report_problem',
-          });
-        } else {
-          $q.notify({
-            color: 'negative',
-            position: 'top',
-            message:
-              'Mã Authenticator bị sai! Vui lòng nhập lại mã Authenticator',
-            icon: 'report_problem',
-          });
-        }
-      } finally {
-        $q.loading.hide();
-      }
-    }
-    function getEmail() {
-      email.value = JSON.parse(localStorage.getItem('user')).email;
-    }
+
     async function checkIsLogin() {
-      let token = localStorage.getItem('jwt');
-      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      await api.post('/users/valid-token');
-      $q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: 'Bạn đã đăng nhập sàn rồi!',
-        position: 'top',
-      });
-      $router.back();
+      try {
+        let token = localStorage.getItem('jwt');
+        // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        let responseContent = await api.post('/users/valid-token');
+        // $q.notify({
+        //   color: 'green-4',
+        //   textColor: 'white',
+        //   icon: 'cloud_done',
+        //   message: 'Bạn đã đăng nhập sàn rồi!',
+        //   position: 'top',
+        // });
+        if (responseContent.status == 201) {
+          message.value = 'Bạn đang kết nối sàn!'
+          logined.value = true
+          accessToken.value = responseContent.data.accessToken
+        }
+      } catch (error) {
+        if (error.response.data.status === 404 &&
+          error.response.data.message === 'token.notFound') {
+          accessToken.value = null
+        } else if (error.response.data.status === 404 &&
+          error.response.data.message === 'token.expiredDate') {
+          message.value = 'Mã Token đã hết hạn. Vui lòng vào sàn để tạo Token mới!'
+          accessToken.value = null
+        }
+      }
+      // $router.back();
     }
-    onMounted(getEmail);
+
+    function removeToken() {
+      $q.dialog({
+        title: 'Thông báo',
+        message: 'Bạn chắc chắn muốn xóa Token ?',
+        cancel: true,
+        persistent: true,
+      })
+        .onOk(async () => {
+          try {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            let responseContent = await api.post('/users/delete-token');
+            if (responseContent.status !== 200 && responseContent.status !== 201) {
+              throw new Error();
+            }
+            $q.notify({
+              color: 'green-4',
+              position: 'top',
+              message: 'Bạn đã xoá Token Thành Công !',
+              icon: 'cloud_done',
+            });
+            accessToken.value = null
+            $router.go()
+          } catch (error) {
+            throw new Error();
+          }
+        })
+        .onCancel(() => {
+          return
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+          return
+        });
+    }
     onBeforeMount(checkIsLogin);
     return {
-      email,
+      accessToken,
       onLogin,
-      password,
       isPwd,
-      isValidEmail,
-      isShowAuthenticator,
-      onAuthenticator,
-      authenticatorCode,
+      logined,
+      message,
+      removeToken
     };
   },
 };

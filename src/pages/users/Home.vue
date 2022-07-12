@@ -141,7 +141,7 @@
 
   import { api } from 'boot/axios';
   import { useRouter } from 'vue-router';
-  import { useQuasar, QSpinnerIos, date } from 'quasar';
+  import { useQuasar, date } from 'quasar';
   import { ref, onMounted, onBeforeMount } from 'vue';
   import MontlyExport from '../MontlyExport.vue';
 
@@ -288,16 +288,16 @@
         incomeAmount.value = data.monthlyTotalIncome
       }
       onMounted(async () => {
-        $q.loading.show({
-          spinner: QSpinnerIos,
-          spinnerColor: 'yellow',
-          spinnerSize: 140,
-          backgroundColor: 'purple',
-          messageColor: 'black',
-        });
+        // $q.loading.show({
+        //   spinner: QSpinnerIos,
+        //   spinnerColor: 'yellow',
+        //   spinnerSize: 140,
+        //   backgroundColor: 'purple',
+        //   messageColor: 'black',
+        // });
         await getSportBalance(),
           await getStatistic();
-        $q.loading.hide();
+        // $q.loading.hide();
       });
       onBeforeMount(async () => {
         let token = localStorage.getItem('jwt');

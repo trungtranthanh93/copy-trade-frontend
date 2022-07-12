@@ -118,7 +118,9 @@
                     </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Số phiên cháy liên tiếp để vào lệnh</q-item-label>
-                      <q-input type="number" filled v-model="loseSessionNum" />
+                      <q-input filled type="text" v-model="loseSessionNum" lazy-rules
+                        :rules="[(val) => (val !== null && val !== '') || 'Hãy nhập số phiên cháy liên tiếp', (val) => (val >= 1) || 'Hãy nhập số phiên cháy liên tiếp từ 1',]">
+                      </q-input>
                     </div>
                     <div class="q-pa-md">
                       <q-item-label class="q-mb-sm">Vào lệnh cách phiên cháy</q-item-label>
@@ -225,10 +227,10 @@ export default {
         label: 'Tài khoản thực',
         value: 'LIVE',
       },
-      {
-        label: 'Tài khoản demo',
-        value: 'DEMO',
-      },
+      // {
+      //   label: 'Tài khoản demo',
+      //   value: 'DEMO',
+      // },
     ]);
     const winPercent = ref(null);
     const losePercent = ref(null);
@@ -618,6 +620,7 @@ export default {
     function changeSignalType() {
       sessionNum.value = null
       loseSessionNum.value = null
+      sessionWaitNum.value = null
     }
 
     function changeBalanceManagement(val) {

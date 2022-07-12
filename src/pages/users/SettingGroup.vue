@@ -127,10 +127,10 @@ export default {
         label: 'Tài khoản thực',
         value: 'LIVE',
       },
-      {
-        label: 'Tài khoản demo',
-        value: 'DEMO',
-      },
+      // {
+      //   label: 'Tài khoản demo',
+      //   value: 'DEMO',
+      // },
     ]);
     async function onSetting() {
       if (!accountType.value) {
